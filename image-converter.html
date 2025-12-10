@@ -3,19 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Image Converter (Working Version)</title>
+  <title>Image Converter — 100% Working</title>
   <style>
-    body{font-family:Arial;background:#e9f5ff;padding:20px;margin:0}
-    .box{max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,0.1)}
+    body{font-family:Arial;background:#eaf6ff;padding:20px;margin:0}
+    .box{max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,0.12)}
     h2{text-align:center;color:#0ea5ff;margin-top:0}
     input,select,button{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid #cbd5e1}
     button{background:#0ea5ff;color:#fff;font-weight:bold;border:none;cursor:pointer}
-    button:disabled{background:#9ccff5}
+    button:disabled{background:#9ccff5;cursor:not-allowed}
     #preview{margin-top:15px;max-width:100%;border:1px solid #e2e8f0;border-radius:8px}
-    #downloadBtn{margin-top:15px;display:none}
+    #downloadBtn{margin-top:15px;display:none;text-align:center;background:#10b981;color:white;padding:12px;border-radius:8px;font-weight:bold;text-decoration:none}
   </style>
 </head>
 <body>
+
   <div class="box">
     <h2>Image Converter (Fully Working)</h2>
 
@@ -27,45 +28,54 @@
       <option value="image/webp">WEBP</option>
     </select>
 
-    <label>Quality (JPEG/WEBP)</label>
+    <label>Quality (JPEG / WEBP)</label>
     <input type="range" id="quality" min="10" max="100" value="90">
 
     <button id="convertBtn" disabled>Convert Image</button>
 
     <img id="preview" />
 
-    <a id="downloadBtn" class="btn" download>Download Converted Image</a>
+    <a id="downloadBtn">Download Converted Image</a>
   </div>
 
 <script>
-let originalFile;
-let convertedBlob;
+let originalFile = null;
+let convertedBlob = null;
 
 const fileInput = document.getElementById("fileInput");
 const convertBtn = document.getElementById("convertBtn");
 const preview = document.getElementById("preview");
 const downloadBtn = document.getElementById("downloadBtn");
 
-fileInput.addEventListener("change", function(){
-  originalFile = this.files[0];
+// IMAGE SELECT
+fileInput.addEventListener("change", () => {
+  originalFile = fileInput.files[0];
   if(!originalFile) return;
 
   convertBtn.disabled = false;
 
   const reader = new FileReader();
-  reader.onload = e => {
-    preview.src = e.target.result;
-  };
+  reader.onload = e => preview.src = e.target.result;
   reader.readAsDataURL(originalFile);
 });
 
-convertBtn.addEventListener("click", async function(){
+// PROMISE-BASED toBlob FOR RELIABILITY
+function canvasToBlob(canvas, type, quality){
+  return new Promise(resolve => {
+    canvas.toBlob(blob => resolve(blob), type, quality);
+  });
+}
+
+// IMAGE CONVERSION
+convertBtn.addEventListener("click", async () => {
+  if(!originalFile) return;
+
   const format = document.getElementById("format").value;
   const quality = document.getElementById("quality").value / 100;
 
   const img = new Image();
 
-  img.onload = () => {
+  img.onload = async () => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
@@ -73,19 +83,25 @@ convertBtn.addEventListener("click", async function(){
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
 
-    canvas.toBlob(blob => {
-      convertedBlob = blob;
-      const url = URL.createObjectURL(blob);
-      preview.src = url;
+    const blob = await canvasToBlob(canvas, format, quality);
 
-      downloadBtn.href = url;
-      downloadBtn.download = "converted." + format.split("/")[1];
-      downloadBtn.style.display = "block";
-    }, format, quality);
+    if(!blob){
+      alert("Conversion Failed! Browser format support issue.");
+      return;
+    }
+
+    convertedBlob = blob;
+    const url = URL.createObjectURL(blob);
+
+    preview.src = url;
+    downloadBtn.href = url;
+    downloadBtn.download = "converted." + format.split("/")[1];
+    downloadBtn.style.display = "block";
   };
 
   img.src = URL.createObjectURL(originalFile);
 });
 </script>
+
 </body>
 </html>
