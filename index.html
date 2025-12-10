@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Any Tasker - All Tools Working Properly</title>
+    <title>Any Tasker - All Tools Working & Shareable</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* CSS Variables for Blue Theme */
@@ -818,7 +818,7 @@
                 <h2 class="section-heading">🖼 Image Tools</h2>
                 <p class="section-subheading">Edit, convert, compress and optimize your images for any purpose</p>
                 <div class="tool-grid">
-                    <!-- Tools will be loaded by JavaScript -->
+                    <!-- Image tools will be populated by JavaScript -->
                 </div>
             </div>
 
@@ -827,7 +827,7 @@
                 <h2 class="section-heading">📄 Document Tools</h2>
                 <p class="section-subheading">Handle PDFs and documents with ease - convert, merge, compress and more</p>
                 <div class="tool-grid">
-                    <!-- Tools will be loaded by JavaScript -->
+                    <!-- Document tools will be populated by JavaScript -->
                 </div>
             </div>
 
@@ -836,7 +836,7 @@
                 <h2 class="section-heading">🧮 Calculator Tools</h2>
                 <p class="section-subheading">Calculate everything from basic math to complex financial calculations</p>
                 <div class="tool-grid">
-                    <!-- Tools will be loaded by JavaScript -->
+                    <!-- Calculator tools will be populated by JavaScript -->
                 </div>
             </div>
 
@@ -845,7 +845,7 @@
                 <h2 class="section-heading">🔤 Text Tools</h2>
                 <p class="section-subheading">Manipulate, analyze and transform text for your needs</p>
                 <div class="tool-grid">
-                    <!-- Tools will be loaded by JavaScript -->
+                    <!-- Text tools will be populated by JavaScript -->
                 </div>
             </div>
 
@@ -854,7 +854,7 @@
                 <h2 class="section-heading">🌐 Web/Developer Tools</h2>
                 <p class="section-subheading">Essential tools for developers and web professionals</p>
                 <div class="tool-grid">
-                    <!-- Tools will be loaded by JavaScript -->
+                    <!-- Web tools will be populated by JavaScript -->
                 </div>
             </div>
 
@@ -863,7 +863,7 @@
                 <h2 class="section-heading">🎨 Color Tools</h2>
                 <p class="section-subheading">Pick, convert and analyze colors for your design projects</p>
                 <div class="tool-grid">
-                    <!-- Tools will be loaded by JavaScript -->
+                    <!-- Color tools will be populated by JavaScript -->
                 </div>
             </div>
 
@@ -872,7 +872,7 @@
                 <h2 class="section-heading">🌍 SEO & Marketing Tools</h2>
                 <p class="section-subheading">Optimize your content for search engines and marketing campaigns</p>
                 <div class="tool-grid">
-                    <!-- Tools will be loaded by JavaScript -->
+                    <!-- SEO tools will be populated by JavaScript -->
                 </div>
             </div>
 
@@ -881,7 +881,7 @@
                 <h2 class="section-heading">🛠️ Utility Tools</h2>
                 <p class="section-subheading">Miscellaneous tools for everyday tasks and productivity</p>
                 <div class="tool-grid">
-                    <!-- Tools will be loaded by JavaScript -->
+                    <!-- Utility tools will be populated by JavaScript -->
                 </div>
             </div>
         </div>
@@ -1231,149 +1231,118 @@
             ]
         };
 
-        // Tool implementations - AB HAR TOOL KA ACTUAL KAAM HOGA
+        // Tool implementations
         const toolFunctions = {
-            // 1. AGE CALCULATOR - ACTUAL WORKING
+            // Image Tools
+            imageConverter: function() {
+                return `
+                    <div class="input-group">
+                        <label>Upload Image</label>
+                        <input type="file" id="imageFile" accept="image/*">
+                    </div>
+                    <div class="input-group">
+                        <label>Convert To</label>
+                        <select id="imageFormat">
+                            <option value="jpg">JPG</option>
+                            <option value="png">PNG</option>
+                            <option value="webp">WEBP</option>
+                            <option value="gif">GIF</option>
+                            <option value="bmp">BMP</option>
+                        </select>
+                    </div>
+                    <button id="convertImageBtn" class="btn">Convert Image</button>
+                `;
+            },
+            
+            imageCompressor: function() {
+                return `
+                    <div class="input-group">
+                        <label>Upload Image</label>
+                        <input type="file" id="compressImage" accept="image/*">
+                    </div>
+                    <div class="input-group">
+                        <label>Compression Quality (0-100%)</label>
+                        <input type="range" id="compressionLevel" min="1" max="100" value="80">
+                        <span id="compressionValue">80%</span>
+                    </div>
+                    <button id="compressImageBtn" class="btn">Compress Image</button>
+                `;
+            },
+            
+            imageResizer: function() {
+                return `
+                    <div class="input-group">
+                        <label>Upload Image</label>
+                        <input type="file" id="resizeImage" accept="image/*">
+                    </div>
+                    <div class="input-group">
+                        <label>Width (px)</label>
+                        <input type="number" id="imageWidth" placeholder="Enter width">
+                    </div>
+                    <div class="input-group">
+                        <label>Height (px)</label>
+                        <input type="number" id="imageHeight" placeholder="Enter height">
+                    </div>
+                    <div class="input-group">
+                        <label>Maintain Aspect Ratio</label>
+                        <input type="checkbox" id="aspectRatio" checked>
+                    </div>
+                    <button id="resizeImageBtn" class="btn">Resize Image</button>
+                `;
+            },
+            
+            // Calculator Tools
             ageCalculator: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Date of Birth</label>
                         <input type="date" id="dob" max="${new Date().toISOString().split('T')[0]}">
                     </div>
                     <div class="input-group">
                         <label>Calculate Age As Of (Optional)</label>
-                        <input type="date" id="asOfDate" value="${new Date().toISOString().split('T')[0]}">
+                        <input type="date" id="asOfDate">
                     </div>
                     <button id="calculateAgeBtn" class="btn">Calculate Age</button>
                 `;
-                
-                // Attach event listener immediately
-                setTimeout(() => {
-                    document.getElementById('calculateAgeBtn').addEventListener('click', function() {
-                        const dob = document.getElementById('dob').value;
-                        const asOfDate = document.getElementById('asOfDate').value || new Date().toISOString().split('T')[0];
-                        
-                        if (!dob) {
-                            alert('Please enter date of birth');
-                            return;
-                        }
-                        
-                        const birthDate = new Date(dob);
-                        const targetDate = new Date(asOfDate);
-                        
-                        let years = targetDate.getFullYear() - birthDate.getFullYear();
-                        let months = targetDate.getMonth() - birthDate.getMonth();
-                        let days = targetDate.getDate() - birthDate.getDate();
-                        
-                        if (days < 0) {
-                            months--;
-                            const prevMonth = new Date(targetDate.getFullYear(), targetDate.getMonth(), 0);
-                            days += prevMonth.getDate();
-                        }
-                        
-                        if (months < 0) {
-                            years--;
-                            months += 12;
-                        }
-                        
-                        const result = `Age: ${years} years, ${months} months, ${days} days\n\nDate of Birth: ${dob}\nAs of Date: ${asOfDate}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 2. BMI CALCULATOR - ACTUAL WORKING
             bmiCalculator: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Weight (kg)</label>
-                        <input type="number" id="weight" placeholder="Enter weight in kg" min="1" max="500">
+                        <input type="number" id="weight" placeholder="Enter weight in kg">
                     </div>
                     <div class="input-group">
                         <label>Height (cm)</label>
-                        <input type="number" id="height" placeholder="Enter height in cm" min="50" max="300">
+                        <input type="number" id="height" placeholder="Enter height in cm">
                     </div>
                     <button id="calculateBmiBtn" class="btn">Calculate BMI</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('calculateBmiBtn').addEventListener('click', function() {
-                        const weight = parseFloat(document.getElementById('weight').value);
-                        const height = parseFloat(document.getElementById('height').value);
-                        
-                        if (!weight || !height) {
-                            alert('Please enter weight and height');
-                            return;
-                        }
-                        
-                        const heightInMeters = height / 100;
-                        const bmi = weight / (heightInMeters * heightInMeters);
-                        
-                        let category = '';
-                        if (bmi < 18.5) category = 'Underweight';
-                        else if (bmi < 25) category = 'Normal weight';
-                        else if (bmi < 30) category = 'Overweight';
-                        else category = 'Obese';
-                        
-                        const result = `BMI: ${bmi.toFixed(2)}\nCategory: ${category}\n\nWeight: ${weight} kg\nHeight: ${height} cm`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 3. LOAN EMI CALCULATOR - ACTUAL WORKING
             loanEmiCalculator: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Loan Amount (₹)</label>
-                        <input type="number" id="loanAmount" placeholder="Enter loan amount" min="1000" step="1000">
+                        <input type="number" id="loanAmount" placeholder="Enter loan amount">
                     </div>
                     <div class="input-group">
                         <label>Interest Rate (% per year)</label>
-                        <input type="number" id="interestRate" step="0.1" placeholder="Enter interest rate" min="1" max="30">
+                        <input type="number" id="interestRate" step="0.1" placeholder="Enter interest rate">
                     </div>
                     <div class="input-group">
                         <label>Loan Tenure (months)</label>
-                        <input type="number" id="loanTenure" placeholder="Enter tenure in months" min="1" max="360">
+                        <input type="number" id="loanTenure" placeholder="Enter tenure in months">
                     </div>
                     <button id="calculateEmiBtn" class="btn">Calculate EMI</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('calculateEmiBtn').addEventListener('click', function() {
-                        const loanAmount = parseFloat(document.getElementById('loanAmount').value);
-                        const interestRate = parseFloat(document.getElementById('interestRate').value);
-                        const loanTenure = parseFloat(document.getElementById('loanTenure').value);
-                        
-                        if (!loanAmount || !interestRate || !loanTenure) {
-                            alert('Please enter all fields');
-                            return;
-                        }
-                        
-                        const monthlyRate = interestRate / 12 / 100;
-                        const emi = loanAmount * monthlyRate * Math.pow(1 + monthlyRate, loanTenure) / 
-                                    (Math.pow(1 + monthlyRate, loanTenure) - 1);
-                        const totalPayment = emi * loanTenure;
-                        const totalInterest = totalPayment - loanAmount;
-                        
-                        const result = `EMI: ₹${emi.toFixed(2)}\nTotal Payment: ₹${totalPayment.toFixed(2)}\nTotal Interest: ₹${totalInterest.toFixed(2)}\n\nLoan Amount: ₹${loanAmount}\nInterest Rate: ${interestRate}%\nTenure: ${loanTenure} months`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 4. GST CALCULATOR - ACTUAL WORKING
             gstCalculator: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Amount Before GST</label>
-                        <input type="number" id="amountBeforeGst" placeholder="Enter amount" min="1">
+                        <input type="number" id="amountBeforeGst" placeholder="Enter amount">
                     </div>
                     <div class="input-group">
                         <label>GST Rate (%)</label>
@@ -1386,37 +1355,16 @@
                     </div>
                     <button id="calculateGstBtn" class="btn">Calculate GST</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('calculateGstBtn').addEventListener('click', function() {
-                        const amount = parseFloat(document.getElementById('amountBeforeGst').value);
-                        const gstRate = parseFloat(document.getElementById('gstRate').value);
-                        
-                        if (!amount) {
-                            alert('Please enter amount');
-                            return;
-                        }
-                        
-                        const gstAmount = amount * (gstRate / 100);
-                        const totalAmount = amount + gstAmount;
-                        
-                        const result = `Original Amount: ₹${amount.toFixed(2)}\nGST Rate: ${gstRate}%\nGST Amount: ₹${gstAmount.toFixed(2)}\nTotal Amount (including GST): ₹${totalAmount.toFixed(2)}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 5. CURRENCY CONVERTER - ACTUAL WORKING
             currencyConverter: function() {
                 const currencies = ['USD', 'EUR', 'GBP', 'INR', 'JPY', 'CAD', 'AUD'];
                 let options = currencies.map(c => `<option value="${c}">${c}</option>`).join('');
                 
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Amount</label>
-                        <input type="number" id="currencyAmount" placeholder="Enter amount" value="1" min="0.01" step="0.01">
+                        <input type="number" id="currencyAmount" placeholder="Enter amount" value="1">
                     </div>
                     <div class="input-group">
                         <label>From Currency</label>
@@ -1428,43 +1376,11 @@
                     </div>
                     <button id="convertCurrencyBtn" class="btn">Convert Currency</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('convertCurrencyBtn').addEventListener('click', function() {
-                        const amount = parseFloat(document.getElementById('currencyAmount').value);
-                        const fromCurrency = document.getElementById('fromCurrency').value;
-                        const toCurrency = document.getElementById('toCurrency').value;
-                        
-                        if (!amount) {
-                            alert('Please enter amount');
-                            return;
-                        }
-                        
-                        // Mock exchange rates
-                        const exchangeRates = {
-                            'USD': 1,
-                            'EUR': 0.92,
-                            'GBP': 0.79,
-                            'INR': 83.5,
-                            'JPY': 149.5,
-                            'CAD': 1.36,
-                            'AUD': 1.52
-                        };
-                        
-                        const amountInUSD = amount / exchangeRates[fromCurrency];
-                        const convertedAmount = amountInUSD * exchangeRates[toCurrency];
-                        
-                        const result = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}\n\nExchange Rate: 1 ${fromCurrency} = ${(exchangeRates[toCurrency]/exchangeRates[fromCurrency]).toFixed(4)} ${toCurrency}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 6. TEXT CASE CONVERTER - ACTUAL WORKING
+            // Text Tools
             textCaseConverter: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Enter Text</label>
                         <textarea id="textToConvert" placeholder="Enter text here..."></textarea>
@@ -1484,111 +1400,30 @@
                     </div>
                     <button id="convertCaseBtn" class="btn">Convert Text Case</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('convertCaseBtn').addEventListener('click', function() {
-                        const text = document.getElementById('textToConvert').value;
-                        const caseType = document.getElementById('caseType').value;
-                        
-                        if (!text) {
-                            alert('Please enter text');
-                            return;
-                        }
-                        
-                        let convertedText = '';
-                        
-                        switch(caseType) {
-                            case 'upper':
-                                convertedText = text.toUpperCase();
-                                break;
-                            case 'lower':
-                                convertedText = text.toLowerCase();
-                                break;
-                            case 'title':
-                                convertedText = text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
-                                break;
-                            case 'sentence':
-                                convertedText = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-                                break;
-                            case 'camel':
-                                convertedText = text.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
-                                break;
-                            case 'pascal':
-                                convertedText = text.replace(/\w+/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase()).replace(/[^a-zA-Z0-9]/g, '');
-                                break;
-                            case 'snake':
-                                convertedText = text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '_');
-                                break;
-                            case 'kebab':
-                                convertedText = text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '-');
-                                break;
-                        }
-                        
-                        const result = `Original Text:\n${text}\n\nConverted Text (${caseType}):\n${convertedText}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 7. WORD & CHARACTER COUNTER - ACTUAL WORKING
             wordCharCounter: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Enter Text</label>
                         <textarea id="textToCount" placeholder="Enter text here..."></textarea>
                     </div>
                     <button id="countTextBtn" class="btn">Count Words & Characters</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('countTextBtn').addEventListener('click', function() {
-                        const text = document.getElementById('textToCount').value;
-                        
-                        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-                        const characters = text.length;
-                        const charactersNoSpaces = text.replace(/\s/g, '').length;
-                        const sentences = text.split(/[.!?]+/).filter(s => s.trim()).length;
-                        const paragraphs = text.split(/\n+/).filter(p => p.trim()).length;
-                        const lines = text.split(/\n/).length;
-                        
-                        const result = `Words: ${words}\nCharacters: ${characters}\nCharacters (no spaces): ${charactersNoSpaces}\nSentences: ${sentences}\nParagraphs: ${paragraphs}\nLines: ${lines}\n\nText Preview:\n${text.substring(0, 200)}${text.length > 200 ? '...' : ''}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 8. REMOVE DUPLICATE LINES - ACTUAL WORKING
             removeDuplicateLines: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Enter Text (One item per line)</label>
                         <textarea id="textWithDuplicates" placeholder="Enter text with duplicate lines..."></textarea>
                     </div>
                     <button id="removeDuplicatesBtn" class="btn">Remove Duplicate Lines</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('removeDuplicatesBtn').addEventListener('click', function() {
-                        const text = document.getElementById('textWithDuplicates').value;
-                        const lines = text.split('\n');
-                        const uniqueLines = [...new Set(lines)];
-                        const duplicateCount = lines.length - uniqueLines.length;
-                        
-                        const result = `Original Lines: ${lines.length}\nUnique Lines: ${uniqueLines.length}\nDuplicates Removed: ${duplicateCount}\n\nUnique Lines:\n${uniqueLines.join('\n')}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 9. TEXT SORTER - ACTUAL WORKING
             textSorter: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Enter Text (One item per line)</label>
                         <textarea id="textToSort" placeholder="Enter text to sort..."></textarea>
@@ -1604,36 +1439,10 @@
                     </div>
                     <button id="sortTextBtn" class="btn">Sort Text</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('sortTextBtn').addEventListener('click', function() {
-                        const text = document.getElementById('textToSort').value;
-                        const sortOrder = document.getElementById('sortOrder').value;
-                        
-                        const lines = text.split('\n').filter(line => line.trim());
-                        
-                        let sortedLines;
-                        if (sortOrder === 'asc') {
-                            sortedLines = lines.sort();
-                        } else if (sortOrder === 'desc') {
-                            sortedLines = lines.sort().reverse();
-                        } else if (sortOrder === 'numAsc') {
-                            sortedLines = lines.sort((a, b) => parseFloat(a) - parseFloat(b));
-                        } else if (sortOrder === 'numDesc') {
-                            sortedLines = lines.sort((a, b) => parseFloat(b) - parseFloat(a));
-                        }
-                        
-                        const result = `Original: ${lines.length} lines\nSorted: ${sortedLines.length} lines\n\nSorted Text:\n${sortedLines.join('\n')}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 10. TEXT REVERSER - ACTUAL WORKING
             textReverser: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Enter Text</label>
                         <textarea id="textToReverse" placeholder="Enter text to reverse..."></textarea>
@@ -1648,33 +1457,10 @@
                     </div>
                     <button id="reverseTextBtn" class="btn">Reverse Text</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('reverseTextBtn').addEventListener('click', function() {
-                        const text = document.getElementById('textToReverse').value;
-                        const reverseType = document.getElementById('reverseType').value;
-                        
-                        let reversedText = '';
-                        
-                        if (reverseType === 'characters') {
-                            reversedText = text.split('').reverse().join('');
-                        } else if (reverseType === 'words') {
-                            reversedText = text.split(' ').reverse().join(' ');
-                        } else if (reverseType === 'lines') {
-                            reversedText = text.split('\n').reverse().join('\n');
-                        }
-                        
-                        const result = `Original Text:\n${text}\n\nReversed Text (${reverseType}):\n${reversedText}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 11. TEXT ENCRYPTOR/DECRYPTOR - ACTUAL WORKING
             textEncryptor: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Enter Text</label>
                         <textarea id="textToEncrypt" placeholder="Enter text to encrypt/decrypt..."></textarea>
@@ -1688,82 +1474,25 @@
                     </div>
                     <div class="input-group">
                         <label>Key (Optional)</label>
-                        <input type="text" id="encryptionKey" placeholder="Enter encryption key" value="secret">
+                        <input type="text" id="encryptionKey" placeholder="Enter encryption key">
                     </div>
                     <button id="encryptTextBtn" class="btn">Process Text</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('encryptTextBtn').addEventListener('click', function() {
-                        const text = document.getElementById('textToEncrypt').value;
-                        const action = document.getElementById('encryptAction').value;
-                        const key = document.getElementById('encryptionKey').value || 'secret';
-                        
-                        if (!text) {
-                            alert('Please enter text');
-                            return;
-                        }
-                        
-                        let result = '';
-                        if (action === 'encrypt') {
-                            // Simple encryption
-                            result = text.split('').map(char => {
-                                const code = char.charCodeAt(0);
-                                const keyCode = key.charCodeAt(0) % 26;
-                                return String.fromCharCode(code + keyCode);
-                            }).join('');
-                        } else {
-                            // Simple decryption
-                            result = text.split('').map(char => {
-                                const code = char.charCodeAt(0);
-                                const keyCode = key.charCodeAt(0) % 26;
-                                return String.fromCharCode(code - keyCode);
-                            }).join('');
-                        }
-                        
-                        const operation = action === 'encrypt' ? 'Encrypted' : 'Decrypted';
-                        const resultText = `Original Text:\n${text}\n\n${operation} Text:\n${result}\n\nKey used: ${key}`;
-                        showResult(resultText);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 12. JSON FORMATTER & VALIDATOR - ACTUAL WORKING
+            // Web Tools
             jsonFormatter: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Enter JSON</label>
                         <textarea id="jsonInput" placeholder='{"key": "value", "array": [1, 2, 3]}'></textarea>
                     </div>
                     <button id="formatJsonBtn" class="btn">Format & Validate JSON</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('formatJsonBtn').addEventListener('click', function() {
-                        const jsonText = document.getElementById('jsonInput').value;
-                        
-                        try {
-                            const jsonObj = JSON.parse(jsonText);
-                            const formatted = JSON.stringify(jsonObj, null, 2);
-                            const isValid = true;
-                            
-                            const result = `✅ Valid JSON\n\nFormatted JSON:\n${formatted}\n\nProperties:\n- Type: ${typeof jsonObj}\n- Is Array: ${Array.isArray(jsonObj)}\n- Total Keys: ${Object.keys(jsonObj).length}`;
-                            showResult(result);
-                        } catch (error) {
-                            const result = `❌ Invalid JSON\n\nError: ${error.message}\n\nTry to fix:\n1. Check for missing commas\n2. Check for missing quotes\n3. Check for trailing commas\n4. Validate your JSON structure`;
-                            showResult(result);
-                        }
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 13. BASE64 ENCODER/DECODER - ACTUAL WORKING
             base64Encoder: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Enter Text</label>
                         <textarea id="base64Input" placeholder="Enter text to encode/decode..."></textarea>
@@ -1777,41 +1506,10 @@
                     </div>
                     <button id="base64Btn" class="btn">Process</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('base64Btn').addEventListener('click', function() {
-                        const text = document.getElementById('base64Input').value;
-                        const action = document.getElementById('base64Action').value;
-                        
-                        if (!text) {
-                            alert('Please enter text');
-                            return;
-                        }
-                        
-                        let result = '';
-                        try {
-                            if (action === 'encode') {
-                                result = btoa(text);
-                            } else {
-                                result = atob(text);
-                            }
-                            
-                            const operation = action === 'encode' ? 'Encoded' : 'Decoded';
-                            const resultText = `Original Text:\n${text}\n\n${operation} Text:\n${result}`;
-                            showResult(resultText);
-                        } catch (error) {
-                            const result = `Error: ${error.message}\n\nMake sure you're entering valid Base64 for decoding.`;
-                            showResult(result);
-                        }
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 14. URL ENCODER/DECODER - ACTUAL WORKING
             urlEncoder: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Enter URL or Text</label>
                         <textarea id="urlInput" placeholder="Enter text to encode/decode..."></textarea>
@@ -1825,138 +1523,32 @@
                     </div>
                     <button id="urlBtn" class="btn">Process</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('urlBtn').addEventListener('click', function() {
-                        const text = document.getElementById('urlInput').value;
-                        const action = document.getElementById('urlAction').value;
-                        
-                        if (!text) {
-                            alert('Please enter text');
-                            return;
-                        }
-                        
-                        let result = '';
-                        try {
-                            if (action === 'encode') {
-                                result = encodeURIComponent(text);
-                            } else {
-                                result = decodeURIComponent(text);
-                            }
-                            
-                            const operation = action === 'encode' ? 'Encoded' : 'Decoded';
-                            const resultText = `Original Text:\n${text}\n\n${operation} Text:\n${result}`;
-                            showResult(resultText);
-                        } catch (error) {
-                            const result = `Error: ${error.message}\n\nMake sure you're entering valid encoded URL for decoding.`;
-                            showResult(result);
-                        }
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 15. HEX TO RGB CONVERTER - ACTUAL WORKING
+            // Color Tools
             hexRgbConverter: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Enter HEX or RGB Color</label>
-                        <input type="text" id="colorInput" placeholder="#FF5733 or rgb(255, 87, 51)" value="#2c3e8f">
+                        <input type="text" id="colorInput" placeholder="#FF5733 or rgb(255, 87, 51)">
                     </div>
                     <div class="input-group">
                         <label>Conversion Direction</label>
                         <select id="colorConversion">
-                            <option value="auto">Auto Detect</option>
                             <option value="hexToRgb">HEX to RGB</option>
                             <option value="rgbToHex">RGB to HEX</option>
                         </select>
                     </div>
                     <button id="convertColorBtn" class="btn">Convert Color</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('convertColorBtn').addEventListener('click', function() {
-                        const colorInput = document.getElementById('colorInput').value.trim();
-                        const conversion = document.getElementById('colorConversion').value;
-                        
-                        if (!colorInput) {
-                            alert('Please enter color');
-                            return;
-                        }
-                        
-                        let result = '';
-                        let detectedType = '';
-                        
-                        // Auto detect input type
-                        let inputType = conversion;
-                        if (conversion === 'auto') {
-                            if (colorInput.startsWith('#') && (colorInput.length === 4 || colorInput.length === 7)) {
-                                inputType = 'hexToRgb';
-                                detectedType = 'HEX';
-                            } else if (colorInput.startsWith('rgb(') && colorInput.endsWith(')')) {
-                                inputType = 'rgbToHex';
-                                detectedType = 'RGB';
-                            } else {
-                                result = 'Unable to detect color format. Please specify conversion direction.';
-                                showResult(result);
-                                return;
-                            }
-                        }
-                        
-                        if (inputType === 'hexToRgb') {
-                            // HEX to RGB
-                            const hex = colorInput.replace('#', '');
-                            if (hex.length === 3) {
-                                const r = parseInt(hex[0] + hex[0], 16);
-                                const g = parseInt(hex[1] + hex[1], 16);
-                                const b = parseInt(hex[2] + hex[2], 16);
-                                result = `HEX: ${colorInput}\nRGB: rgb(${r}, ${g}, ${b})`;
-                            } else if (hex.length === 6) {
-                                const r = parseInt(hex.substr(0, 2), 16);
-                                const g = parseInt(hex.substr(2, 2), 16);
-                                const b = parseInt(hex.substr(4, 2), 16);
-                                result = `HEX: ${colorInput}\nRGB: rgb(${r}, ${g}, ${b})`;
-                            } else {
-                                result = 'Invalid HEX color format (use: #FFF or #FFFFFF)';
-                            }
-                        } else {
-                            // RGB to HEX
-                            const rgbMatch = colorInput.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
-                            if (rgbMatch) {
-                                const r = parseInt(rgbMatch[1]);
-                                const g = parseInt(rgbMatch[2]);
-                                const b = parseInt(rgbMatch[3]);
-                                
-                                const toHex = (c) => {
-                                    const hex = c.toString(16);
-                                    return hex.length === 1 ? '0' + hex : hex;
-                                };
-                                
-                                const hexColor = `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
-                                result = `RGB: ${colorInput}\nHEX: ${hexColor}`;
-                            } else {
-                                result = 'Invalid RGB color format (use: rgb(255, 255, 255))';
-                            }
-                        }
-                        
-                        if (detectedType) {
-                            result = `Detected: ${detectedType} color\n\n${result}`;
-                        }
-                        
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 16. QR CODE GENERATOR - ACTUAL WORKING
+            // Utility Tools
             qrCodeGenerator: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Enter Text or URL for QR Code</label>
-                        <textarea id="qrText" placeholder="Enter text or URL...">https://anytasker.com</textarea>
+                        <textarea id="qrText" placeholder="Enter text or URL..."></textarea>
                     </div>
                     <div class="input-group">
                         <label>QR Code Size</label>
@@ -1969,40 +1561,13 @@
                     <button id="generateQrBtn" class="btn">Generate QR Code</button>
                     <div id="qrCodeOutput" style="margin-top: 20px; text-align: center;"></div>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('generateQrBtn').addEventListener('click', function() {
-                        const qrText = document.getElementById('qrText').value;
-                        const qrSize = document.getElementById('qrSize').value;
-                        
-                        if (!qrText) {
-                            alert('Please enter text for QR code');
-                            return;
-                        }
-                        
-                        // Create QR code using Google Charts API
-                        const qrCodeUrl = `https://chart.googleapis.com/chart?cht=qr&chs=${qrSize}x${qrSize}&chl=${encodeURIComponent(qrText)}&choe=UTF-8`;
-                        
-                        const qrCodeOutput = document.getElementById('qrCodeOutput');
-                        qrCodeOutput.innerHTML = `
-                            <img src="${qrCodeUrl}" alt="QR Code" style="max-width: 100%; border: 1px solid #ddd; border-radius: 8px;">
-                            <p style="margin-top: 10px; font-size: 14px;">Scan this QR code</p>
-                        `;
-                        
-                        const result = `QR Code generated successfully!\n\nDetails:\n- Size: ${qrSize}x${qrSize}px\n- Text: ${qrText}\n- URL: ${qrCodeUrl}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 17. UUID GENERATOR - ACTUAL WORKING
             uuidGenerator: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Number of UUIDs to generate</label>
-                        <input type="number" id="uuidCount" min="1" max="50" value="1">
+                        <input type="number" id="uuidCount" min="1" max="100" value="1">
                     </div>
                     <div class="input-group">
                         <label>UUID Version</label>
@@ -2013,150 +1578,56 @@
                     </div>
                     <button id="generateUuidBtn" class="btn">Generate UUIDs</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('generateUuidBtn').addEventListener('click', function() {
-                        const count = parseInt(document.getElementById('uuidCount').value) || 1;
-                        const version = document.getElementById('uuidVersion').value;
-                        
-                        let uuids = [];
-                        for (let i = 0; i < count; i++) {
-                            if (version === 'v4') {
-                                // Version 4 UUID (random)
-                                uuids.push('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                                    const r = Math.random() * 16 | 0;
-                                    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-                                    return v.toString(16);
-                                }));
-                            } else {
-                                // Version 1 UUID (timestamp-based - simplified)
-                                const timestamp = Date.now();
-                                uuids.push(`1${timestamp.toString(16).slice(0,7)}-xxxx-1xxx-yxxx-xxxxxxxxxxxx`.replace(/[xy]/g, function(c) {
-                                    const r = Math.random() * 16 | 0;
-                                    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-                                    return v.toString(16);
-                                }));
-                            }
-                        }
-                        
-                        const result = `Generated ${count} UUID${count > 1 ? 's' : ''} (Version: ${version}):\n\n${uuids.join('\n')}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 18. UNIT CONVERTER - ACTUAL WORKING
             unitConverter: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Value</label>
-                        <input type="number" id="unitValue" placeholder="Enter value" value="1" step="0.01">
+                        <input type="number" id="unitValue" placeholder="Enter value">
                     </div>
                     <div class="input-group">
                         <label>From Unit</label>
                         <select id="fromUnit">
-                            <option value="meter">Meter (m)</option>
-                            <option value="kilometer">Kilometer (km)</option>
-                            <option value="centimeter">Centimeter (cm)</option>
-                            <option value="millimeter">Millimeter (mm)</option>
+                            <option value="meter">Meter</option>
+                            <option value="kilometer">Kilometer</option>
+                            <option value="centimeter">Centimeter</option>
                             <option value="mile">Mile</option>
-                            <option value="foot">Foot (ft)</option>
-                            <option value="inch">Inch (in)</option>
-                            <option value="kilogram">Kilogram (kg)</option>
-                            <option value="gram">Gram (g)</option>
-                            <option value="pound">Pound (lb)</option>
-                            <option value="ounce">Ounce (oz)</option>
-                            <option value="liter">Liter (L)</option>
-                            <option value="milliliter">Milliliter (mL)</option>
-                            <option value="gallon">Gallon (gal)</option>
+                            <option value="foot">Foot</option>
+                            <option value="inch">Inch</option>
+                            <option value="kilogram">Kilogram</option>
+                            <option value="gram">Gram</option>
+                            <option value="pound">Pound</option>
+                            <option value="ounce">Ounce</option>
+                            <option value="liter">Liter</option>
+                            <option value="milliliter">Milliliter</option>
+                            <option value="gallon">Gallon</option>
                         </select>
                     </div>
                     <div class="input-group">
                         <label>To Unit</label>
                         <select id="toUnit">
-                            <option value="meter">Meter (m)</option>
-                            <option value="kilometer">Kilometer (km)</option>
-                            <option value="centimeter">Centimeter (cm)</option>
-                            <option value="millimeter">Millimeter (mm)</option>
+                            <option value="meter">Meter</option>
+                            <option value="kilometer">Kilometer</option>
+                            <option value="centimeter">Centimeter</option>
                             <option value="mile">Mile</option>
-                            <option value="foot">Foot (ft)</option>
-                            <option value="inch">Inch (in)</option>
-                            <option value="kilogram">Kilogram (kg)</option>
-                            <option value="gram">Gram (g)</option>
-                            <option value="pound">Pound (lb)</option>
-                            <option value="ounce">Ounce (oz)</option>
-                            <option value="liter">Liter (L)</option>
-                            <option value="milliliter">Milliliter (mL)</option>
-                            <option value="gallon">Gallon (gal)</option>
+                            <option value="foot">Foot</option>
+                            <option value="inch">Inch</option>
+                            <option value="kilogram">Kilogram</option>
+                            <option value="gram">Gram</option>
+                            <option value="pound">Pound</option>
+                            <option value="ounce">Ounce</option>
+                            <option value="liter">Liter</option>
+                            <option value="milliliter">Milliliter</option>
+                            <option value="gallon">Gallon</option>
                         </select>
                     </div>
                     <button id="convertUnitBtn" class="btn">Convert Units</button>
                 `;
-                
-                setTimeout(() => {
-                    document.getElementById('convertUnitBtn').addEventListener('click', function() {
-                        const value = parseFloat(document.getElementById('unitValue').value);
-                        const fromUnit = document.getElementById('fromUnit').value;
-                        const toUnit = document.getElementById('toUnit').value;
-                        
-                        if (!value) {
-                            alert('Please enter value');
-                            return;
-                        }
-                        
-                        // Conversion factors to base units (meters, kilograms, liters)
-                        const conversions = {
-                            // Length
-                            meter: 1,
-                            kilometer: 1000,
-                            centimeter: 0.01,
-                            millimeter: 0.001,
-                            mile: 1609.34,
-                            foot: 0.3048,
-                            inch: 0.0254,
-                            // Weight
-                            kilogram: 1,
-                            gram: 0.001,
-                            pound: 0.453592,
-                            ounce: 0.0283495,
-                            // Volume
-                            liter: 1,
-                            milliliter: 0.001,
-                            gallon: 3.78541
-                        };
-                        
-                        // Check if units are compatible
-                        const unitCategories = {
-                            // Length
-                            meter: 'length', kilometer: 'length', centimeter: 'length', millimeter: 'length', mile: 'length', foot: 'length', inch: 'length',
-                            // Weight
-                            kilogram: 'weight', gram: 'weight', pound: 'weight', ounce: 'weight',
-                            // Volume
-                            liter: 'volume', milliliter: 'volume', gallon: 'volume'
-                        };
-                        
-                        if (unitCategories[fromUnit] !== unitCategories[toUnit]) {
-                            alert('Cannot convert between different unit types (Length, Weight, Volume)');
-                            return;
-                        }
-                        
-                        const valueInBase = value * conversions[fromUnit];
-                        const convertedValue = valueInBase / conversions[toUnit];
-                        
-                        const category = unitCategories[fromUnit];
-                        const result = `${value} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}\n\nCategory: ${category}\nConversion Factor: 1 ${fromUnit} = ${(conversions[toUnit]/conversions[fromUnit]).toFixed(6)} ${toUnit}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // 19. RANDOM NUMBER/PASSWORD GENERATOR - ACTUAL WORKING
             randomGenerator: function() {
-                const html = `
+                return `
                     <div class="input-group">
                         <label>Generate</label>
                         <select id="randomType">
@@ -2170,111 +1641,37 @@
                         <label>Max Number</label>
                         <input type="number" id="maxNumber" value="100">
                         <label>Count</label>
-                        <input type="number" id="numberCount" min="1" max="20" value="1">
+                        <input type="number" id="numberCount" min="1" max="100" value="1">
                     </div>
                     <div class="input-group" id="passwordOptions" style="display: none;">
                         <label>Password Length</label>
                         <input type="number" id="passwordLength" min="6" max="50" value="12">
                         <label>
-                            <input type="checkbox" id="includeUppercase" checked> Uppercase Letters (A-Z)
+                            <input type="checkbox" id="includeUppercase" checked> Uppercase Letters
                         </label>
                         <label>
-                            <input type="checkbox" id="includeLowercase" checked> Lowercase Letters (a-z)
+                            <input type="checkbox" id="includeLowercase" checked> Lowercase Letters
                         </label>
                         <label>
-                            <input type="checkbox" id="includeNumbers" checked> Numbers (0-9)
+                            <input type="checkbox" id="includeNumbers" checked> Numbers
                         </label>
                         <label>
-                            <input type="checkbox" id="includeSymbols"> Symbols (!@#$%^&*)
+                            <input type="checkbox" id="includeSymbols"> Symbols
                         </label>
                     </div>
                     <button id="generateRandomBtn" class="btn">Generate</button>
                 `;
-                
-                setTimeout(() => {
-                    // Toggle between number and password options
-                    document.getElementById('randomType').addEventListener('change', function() {
-                        if (this.value === 'number') {
-                            document.getElementById('numberOptions').style.display = 'block';
-                            document.getElementById('passwordOptions').style.display = 'none';
-                        } else {
-                            document.getElementById('numberOptions').style.display = 'none';
-                            document.getElementById('passwordOptions').style.display = 'block';
-                        }
-                    });
-                    
-                    document.getElementById('generateRandomBtn').addEventListener('click', function() {
-                        const type = document.getElementById('randomType').value;
-                        
-                        if (type === 'number') {
-                            const min = parseInt(document.getElementById('minNumber').value) || 1;
-                            const max = parseInt(document.getElementById('maxNumber').value) || 100;
-                            const count = parseInt(document.getElementById('numberCount').value) || 1;
-                            
-                            if (min >= max) {
-                                alert('Max must be greater than min');
-                                return;
-                            }
-                            
-                            let numbers = [];
-                            for (let i = 0; i < count; i++) {
-                                numbers.push(Math.floor(Math.random() * (max - min + 1)) + min);
-                            }
-                            
-                            const result = `Random Numbers (${count}):\nMin: ${min}, Max: ${max}\n\n${numbers.join(', ')}\n\nSorted: ${numbers.sort((a,b) => a-b).join(', ')}`;
-                            showResult(result);
-                        } else {
-                            const length = parseInt(document.getElementById('passwordLength').value) || 12;
-                            const includeUppercase = document.getElementById('includeUppercase').checked;
-                            const includeLowercase = document.getElementById('includeLowercase').checked;
-                            const includeNumbers = document.getElementById('includeNumbers').checked;
-                            const includeSymbols = document.getElementById('includeSymbols').checked;
-                            
-                            if (!includeUppercase && !includeLowercase && !includeNumbers && !includeSymbols) {
-                                alert('Please select at least one character type');
-                                return;
-                            }
-                            
-                            const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                            const lowercase = 'abcdefghijklmnopqrstuvwxyz';
-                            const numbers = '0123456789';
-                            const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-                            
-                            let charset = '';
-                            if (includeUppercase) charset += uppercase;
-                            if (includeLowercase) charset += lowercase;
-                            if (includeNumbers) charset += numbers;
-                            if (includeSymbols) charset += symbols;
-                            
-                            let password = '';
-                            for (let i = 0; i < length; i++) {
-                                password += charset.charAt(Math.floor(Math.random() * charset.length));
-                            }
-                            
-                            let charTypes = [];
-                            if (includeUppercase) charTypes.push('Uppercase');
-                            if (includeLowercase) charTypes.push('Lowercase');
-                            if (includeNumbers) charTypes.push('Numbers');
-                            if (includeSymbols) charTypes.push('Symbols');
-                            
-                            const result = `Password Length: ${length}\nCharacter Types: ${charTypes.join(', ')}\n\nGenerated Password:\n${password}\n\nPassword Strength: ${length >= 12 && includeUppercase && includeLowercase && includeNumbers && includeSymbols ? 'Strong' : length >= 8 && includeUppercase && includeLowercase && includeNumbers ? 'Medium' : 'Weak'}`;
-                            showResult(result);
-                        }
-                    });
-                }, 100);
-                
-                return html;
             },
             
-            // DEFAULT TOOL INTERFACE FOR TOOLS NOT YET IMPLEMENTED
-            defaultTool: function(toolName) {
+            // Default tool interface for tools not implemented yet
+            defaultTool: function() {
                 return `
                     <div class="input-group">
-                        <label>${toolName}</label>
-                        <p>This tool functionality is coming soon. For now, you can use the similar tools available.</p>
+                        <label>This tool is under development</label>
+                        <p>This tool functionality will be available soon. For now, you can use the placeholder.</p>
                     </div>
                     <div class="input-group">
-                        <label>Sample Input</label>
+                        <label>Input Field</label>
                         <input type="text" placeholder="Enter input here...">
                     </div>
                     <button class="btn">Process</button>
@@ -2306,9 +1703,6 @@
                     });
                 }
             }
-            
-            // Attach event listeners to all tool buttons
-            attachToolButtonListeners();
         }
 
         // Function to filter tools by search
@@ -2398,7 +1792,7 @@
             attachToolButtonListeners();
         }
 
-        // Open tool modal - AB HAR TOOL KA ACTUAL FUNCTION CALL HOGA
+        // Open tool modal
         function openToolModal(toolName, toolFunc) {
             const modal = document.getElementById('toolModal');
             const modalToolName = document.getElementById('modalToolName');
@@ -2408,20 +1802,17 @@
             modalToolName.textContent = toolName;
             toolResult.style.display = 'none';
             
-            // Clear previous interface
-            toolInterface.innerHTML = '';
-            
-            // Load tool interface - AB HAR TOOL KA APNA FUNCTION HOGA
+            // Load tool interface
             if (toolFunctions[toolFunc]) {
                 toolInterface.innerHTML = toolFunctions[toolFunc]();
             } else {
-                toolInterface.innerHTML = toolFunctions.defaultTool(toolName);
+                toolInterface.innerHTML = toolFunctions.defaultTool();
             }
             
             modal.style.display = 'flex';
             
-            // Store current tool info for sharing
-            window.currentToolName = toolName;
+            // Attach event listeners for this specific tool
+            attachToolSpecificListeners(toolFunc);
         }
 
         // Close modal
@@ -2442,6 +1833,587 @@
             });
         }
 
+        // Attach tool-specific event listeners
+        function attachToolSpecificListeners(toolFunc) {
+            // Age Calculator
+            if (toolFunc === 'ageCalculator') {
+                document.getElementById('calculateAgeBtn').addEventListener('click', function() {
+                    const dob = document.getElementById('dob').value;
+                    const asOfDate = document.getElementById('asOfDate').value || new Date().toISOString().split('T')[0];
+                    
+                    if (!dob) {
+                        alert('Please enter date of birth');
+                        return;
+                    }
+                    
+                    const birthDate = new Date(dob);
+                    const targetDate = new Date(asOfDate);
+                    
+                    let years = targetDate.getFullYear() - birthDate.getFullYear();
+                    let months = targetDate.getMonth() - birthDate.getMonth();
+                    let days = targetDate.getDate() - birthDate.getDate();
+                    
+                    if (days < 0) {
+                        months--;
+                        // Get days in previous month
+                        const prevMonth = new Date(targetDate.getFullYear(), targetDate.getMonth(), 0);
+                        days += prevMonth.getDate();
+                    }
+                    
+                    if (months < 0) {
+                        years--;
+                        months += 12;
+                    }
+                    
+                    const result = `Age: ${years} years, ${months} months, ${days} days`;
+                    showResult(result);
+                });
+            }
+            
+            // BMI Calculator
+            else if (toolFunc === 'bmiCalculator') {
+                document.getElementById('calculateBmiBtn').addEventListener('click', function() {
+                    const weight = parseFloat(document.getElementById('weight').value);
+                    const height = parseFloat(document.getElementById('height').value);
+                    
+                    if (!weight || !height) {
+                        alert('Please enter weight and height');
+                        return;
+                    }
+                    
+                    const heightInMeters = height / 100;
+                    const bmi = weight / (heightInMeters * heightInMeters);
+                    
+                    let category = '';
+                    if (bmi < 18.5) category = 'Underweight';
+                    else if (bmi < 25) category = 'Normal weight';
+                    else if (bmi < 30) category = 'Overweight';
+                    else category = 'Obese';
+                    
+                    const result = `BMI: ${bmi.toFixed(2)}\nCategory: ${category}`;
+                    showResult(result);
+                });
+            }
+            
+            // Loan EMI Calculator
+            else if (toolFunc === 'loanEmiCalculator') {
+                document.getElementById('calculateEmiBtn').addEventListener('click', function() {
+                    const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+                    const interestRate = parseFloat(document.getElementById('interestRate').value);
+                    const loanTenure = parseFloat(document.getElementById('loanTenure').value);
+                    
+                    if (!loanAmount || !interestRate || !loanTenure) {
+                        alert('Please enter all fields');
+                        return;
+                    }
+                    
+                    const monthlyRate = interestRate / 12 / 100;
+                    const emi = loanAmount * monthlyRate * Math.pow(1 + monthlyRate, loanTenure) / 
+                                (Math.pow(1 + monthlyRate, loanTenure) - 1);
+                    const totalPayment = emi * loanTenure;
+                    const totalInterest = totalPayment - loanAmount;
+                    
+                    const result = `EMI: ₹${emi.toFixed(2)}\nTotal Payment: ₹${totalPayment.toFixed(2)}\nTotal Interest: ₹${totalInterest.toFixed(2)}`;
+                    showResult(result);
+                });
+            }
+            
+            // GST Calculator
+            else if (toolFunc === 'gstCalculator') {
+                document.getElementById('calculateGstBtn').addEventListener('click', function() {
+                    const amount = parseFloat(document.getElementById('amountBeforeGst').value);
+                    const gstRate = parseFloat(document.getElementById('gstRate').value);
+                    
+                    if (!amount) {
+                        alert('Please enter amount');
+                        return;
+                    }
+                    
+                    const gstAmount = amount * (gstRate / 100);
+                    const totalAmount = amount + gstAmount;
+                    
+                    const result = `GST Amount: ₹${gstAmount.toFixed(2)}\nTotal Amount (including GST): ₹${totalAmount.toFixed(2)}`;
+                    showResult(result);
+                });
+            }
+            
+            // Currency Converter
+            else if (toolFunc === 'currencyConverter') {
+                // Mock exchange rates
+                const exchangeRates = {
+                    'USD': 1,
+                    'EUR': 0.92,
+                    'GBP': 0.79,
+                    'INR': 83.5,
+                    'JPY': 149.5,
+                    'CAD': 1.36,
+                    'AUD': 1.52
+                };
+                
+                document.getElementById('convertCurrencyBtn').addEventListener('click', function() {
+                    const amount = parseFloat(document.getElementById('currencyAmount').value);
+                    const fromCurrency = document.getElementById('fromCurrency').value;
+                    const toCurrency = document.getElementById('toCurrency').value;
+                    
+                    if (!amount) {
+                        alert('Please enter amount');
+                        return;
+                    }
+                    
+                    // Convert to USD first, then to target currency
+                    const amountInUSD = amount / exchangeRates[fromCurrency];
+                    const convertedAmount = amountInUSD * exchangeRates[toCurrency];
+                    
+                    const result = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
+                    showResult(result);
+                });
+            }
+            
+            // Text Case Converter
+            else if (toolFunc === 'textCaseConverter') {
+                document.getElementById('convertCaseBtn').addEventListener('click', function() {
+                    const text = document.getElementById('textToConvert').value;
+                    const caseType = document.getElementById('caseType').value;
+                    
+                    if (!text) {
+                        alert('Please enter text');
+                        return;
+                    }
+                    
+                    let convertedText = '';
+                    
+                    switch(caseType) {
+                        case 'upper':
+                            convertedText = text.toUpperCase();
+                            break;
+                        case 'lower':
+                            convertedText = text.toLowerCase();
+                            break;
+                        case 'title':
+                            convertedText = text.replace(/\b\w/g, char => char.toUpperCase());
+                            break;
+                        case 'sentence':
+                            convertedText = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+                            break;
+                        case 'camel':
+                            convertedText = text.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+                            break;
+                        case 'pascal':
+                            convertedText = text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase()).replace(/[^a-zA-Z0-9]/g, '');
+                            break;
+                        case 'snake':
+                            convertedText = text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '_');
+                            break;
+                        case 'kebab':
+                            convertedText = text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '-');
+                            break;
+                    }
+                    
+                    showResult(convertedText);
+                });
+            }
+            
+            // Word & Character Counter
+            else if (toolFunc === 'wordCharCounter') {
+                document.getElementById('countTextBtn').addEventListener('click', function() {
+                    const text = document.getElementById('textToCount').value;
+                    
+                    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                    const characters = text.length;
+                    const charactersNoSpaces = text.replace(/\s/g, '').length;
+                    const sentences = text.split(/[.!?]+/).filter(s => s.trim()).length;
+                    const paragraphs = text.split(/\n+/).filter(p => p.trim()).length;
+                    
+                    const result = `Words: ${words}\nCharacters: ${characters}\nCharacters (no spaces): ${charactersNoSpaces}\nSentences: ${sentences}\nParagraphs: ${paragraphs}`;
+                    showResult(result);
+                });
+            }
+            
+            // Remove Duplicate Lines
+            else if (toolFunc === 'removeDuplicateLines') {
+                document.getElementById('removeDuplicatesBtn').addEventListener('click', function() {
+                    const text = document.getElementById('textWithDuplicates').value;
+                    const lines = text.split('\n');
+                    const uniqueLines = [...new Set(lines)];
+                    
+                    showResult(uniqueLines.join('\n'));
+                });
+            }
+            
+            // Text Sorter
+            else if (toolFunc === 'textSorter') {
+                document.getElementById('sortTextBtn').addEventListener('click', function() {
+                    const text = document.getElementById('textToSort').value;
+                    const sortOrder = document.getElementById('sortOrder').value;
+                    
+                    const lines = text.split('\n').filter(line => line.trim());
+                    
+                    let sortedLines;
+                    if (sortOrder === 'asc') {
+                        sortedLines = lines.sort();
+                    } else if (sortOrder === 'desc') {
+                        sortedLines = lines.sort().reverse();
+                    } else if (sortOrder === 'numAsc') {
+                        sortedLines = lines.sort((a, b) => parseFloat(a) - parseFloat(b));
+                    } else if (sortOrder === 'numDesc') {
+                        sortedLines = lines.sort((a, b) => parseFloat(b) - parseFloat(a));
+                    }
+                    
+                    showResult(sortedLines.join('\n'));
+                });
+            }
+            
+            // Text Reverser
+            else if (toolFunc === 'textReverser') {
+                document.getElementById('reverseTextBtn').addEventListener('click', function() {
+                    const text = document.getElementById('textToReverse').value;
+                    const reverseType = document.getElementById('reverseType').value;
+                    
+                    let reversedText = '';
+                    
+                    if (reverseType === 'characters') {
+                        reversedText = text.split('').reverse().join('');
+                    } else if (reverseType === 'words') {
+                        reversedText = text.split(' ').reverse().join(' ');
+                    } else if (reverseType === 'lines') {
+                        reversedText = text.split('\n').reverse().join('\n');
+                    }
+                    
+                    showResult(reversedText);
+                });
+            }
+            
+            // Text Encryptor/Decryptor
+            else if (toolFunc === 'textEncryptor') {
+                document.getElementById('encryptTextBtn').addEventListener('click', function() {
+                    const text = document.getElementById('textToEncrypt').value;
+                    const action = document.getElementById('encryptAction').value;
+                    const key = document.getElementById('encryptionKey').value || 'secret';
+                    
+                    if (!text) {
+                        alert('Please enter text');
+                        return;
+                    }
+                    
+                    let result = '';
+                    if (action === 'encrypt') {
+                        // Simple encryption (Caesar cipher based on key)
+                        result = text.split('').map(char => {
+                            const code = char.charCodeAt(0);
+                            const keyCode = key.charCodeAt(0) % 26;
+                            return String.fromCharCode(code + keyCode);
+                        }).join('');
+                    } else {
+                        // Simple decryption
+                        result = text.split('').map(char => {
+                            const code = char.charCodeAt(0);
+                            const keyCode = key.charCodeAt(0) % 26;
+                            return String.fromCharCode(code - keyCode);
+                        }).join('');
+                    }
+                    
+                    showResult(result);
+                });
+            }
+            
+            // JSON Formatter & Validator
+            else if (toolFunc === 'jsonFormatter') {
+                document.getElementById('formatJsonBtn').addEventListener('click', function() {
+                    const jsonText = document.getElementById('jsonInput').value;
+                    
+                    try {
+                        const jsonObj = JSON.parse(jsonText);
+                        const formatted = JSON.stringify(jsonObj, null, 2);
+                        showResult(formatted);
+                    } catch (error) {
+                        showResult(`Invalid JSON: ${error.message}`);
+                    }
+                });
+            }
+            
+            // Base64 Encoder/Decoder
+            else if (toolFunc === 'base64Encoder') {
+                document.getElementById('base64Btn').addEventListener('click', function() {
+                    const text = document.getElementById('base64Input').value;
+                    const action = document.getElementById('base64Action').value;
+                    
+                    if (!text) {
+                        alert('Please enter text');
+                        return;
+                    }
+                    
+                    let result = '';
+                    try {
+                        if (action === 'encode') {
+                            result = btoa(text);
+                        } else {
+                            result = atob(text);
+                        }
+                        showResult(result);
+                    } catch (error) {
+                        showResult(`Error: ${error.message}`);
+                    }
+                });
+            }
+            
+            // URL Encoder/Decoder
+            else if (toolFunc === 'urlEncoder') {
+                document.getElementById('urlBtn').addEventListener('click', function() {
+                    const text = document.getElementById('urlInput').value;
+                    const action = document.getElementById('urlAction').value;
+                    
+                    if (!text) {
+                        alert('Please enter text');
+                        return;
+                    }
+                    
+                    let result = '';
+                    if (action === 'encode') {
+                        result = encodeURIComponent(text);
+                    } else {
+                        result = decodeURIComponent(text);
+                    }
+                    
+                    showResult(result);
+                });
+            }
+            
+            // HEX to RGB Converter
+            else if (toolFunc === 'hexRgbConverter') {
+                document.getElementById('convertColorBtn').addEventListener('click', function() {
+                    const colorInput = document.getElementById('colorInput').value;
+                    const conversion = document.getElementById('colorConversion').value;
+                    
+                    if (!colorInput) {
+                        alert('Please enter color');
+                        return;
+                    }
+                    
+                    let result = '';
+                    
+                    if (conversion === 'hexToRgb') {
+                        // HEX to RGB
+                        const hex = colorInput.replace('#', '');
+                        if (hex.length === 3) {
+                            const r = parseInt(hex[0] + hex[0], 16);
+                            const g = parseInt(hex[1] + hex[1], 16);
+                            const b = parseInt(hex[2] + hex[2], 16);
+                            result = `RGB(${r}, ${g}, ${b})`;
+                        } else if (hex.length === 6) {
+                            const r = parseInt(hex.substr(0, 2), 16);
+                            const g = parseInt(hex.substr(2, 2), 16);
+                            const b = parseInt(hex.substr(4, 2), 16);
+                            result = `RGB(${r}, ${g}, ${b})`;
+                        } else {
+                            result = 'Invalid HEX color format';
+                        }
+                    } else {
+                        // RGB to HEX
+                        const rgbMatch = colorInput.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+                        if (rgbMatch) {
+                            const r = parseInt(rgbMatch[1]);
+                            const g = parseInt(rgbMatch[2]);
+                            const b = parseInt(rgbMatch[3]);
+                            
+                            const toHex = (c) => {
+                                const hex = c.toString(16);
+                                return hex.length === 1 ? '0' + hex : hex;
+                            };
+                            
+                            result = `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+                        } else {
+                            result = 'Invalid RGB color format (use: rgb(255, 255, 255))';
+                        }
+                    }
+                    
+                    showResult(result);
+                });
+            }
+            
+            // QR Code Generator
+            else if (toolFunc === 'qrCodeGenerator') {
+                const qrSizeSelect = document.getElementById('qrSize');
+                if (qrSizeSelect) {
+                    qrSizeSelect.addEventListener('change', updateQrPreview);
+                }
+                
+                document.getElementById('generateQrBtn').addEventListener('click', function() {
+                    const qrText = document.getElementById('qrText').value;
+                    const qrSize = document.getElementById('qrSize').value;
+                    
+                    if (!qrText) {
+                        alert('Please enter text for QR code');
+                        return;
+                    }
+                    
+                    // Create QR code using Google Charts API
+                    const qrCodeUrl = `https://chart.googleapis.com/chart?cht=qr&chs=${qrSize}x${qrSize}&chl=${encodeURIComponent(qrText)}`;
+                    
+                    const qrCodeOutput = document.getElementById('qrCodeOutput');
+                    qrCodeOutput.innerHTML = `
+                        <img src="${qrCodeUrl}" alt="QR Code" style="max-width: 100%; border: 1px solid #ddd; border-radius: 8px;">
+                        <p style="margin-top: 10px;">Scan this QR code</p>
+                    `;
+                    
+                    const result = `QR Code generated successfully!\nSize: ${qrSize}x${qrSize}px\nText: ${qrText}`;
+                    showResult(result);
+                });
+            }
+            
+            // UUID Generator
+            else if (toolFunc === 'uuidGenerator') {
+                document.getElementById('generateUuidBtn').addEventListener('click', function() {
+                    const count = parseInt(document.getElementById('uuidCount').value) || 1;
+                    const version = document.getElementById('uuidVersion').value;
+                    
+                    let uuids = [];
+                    for (let i = 0; i < count; i++) {
+                        if (version === 'v4') {
+                            // Version 4 UUID (random)
+                            uuids.push('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                                const r = Math.random() * 16 | 0;
+                                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                                return v.toString(16);
+                            }));
+                        } else {
+                            // Version 1 UUID (timestamp-based - simplified)
+                            const timestamp = Date.now();
+                            uuids.push(`1${timestamp.toString(16).slice(0,7)}-xxxx-1xxx-yxxx-xxxxxxxxxxxx`.replace(/[xy]/g, function(c) {
+                                const r = Math.random() * 16 | 0;
+                                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                                return v.toString(16);
+                            }));
+                        }
+                    }
+                    
+                    showResult(uuids.join('\n'));
+                });
+            }
+            
+            // Unit Converter
+            else if (toolFunc === 'unitConverter') {
+                document.getElementById('convertUnitBtn').addEventListener('click', function() {
+                    const value = parseFloat(document.getElementById('unitValue').value);
+                    const fromUnit = document.getElementById('fromUnit').value;
+                    const toUnit = document.getElementById('toUnit').value;
+                    
+                    if (!value) {
+                        alert('Please enter value');
+                        return;
+                    }
+                    
+                    // Conversion factors to meters/kilograms/liters
+                    const conversions = {
+                        // Length
+                        meter: 1,
+                        kilometer: 1000,
+                        centimeter: 0.01,
+                        mile: 1609.34,
+                        foot: 0.3048,
+                        inch: 0.0254,
+                        // Weight
+                        kilogram: 1,
+                        gram: 0.001,
+                        pound: 0.453592,
+                        ounce: 0.0283495,
+                        // Volume
+                        liter: 1,
+                        milliliter: 0.001,
+                        gallon: 3.78541
+                    };
+                    
+                    // Check if units are compatible
+                    const unitCategories = {
+                        // Length
+                        meter: 'length', kilometer: 'length', centimeter: 'length', mile: 'length', foot: 'length', inch: 'length',
+                        // Weight
+                        kilogram: 'weight', gram: 'weight', pound: 'weight', ounce: 'weight',
+                        // Volume
+                        liter: 'volume', milliliter: 'volume', gallon: 'volume'
+                    };
+                    
+                    if (unitCategories[fromUnit] !== unitCategories[toUnit]) {
+                        alert('Cannot convert between different unit types');
+                        return;
+                    }
+                    
+                    const valueInBase = value * conversions[fromUnit];
+                    const convertedValue = valueInBase / conversions[toUnit];
+                    
+                    const result = `${value} ${fromUnit} = ${convertedValue.toFixed(4)} ${toUnit}`;
+                    showResult(result);
+                });
+            }
+            
+            // Random Generator
+            else if (toolFunc === 'randomGenerator') {
+                const randomTypeSelect = document.getElementById('randomType');
+                const numberOptions = document.getElementById('numberOptions');
+                const passwordOptions = document.getElementById('passwordOptions');
+                
+                randomTypeSelect.addEventListener('change', function() {
+                    if (this.value === 'number') {
+                        numberOptions.style.display = 'block';
+                        passwordOptions.style.display = 'none';
+                    } else {
+                        numberOptions.style.display = 'none';
+                        passwordOptions.style.display = 'block';
+                    }
+                });
+                
+                document.getElementById('generateRandomBtn').addEventListener('click', function() {
+                    const type = randomTypeSelect.value;
+                    
+                    if (type === 'number') {
+                        const min = parseInt(document.getElementById('minNumber').value) || 1;
+                        const max = parseInt(document.getElementById('maxNumber').value) || 100;
+                        const count = parseInt(document.getElementById('numberCount').value) || 1;
+                        
+                        if (min >= max) {
+                            alert('Max must be greater than min');
+                            return;
+                        }
+                        
+                        let numbers = [];
+                        for (let i = 0; i < count; i++) {
+                            numbers.push(Math.floor(Math.random() * (max - min + 1)) + min);
+                        }
+                        
+                        showResult(numbers.join(', '));
+                    } else {
+                        const length = parseInt(document.getElementById('passwordLength').value) || 12;
+                        const includeUppercase = document.getElementById('includeUppercase').checked;
+                        const includeLowercase = document.getElementById('includeLowercase').checked;
+                        const includeNumbers = document.getElementById('includeNumbers').checked;
+                        const includeSymbols = document.getElementById('includeSymbols').checked;
+                        
+                        if (!includeUppercase && !includeLowercase && !includeNumbers && !includeSymbols) {
+                            alert('Please select at least one character type');
+                            return;
+                        }
+                        
+                        const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                        const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+                        const numbers = '0123456789';
+                        const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+                        
+                        let charset = '';
+                        if (includeUppercase) charset += uppercase;
+                        if (includeLowercase) charset += lowercase;
+                        if (includeNumbers) charset += numbers;
+                        if (includeSymbols) charset += symbols;
+                        
+                        let password = '';
+                        for (let i = 0; i < length; i++) {
+                            password += charset.charAt(Math.floor(Math.random() * charset.length));
+                        }
+                        
+                        showResult(password);
+                    }
+                });
+            }
+        }
+
         // Show result in modal
         function showResult(result) {
             const resultContent = document.getElementById('resultContent');
@@ -2460,7 +2432,7 @@
         // Copy result to clipboard
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
-                alert('✅ Result copied to clipboard!');
+                alert('Result copied to clipboard!');
             }).catch(err => {
                 console.error('Failed to copy: ', err);
                 // Fallback method
@@ -2470,22 +2442,19 @@
                 textArea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
-                alert('✅ Result copied to clipboard!');
+                alert('Result copied to clipboard!');
             });
         }
 
         // Share tool
         function shareTool(toolName, result) {
-            const shareText = `Check out this result from "${toolName}" on Any Tasker:\n\n${result}\n\nTry it yourself at: ${window.location.href}`;
+            const shareText = `Check out this result from ${toolName} on Any Tasker:\n\n${result}\n\nTry it yourself at: ${window.location.href}`;
             
             if (navigator.share) {
                 navigator.share({
                     title: `Any Tasker - ${toolName}`,
                     text: shareText,
                     url: window.location.href
-                }).catch(err => {
-                    // If share fails, copy to clipboard
-                    copyToClipboard(shareText);
                 });
             } else {
                 // Fallback to copying to clipboard
@@ -2497,6 +2466,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Populate tool cards
             populateToolCards();
+            
+            // Attach event listeners to tool buttons
+            attachToolButtonListeners();
             
             // Setup search functionality
             const searchInput = document.getElementById('searchInput');
@@ -2522,17 +2494,14 @@
             document.getElementById('copyResultBtn').addEventListener('click', function() {
                 if (window.lastResult) {
                     copyToClipboard(window.lastResult);
-                } else {
-                    alert('No result to copy. Please use a tool first.');
                 }
             });
             
             // Share result button
             document.getElementById('shareResultBtn').addEventListener('click', function() {
-                if (window.lastResult && window.currentToolName) {
-                    shareTool(window.currentToolName, window.lastResult);
-                } else {
-                    alert('No result to share. Please use a tool first.');
+                const toolName = document.getElementById('modalToolName').textContent;
+                if (window.lastResult) {
+                    shareTool(toolName, window.lastResult);
                 }
             });
             
@@ -2564,6 +2533,28 @@
                 e.preventDefault();
                 alert('Terms of Use: By using our tools, you agree to use them responsibly and not for illegal purposes. All tools are provided "as is" without warranty.');
             });
+            
+            // Initialize current date for age calculator
+            const today = new Date().toISOString().split('T')[0];
+            const asOfDateInput = document.getElementById('asOfDate');
+            if (asOfDateInput) {
+                asOfDateInput.value = today;
+                asOfDateInput.max = today;
+            }
+            
+            const dobInput = document.getElementById('dob');
+            if (dobInput) {
+                dobInput.max = today;
+            }
+            
+            // Update compression value display
+            const compressionLevel = document.getElementById('compressionLevel');
+            const compressionValue = document.getElementById('compressionValue');
+            if (compressionLevel && compressionValue) {
+                compressionLevel.addEventListener('input', function() {
+                    compressionValue.textContent = this.value + '%';
+                });
+            }
         });
     </script>
 </body>
