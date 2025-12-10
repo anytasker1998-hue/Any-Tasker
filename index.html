@@ -524,6 +524,76 @@
             background-color: #e68900;
         }
 
+        /* Image Converter Specific Styles */
+        .converter-box {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+            border: 2px solid var(--light-blue);
+        }
+
+        .image-preview-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 10px;
+            background: #f8fafc;
+        }
+
+        .quality-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .quality-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .download-converted {
+            margin-top: 20px;
+            text-align: center;
+            background: #10b981;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .download-converted:hover {
+            background: #0da271;
+            transform: translateY(-2px);
+        }
+
+        .converter-stats {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--light-blue);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .converter-stats div {
+            margin: 5px 0;
+        }
+
         /* Footer */
         footer {
             background-color: var(--dark-blue);
@@ -1231,23 +1301,496 @@
             ]
         };
 
-        // Tool implementations - AB HAR TOOL KA ACTUAL KAAM HOGA
+        // Tool implementations - INCLUDING IMAGE CONVERTER
         const toolFunctions = {
-            // 1. AGE CALCULATOR - ACTUAL WORKING
-            ageCalculator: function() {
+            // 1. IMAGE CONVERTER - FULLY WORKING (INTEGRATED CODE)
+            imageConverter: function() {
                 const html = `
-                    <div class="input-group">
-                        <label>Date of Birth</label>
-                        <input type="date" id="dob" max="${new Date().toISOString().split('T')[0]}">
+                    <div class="converter-box">
+                        <h3 style="text-align:center;color:var(--primary-blue);margin-top:0">Image Converter</h3>
+                        
+                        <div class="input-group">
+                            <label>Select Image</label>
+                            <input type="file" id="fileInput" accept="image/*" class="file-input">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Convert To Format</label>
+                            <select id="format">
+                                <option value="image/png">PNG</option>
+                                <option value="image/jpeg">JPEG</option>
+                                <option value="image/webp">WEBP</option>
+                                <option value="image/bmp">BMP</option>
+                                <option value="image/gif">GIF</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Quality (for JPEG/WEBP)</label>
+                            <div class="quality-control">
+                                <input type="range" id="quality" min="10" max="100" value="90" style="flex:1">
+                                <span class="quality-value" id="qualityValue">90%</span>
+                            </div>
+                        </div>
+                        
+                        <button id="convertBtn" class="btn" disabled style="width:100%">
+                            <i class="fas fa-exchange-alt"></i> Convert Image
+                        </button>
+                        
+                        <div class="image-preview-container">
+                            <h4>Preview</h4>
+                            <img id="preview" class="image-preview" alt="Image preview">
+                        </div>
+                        
+                        <div class="converter-stats" id="converterStats" style="display:none">
+                            <div><strong>Original Size:</strong> <span id="originalSize">0 KB</span></div>
+                            <div><strong>Converted Size:</strong> <span id="convertedSize">0 KB</span></div>
+                            <div><strong>Format:</strong> <span id="convertedFormat">-</span></div>
+                            <div><strong>Quality:</strong> <span id="convertedQuality">-</span></div>
+                        </div>
+                        
+                        <a id="downloadBtn" class="download-converted" style="display:none">
+                            <i class="fas fa-download"></i> Download Converted Image
+                        </a>
                     </div>
-                    <div class="input-group">
-                        <label>Calculate Age As Of (Optional)</label>
-                        <input type="date" id="asOfDate" value="${new Date().toISOString().split('T')[0]}">
-                    </div>
-                    <button id="calculateAgeBtn" class="btn">Calculate Age</button>
                 `;
                 
-                // Attach event listener immediately
+                setTimeout(() => {
+                    // Initialize variables
+                    let originalFile = null;
+                    let convertedBlob = null;
+                    let originalFileSize = 0;
+                    
+                    // Get DOM elements
+                    const fileInput = document.getElementById("fileInput");
+                    const convertBtn = document.getElementById("convertBtn");
+                    const preview = document.getElementById("preview");
+                    const downloadBtn = document.getElementById("downloadBtn");
+                    const qualitySlider = document.getElementById("quality");
+                    const qualityValue = document.getElementById("qualityValue");
+                    const converterStats = document.getElementById("converterStats");
+                    
+                    // Update quality value display
+                    qualitySlider.addEventListener("input", function() {
+                        qualityValue.textContent = this.value + "%";
+                    });
+                    
+                    // Image selection
+                    fileInput.addEventListener("change", () => {
+                        originalFile = fileInput.files[0];
+                        if (!originalFile) return;
+                        
+                        // Enable convert button
+                        convertBtn.disabled = false;
+                        
+                        // Store original file size
+                        originalFileSize = originalFile.size;
+                        
+                        // Show preview
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                            preview.src = e.target.result;
+                            preview.style.display = "block";
+                            
+                            // Show file info
+                            converterStats.style.display = "block";
+                            document.getElementById("originalSize").textContent = formatFileSize(originalFileSize);
+                            document.getElementById("convertedFormat").textContent = originalFile.type.split('/')[1].toUpperCase();
+                        };
+                        reader.readAsDataURL(originalFile);
+                    });
+                    
+                    // Promise-based canvas to blob conversion for reliability
+                    function canvasToBlob(canvas, type, quality) {
+                        return new Promise(resolve => {
+                            canvas.toBlob(blob => resolve(blob), type, quality);
+                        });
+                    }
+                    
+                    // Image conversion
+                    convertBtn.addEventListener("click", async () => {
+                        if (!originalFile) return;
+                        
+                        const format = document.getElementById("format").value;
+                        const quality = parseInt(document.getElementById("quality").value) / 100;
+                        
+                        // Show loading state
+                        convertBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting...';
+                        convertBtn.disabled = true;
+                        
+                        const img = new Image();
+                        
+                        img.onload = async () => {
+                            const canvas = document.createElement("canvas");
+                            const ctx = canvas.getContext("2d");
+                            
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            ctx.drawImage(img, 0, 0);
+                            
+                            try {
+                                const blob = await canvasToBlob(canvas, format, quality);
+                                
+                                if (!blob) {
+                                    alert("Conversion failed! Browser may not support this format.");
+                                    convertBtn.innerHTML = '<i class="fas fa-exchange-alt"></i> Convert Image';
+                                    convertBtn.disabled = false;
+                                    return;
+                                }
+                                
+                                convertedBlob = blob;
+                                const url = URL.createObjectURL(blob);
+                                
+                                // Update preview
+                                preview.src = url;
+                                
+                                // Update download link
+                                const fileExtension = format.split("/")[1];
+                                const timestamp = new Date().getTime();
+                                downloadBtn.href = url;
+                                downloadBtn.download = `converted_${timestamp}.${fileExtension}`;
+                                downloadBtn.style.display = "block";
+                                
+                                // Update stats
+                                document.getElementById("convertedSize").textContent = formatFileSize(blob.size);
+                                document.getElementById("convertedFormat").textContent = fileExtension.toUpperCase();
+                                document.getElementById("convertedQuality").textContent = qualitySlider.value + "%";
+                                
+                                // Show size comparison
+                                const sizeReduction = originalFileSize - blob.size;
+                                const reductionPercent = ((sizeReduction / originalFileSize) * 100).toFixed(1);
+                                
+                                if (sizeReduction > 0) {
+                                    converterStats.innerHTML += `<div style="color:#10b981"><strong>Size Reduced:</strong> ${formatFileSize(sizeReduction)} (${reductionPercent}%)</div>`;
+                                } else if (sizeReduction < 0) {
+                                    converterStats.innerHTML += `<div style="color:#ef4444"><strong>Size Increased:</strong> ${formatFileSize(-sizeReduction)}</div>`;
+                                }
+                                
+                                // Show result
+                                const resultText = `Image converted successfully!\n\nOriginal: ${formatFileSize(originalFileSize)}\nConverted: ${formatFileSize(blob.size)}\nFormat: ${fileExtension.toUpperCase()}\nQuality: ${qualitySlider.value}%`;
+                                showResult(resultText);
+                                
+                            } catch (error) {
+                                alert("Error during conversion: " + error.message);
+                            } finally {
+                                convertBtn.innerHTML = '<i class="fas fa-exchange-alt"></i> Convert Image';
+                                convertBtn.disabled = false;
+                            }
+                        };
+                        
+                        img.onerror = () => {
+                            alert("Failed to load image. Please try another image.");
+                            convertBtn.innerHTML = '<i class="fas fa-exchange-alt"></i> Convert Image';
+                            convertBtn.disabled = false;
+                        };
+                        
+                        img.src = URL.createObjectURL(originalFile);
+                    });
+                    
+                    // Helper function to format file size
+                    function formatFileSize(bytes) {
+                        if (bytes === 0) return '0 Bytes';
+                        const k = 1024;
+                        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                        const i = Math.floor(Math.log(bytes) / Math.log(k));
+                        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+                    }
+                    
+                }, 100);
+                
+                return html;
+            },
+            
+            // 2. IMAGE COMPRESSOR
+            imageCompressor: function() {
+                const html = `
+                    <div class="converter-box">
+                        <h3 style="text-align:center;color:var(--primary-blue);margin-top:0">Image Compressor</h3>
+                        
+                        <div class="input-group">
+                            <label>Select Image to Compress</label>
+                            <input type="file" id="compressFileInput" accept="image/*" class="file-input">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Compression Level</label>
+                            <div class="quality-control">
+                                <input type="range" id="compressLevel" min="10" max="100" value="70" style="flex:1">
+                                <span class="quality-value" id="compressValue">70%</span>
+                            </div>
+                            <small style="color:#666;">Lower = More Compression (Smaller File)</small>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Output Format</label>
+                            <select id="compressFormat">
+                                <option value="image/jpeg">JPEG (Recommended)</option>
+                                <option value="image/webp">WEBP</option>
+                                <option value="image/png">PNG</option>
+                            </select>
+                        </div>
+                        
+                        <button id="compressBtn" class="btn" disabled style="width:100%">
+                            <i class="fas fa-compress-alt"></i> Compress Image
+                        </button>
+                        
+                        <div class="image-preview-container">
+                            <h4>Before & After</h4>
+                            <div style="display:flex;gap:10px;margin-top:10px">
+                                <div style="flex:1;text-align:center">
+                                    <small>Original</small>
+                                    <img id="originalPreview" class="image-preview" style="max-height:150px">
+                                </div>
+                                <div style="flex:1;text-align:center">
+                                    <small>Compressed</small>
+                                    <img id="compressedPreview" class="image-preview" style="max-height:150px">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="converter-stats" id="compressStats" style="display:none">
+                            <div><strong>Original Size:</strong> <span id="compressOriginalSize">0 KB</span></div>
+                            <div><strong>Compressed Size:</strong> <span id="compressNewSize">0 KB</span></div>
+                            <div><strong>Compression Ratio:</strong> <span id="compressRatio">0%</span></div>
+                        </div>
+                        
+                        <a id="downloadCompressedBtn" class="download-converted" style="display:none">
+                            <i class="fas fa-download"></i> Download Compressed Image
+                        </a>
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    // Implementation similar to image converter but focused on compression
+                    const compressFileInput = document.getElementById("compressFileInput");
+                    const compressBtn = document.getElementById("compressBtn");
+                    const compressLevel = document.getElementById("compressLevel");
+                    const compressValue = document.getElementById("compressValue");
+                    const originalPreview = document.getElementById("originalPreview");
+                    const compressedPreview = document.getElementById("compressedPreview");
+                    const downloadCompressedBtn = document.getElementById("downloadCompressedBtn");
+                    const compressStats = document.getElementById("compressStats");
+                    
+                    let compressOriginalFile = null;
+                    let compressedBlob = null;
+                    let originalCompressSize = 0;
+                    
+                    // Update compression value display
+                    compressLevel.addEventListener("input", function() {
+                        compressValue.textContent = this.value + "%";
+                    });
+                    
+                    // File selection
+                    compressFileInput.addEventListener("change", function() {
+                        compressOriginalFile = this.files[0];
+                        if (!compressOriginalFile) return;
+                        
+                        compressBtn.disabled = false;
+                        originalCompressSize = compressOriginalFile.size;
+                        
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                            originalPreview.src = e.target.result;
+                            originalPreview.style.display = "block";
+                            
+                            compressStats.style.display = "block";
+                            document.getElementById("compressOriginalSize").textContent = formatFileSize(originalCompressSize);
+                        };
+                        reader.readAsDataURL(compressOriginalFile);
+                    });
+                    
+                    // Compression function
+                    function canvasToBlob(canvas, type, quality) {
+                        return new Promise(resolve => {
+                            canvas.toBlob(blob => resolve(blob), type, quality);
+                        });
+                    }
+                    
+                    // Compress button click
+                    compressBtn.addEventListener("click", async function() {
+                        if (!compressOriginalFile) return;
+                        
+                        const format = document.getElementById("compressFormat").value;
+                        const quality = parseInt(compressLevel.value) / 100;
+                        
+                        compressBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Compressing...';
+                        compressBtn.disabled = true;
+                        
+                        const img = new Image();
+                        
+                        img.onload = async function() {
+                            const canvas = document.createElement("canvas");
+                            const ctx = canvas.getContext("2d");
+                            
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            ctx.drawImage(img, 0, 0);
+                            
+                            try {
+                                const blob = await canvasToBlob(canvas, format, quality);
+                                
+                                if (!blob) {
+                                    alert("Compression failed!");
+                                    compressBtn.innerHTML = '<i class="fas fa-compress-alt"></i> Compress Image';
+                                    compressBtn.disabled = false;
+                                    return;
+                                }
+                                
+                                compressedBlob = blob;
+                                const url = URL.createObjectURL(blob);
+                                
+                                compressedPreview.src = url;
+                                compressedPreview.style.display = "block";
+                                
+                                const fileExtension = format.split("/")[1];
+                                const timestamp = new Date().getTime();
+                                downloadCompressedBtn.href = url;
+                                downloadCompressedBtn.download = `compressed_${timestamp}.${fileExtension}`;
+                                downloadCompressedBtn.style.display = "block";
+                                
+                                const newSize = blob.size;
+                                const sizeReduction = originalCompressSize - newSize;
+                                const reductionPercent = ((sizeReduction / originalCompressSize) * 100).toFixed(1);
+                                
+                                document.getElementById("compressNewSize").textContent = formatFileSize(newSize);
+                                document.getElementById("compressRatio").textContent = reductionPercent + "% reduction";
+                                
+                                const resultText = `Image compressed successfully!\n\nOriginal: ${formatFileSize(originalCompressSize)}\nCompressed: ${formatFileSize(newSize)}\nReduction: ${reductionPercent}%\nNew Format: ${fileExtension.toUpperCase()}`;
+                                showResult(resultText);
+                                
+                            } catch (error) {
+                                alert("Error during compression: " + error.message);
+                            } finally {
+                                compressBtn.innerHTML = '<i class="fas fa-compress-alt"></i> Compress Image';
+                                compressBtn.disabled = false;
+                            }
+                        };
+                        
+                        img.onerror = function() {
+                            alert("Failed to load image.");
+                            compressBtn.innerHTML = '<i class="fas fa-compress-alt"></i> Compress Image';
+                            compressBtn.disabled = false;
+                        };
+                        
+                        img.src = URL.createObjectURL(compressOriginalFile);
+                    });
+                    
+                    function formatFileSize(bytes) {
+                        if (bytes === 0) return '0 Bytes';
+                        const k = 1024;
+                        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                        const i = Math.floor(Math.log(bytes) / Math.log(k));
+                        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+                    }
+                    
+                }, 100);
+                
+                return html;
+            },
+            
+            // 3. IMAGE RESIZER
+            imageResizer: function() {
+                const html = `
+                    <div class="converter-box">
+                        <h3 style="text-align:center;color:var(--primary-blue);margin-top:0">Image Resizer</h3>
+                        
+                        <div class="input-group">
+                            <label>Select Image to Resize</label>
+                            <input type="file" id="resizeFileInput" accept="image/*" class="file-input">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Original Dimensions</label>
+                            <div id="originalDimensions" style="padding:10px;background:#f1f5f9;border-radius:5px">
+                                Width: <span id="originalWidth">-</span>px | Height: <span id="originalHeight">-</span>px
+                            </div>
+                        </div>
+                        
+                        <div style="display:flex;gap:10px;margin-bottom:15px">
+                            <div class="input-group" style="flex:1">
+                                <label>New Width (px)</label>
+                                <input type="number" id="newWidth" placeholder="Width" min="10" max="5000">
+                            </div>
+                            <div class="input-group" style="flex:1">
+                                <label>New Height (px)</label>
+                                <input type="number" id="newHeight" placeholder="Height" min="10" max="5000">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>
+                                <input type="checkbox" id="maintainAspect" checked> Maintain Aspect Ratio
+                            </label>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Preset Sizes</label>
+                            <select id="presetSize" style="width:100%">
+                                <option value="custom">Custom Size</option>
+                                <option value="800x600">Website Banner (800x600)</option>
+                                <option value="1200x630">Facebook Post (1200x630)</option>
+                                <option value="1080x1080">Instagram Square (1080x1080)</option>
+                                <option value="1500x500">Twitter Header (1500x500)</option>
+                                <option value="1280x720">HD Video (1280x720)</option>
+                                <option value="1920x1080">Full HD (1920x1080)</option>
+                                <option value="800x800">Profile Picture (800x800)</option>
+                            </select>
+                        </div>
+                        
+                        <button id="resizeBtn" class="btn" disabled style="width:100%">
+                            <i class="fas fa-expand-alt"></i> Resize Image
+                        </button>
+                        
+                        <div class="image-preview-container">
+                            <h4>Before & After</h4>
+                            <div style="display:flex;gap:10px;margin-top:10px">
+                                <div style="flex:1;text-align:center">
+                                    <small>Original</small>
+                                    <img id="resizeOriginalPreview" class="image-preview" style="max-height:150px">
+                                </div>
+                                <div style="flex:1;text-align:center">
+                                    <small>Resized</small>
+                                    <img id="resizedPreview" class="image-preview" style="max-height:150px">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a id="downloadResizedBtn" class="download-converted" style="display:none">
+                            <i class="fas fa-download"></i> Download Resized Image
+                        </a>
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    // Implementation will go here
+                    // Similar pattern as above tools
+                }, 100);
+                
+                return html;
+            },
+            
+            // 4. AGE CALCULATOR - ACTUAL WORKING
+            ageCalculator: function() {
+                const html = `
+                    <div class="converter-box">
+                        <h3 style="text-align:center;color:var(--primary-blue);margin-top:0">Age Calculator</h3>
+                        
+                        <div class="input-group">
+                            <label>Date of Birth</label>
+                            <input type="date" id="dob" max="${new Date().toISOString().split('T')[0]}" style="width:100%">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Calculate Age As Of (Optional)</label>
+                            <input type="date" id="asOfDate" value="${new Date().toISOString().split('T')[0]}" style="width:100%">
+                        </div>
+                        
+                        <button id="calculateAgeBtn" class="btn" style="width:100%">
+                            <i class="fas fa-calculator"></i> Calculate Age
+                        </button>
+                    </div>
+                `;
+                
                 setTimeout(() => {
                     document.getElementById('calculateAgeBtn').addEventListener('click', function() {
                         const dob = document.getElementById('dob').value;
@@ -1284,18 +1827,26 @@
                 return html;
             },
             
-            // 2. BMI CALCULATOR - ACTUAL WORKING
+            // 5. BMI CALCULATOR - ACTUAL WORKING
             bmiCalculator: function() {
                 const html = `
-                    <div class="input-group">
-                        <label>Weight (kg)</label>
-                        <input type="number" id="weight" placeholder="Enter weight in kg" min="1" max="500">
+                    <div class="converter-box">
+                        <h3 style="text-align:center;color:var(--primary-blue);margin-top:0">BMI Calculator</h3>
+                        
+                        <div class="input-group">
+                            <label>Weight (kg)</label>
+                            <input type="number" id="weight" placeholder="Enter weight in kg" min="1" max="500" style="width:100%">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Height (cm)</label>
+                            <input type="number" id="height" placeholder="Enter height in cm" min="50" max="300" style="width:100%">
+                        </div>
+                        
+                        <button id="calculateBmiBtn" class="btn" style="width:100%">
+                            <i class="fas fa-weight"></i> Calculate BMI
+                        </button>
                     </div>
-                    <div class="input-group">
-                        <label>Height (cm)</label>
-                        <input type="number" id="height" placeholder="Enter height in cm" min="50" max="300">
-                    </div>
-                    <button id="calculateBmiBtn" class="btn">Calculate BMI</button>
                 `;
                 
                 setTimeout(() => {
@@ -1325,164 +1876,35 @@
                 return html;
             },
             
-            // 3. LOAN EMI CALCULATOR - ACTUAL WORKING
-            loanEmiCalculator: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Loan Amount (₹)</label>
-                        <input type="number" id="loanAmount" placeholder="Enter loan amount" min="1000" step="1000">
-                    </div>
-                    <div class="input-group">
-                        <label>Interest Rate (% per year)</label>
-                        <input type="number" id="interestRate" step="0.1" placeholder="Enter interest rate" min="1" max="30">
-                    </div>
-                    <div class="input-group">
-                        <label>Loan Tenure (months)</label>
-                        <input type="number" id="loanTenure" placeholder="Enter tenure in months" min="1" max="360">
-                    </div>
-                    <button id="calculateEmiBtn" class="btn">Calculate EMI</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('calculateEmiBtn').addEventListener('click', function() {
-                        const loanAmount = parseFloat(document.getElementById('loanAmount').value);
-                        const interestRate = parseFloat(document.getElementById('interestRate').value);
-                        const loanTenure = parseFloat(document.getElementById('loanTenure').value);
-                        
-                        if (!loanAmount || !interestRate || !loanTenure) {
-                            alert('Please enter all fields');
-                            return;
-                        }
-                        
-                        const monthlyRate = interestRate / 12 / 100;
-                        const emi = loanAmount * monthlyRate * Math.pow(1 + monthlyRate, loanTenure) / 
-                                    (Math.pow(1 + monthlyRate, loanTenure) - 1);
-                        const totalPayment = emi * loanTenure;
-                        const totalInterest = totalPayment - loanAmount;
-                        
-                        const result = `EMI: ₹${emi.toFixed(2)}\nTotal Payment: ₹${totalPayment.toFixed(2)}\nTotal Interest: ₹${totalInterest.toFixed(2)}\n\nLoan Amount: ₹${loanAmount}\nInterest Rate: ${interestRate}%\nTenure: ${loanTenure} months`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 4. GST CALCULATOR - ACTUAL WORKING
-            gstCalculator: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Amount Before GST</label>
-                        <input type="number" id="amountBeforeGst" placeholder="Enter amount" min="1">
-                    </div>
-                    <div class="input-group">
-                        <label>GST Rate (%)</label>
-                        <select id="gstRate">
-                            <option value="5">5%</option>
-                            <option value="12">12%</option>
-                            <option value="18" selected>18%</option>
-                            <option value="28">28%</option>
-                        </select>
-                    </div>
-                    <button id="calculateGstBtn" class="btn">Calculate GST</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('calculateGstBtn').addEventListener('click', function() {
-                        const amount = parseFloat(document.getElementById('amountBeforeGst').value);
-                        const gstRate = parseFloat(document.getElementById('gstRate').value);
-                        
-                        if (!amount) {
-                            alert('Please enter amount');
-                            return;
-                        }
-                        
-                        const gstAmount = amount * (gstRate / 100);
-                        const totalAmount = amount + gstAmount;
-                        
-                        const result = `Original Amount: ₹${amount.toFixed(2)}\nGST Rate: ${gstRate}%\nGST Amount: ₹${gstAmount.toFixed(2)}\nTotal Amount (including GST): ₹${totalAmount.toFixed(2)}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 5. CURRENCY CONVERTER - ACTUAL WORKING
-            currencyConverter: function() {
-                const currencies = ['USD', 'EUR', 'GBP', 'INR', 'JPY', 'CAD', 'AUD'];
-                let options = currencies.map(c => `<option value="${c}">${c}</option>`).join('');
-                
-                const html = `
-                    <div class="input-group">
-                        <label>Amount</label>
-                        <input type="number" id="currencyAmount" placeholder="Enter amount" value="1" min="0.01" step="0.01">
-                    </div>
-                    <div class="input-group">
-                        <label>From Currency</label>
-                        <select id="fromCurrency">${options}</select>
-                    </div>
-                    <div class="input-group">
-                        <label>To Currency</label>
-                        <select id="toCurrency">${options}</select>
-                    </div>
-                    <button id="convertCurrencyBtn" class="btn">Convert Currency</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('convertCurrencyBtn').addEventListener('click', function() {
-                        const amount = parseFloat(document.getElementById('currencyAmount').value);
-                        const fromCurrency = document.getElementById('fromCurrency').value;
-                        const toCurrency = document.getElementById('toCurrency').value;
-                        
-                        if (!amount) {
-                            alert('Please enter amount');
-                            return;
-                        }
-                        
-                        // Mock exchange rates
-                        const exchangeRates = {
-                            'USD': 1,
-                            'EUR': 0.92,
-                            'GBP': 0.79,
-                            'INR': 83.5,
-                            'JPY': 149.5,
-                            'CAD': 1.36,
-                            'AUD': 1.52
-                        };
-                        
-                        const amountInUSD = amount / exchangeRates[fromCurrency];
-                        const convertedAmount = amountInUSD * exchangeRates[toCurrency];
-                        
-                        const result = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}\n\nExchange Rate: 1 ${fromCurrency} = ${(exchangeRates[toCurrency]/exchangeRates[fromCurrency]).toFixed(4)} ${toCurrency}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
             // 6. TEXT CASE CONVERTER - ACTUAL WORKING
             textCaseConverter: function() {
                 const html = `
-                    <div class="input-group">
-                        <label>Enter Text</label>
-                        <textarea id="textToConvert" placeholder="Enter text here..."></textarea>
+                    <div class="converter-box">
+                        <h3 style="text-align:center;color:var(--primary-blue);margin-top:0">Text Case Converter</h3>
+                        
+                        <div class="input-group">
+                            <label>Enter Text</label>
+                            <textarea id="textToConvert" placeholder="Enter text here..." style="width:100%;height:120px"></textarea>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Convert To</label>
+                            <select id="caseType" style="width:100%">
+                                <option value="upper">UPPERCASE</option>
+                                <option value="lower">lowercase</option>
+                                <option value="title">Title Case</option>
+                                <option value="sentence">Sentence case</option>
+                                <option value="camel">camelCase</option>
+                                <option value="pascal">PascalCase</option>
+                                <option value="snake">snake_case</option>
+                                <option value="kebab">kebab-case</option>
+                            </select>
+                        </div>
+                        
+                        <button id="convertCaseBtn" class="btn" style="width:100%">
+                            <i class="fas fa-exchange-alt"></i> Convert Text Case
+                        </button>
                     </div>
-                    <div class="input-group">
-                        <label>Convert To</label>
-                        <select id="caseType">
-                            <option value="upper">UPPERCASE</option>
-                            <option value="lower">lowercase</option>
-                            <option value="title">Title Case</option>
-                            <option value="sentence">Sentence case</option>
-                            <option value="camel">camelCase</option>
-                            <option value="pascal">PascalCase</option>
-                            <option value="snake">snake_case</option>
-                            <option value="kebab">kebab-case</option>
-                        </select>
-                    </div>
-                    <button id="convertCaseBtn" class="btn">Convert Text Case</button>
                 `;
                 
                 setTimeout(() => {
@@ -1532,752 +1954,25 @@
                 return html;
             },
             
-            // 7. WORD & CHARACTER COUNTER - ACTUAL WORKING
-            wordCharCounter: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Enter Text</label>
-                        <textarea id="textToCount" placeholder="Enter text here..."></textarea>
-                    </div>
-                    <button id="countTextBtn" class="btn">Count Words & Characters</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('countTextBtn').addEventListener('click', function() {
-                        const text = document.getElementById('textToCount').value;
-                        
-                        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-                        const characters = text.length;
-                        const charactersNoSpaces = text.replace(/\s/g, '').length;
-                        const sentences = text.split(/[.!?]+/).filter(s => s.trim()).length;
-                        const paragraphs = text.split(/\n+/).filter(p => p.trim()).length;
-                        const lines = text.split(/\n/).length;
-                        
-                        const result = `Words: ${words}\nCharacters: ${characters}\nCharacters (no spaces): ${charactersNoSpaces}\nSentences: ${sentences}\nParagraphs: ${paragraphs}\nLines: ${lines}\n\nText Preview:\n${text.substring(0, 200)}${text.length > 200 ? '...' : ''}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 8. REMOVE DUPLICATE LINES - ACTUAL WORKING
-            removeDuplicateLines: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Enter Text (One item per line)</label>
-                        <textarea id="textWithDuplicates" placeholder="Enter text with duplicate lines..."></textarea>
-                    </div>
-                    <button id="removeDuplicatesBtn" class="btn">Remove Duplicate Lines</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('removeDuplicatesBtn').addEventListener('click', function() {
-                        const text = document.getElementById('textWithDuplicates').value;
-                        const lines = text.split('\n');
-                        const uniqueLines = [...new Set(lines)];
-                        const duplicateCount = lines.length - uniqueLines.length;
-                        
-                        const result = `Original Lines: ${lines.length}\nUnique Lines: ${uniqueLines.length}\nDuplicates Removed: ${duplicateCount}\n\nUnique Lines:\n${uniqueLines.join('\n')}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 9. TEXT SORTER - ACTUAL WORKING
-            textSorter: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Enter Text (One item per line)</label>
-                        <textarea id="textToSort" placeholder="Enter text to sort..."></textarea>
-                    </div>
-                    <div class="input-group">
-                        <label>Sort Order</label>
-                        <select id="sortOrder">
-                            <option value="asc">Ascending (A-Z)</option>
-                            <option value="desc">Descending (Z-A)</option>
-                            <option value="numAsc">Numerical Ascending</option>
-                            <option value="numDesc">Numerical Descending</option>
-                        </select>
-                    </div>
-                    <button id="sortTextBtn" class="btn">Sort Text</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('sortTextBtn').addEventListener('click', function() {
-                        const text = document.getElementById('textToSort').value;
-                        const sortOrder = document.getElementById('sortOrder').value;
-                        
-                        const lines = text.split('\n').filter(line => line.trim());
-                        
-                        let sortedLines;
-                        if (sortOrder === 'asc') {
-                            sortedLines = lines.sort();
-                        } else if (sortOrder === 'desc') {
-                            sortedLines = lines.sort().reverse();
-                        } else if (sortOrder === 'numAsc') {
-                            sortedLines = lines.sort((a, b) => parseFloat(a) - parseFloat(b));
-                        } else if (sortOrder === 'numDesc') {
-                            sortedLines = lines.sort((a, b) => parseFloat(b) - parseFloat(a));
-                        }
-                        
-                        const result = `Original: ${lines.length} lines\nSorted: ${sortedLines.length} lines\n\nSorted Text:\n${sortedLines.join('\n')}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 10. TEXT REVERSER - ACTUAL WORKING
-            textReverser: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Enter Text</label>
-                        <textarea id="textToReverse" placeholder="Enter text to reverse..."></textarea>
-                    </div>
-                    <div class="input-group">
-                        <label>Reverse Type</label>
-                        <select id="reverseType">
-                            <option value="characters">Reverse Characters</option>
-                            <option value="words">Reverse Words Order</option>
-                            <option value="lines">Reverse Lines Order</option>
-                        </select>
-                    </div>
-                    <button id="reverseTextBtn" class="btn">Reverse Text</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('reverseTextBtn').addEventListener('click', function() {
-                        const text = document.getElementById('textToReverse').value;
-                        const reverseType = document.getElementById('reverseType').value;
-                        
-                        let reversedText = '';
-                        
-                        if (reverseType === 'characters') {
-                            reversedText = text.split('').reverse().join('');
-                        } else if (reverseType === 'words') {
-                            reversedText = text.split(' ').reverse().join(' ');
-                        } else if (reverseType === 'lines') {
-                            reversedText = text.split('\n').reverse().join('\n');
-                        }
-                        
-                        const result = `Original Text:\n${text}\n\nReversed Text (${reverseType}):\n${reversedText}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 11. TEXT ENCRYPTOR/DECRYPTOR - ACTUAL WORKING
-            textEncryptor: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Enter Text</label>
-                        <textarea id="textToEncrypt" placeholder="Enter text to encrypt/decrypt..."></textarea>
-                    </div>
-                    <div class="input-group">
-                        <label>Action</label>
-                        <select id="encryptAction">
-                            <option value="encrypt">Encrypt</option>
-                            <option value="decrypt">Decrypt</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>Key (Optional)</label>
-                        <input type="text" id="encryptionKey" placeholder="Enter encryption key" value="secret">
-                    </div>
-                    <button id="encryptTextBtn" class="btn">Process Text</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('encryptTextBtn').addEventListener('click', function() {
-                        const text = document.getElementById('textToEncrypt').value;
-                        const action = document.getElementById('encryptAction').value;
-                        const key = document.getElementById('encryptionKey').value || 'secret';
-                        
-                        if (!text) {
-                            alert('Please enter text');
-                            return;
-                        }
-                        
-                        let result = '';
-                        if (action === 'encrypt') {
-                            // Simple encryption
-                            result = text.split('').map(char => {
-                                const code = char.charCodeAt(0);
-                                const keyCode = key.charCodeAt(0) % 26;
-                                return String.fromCharCode(code + keyCode);
-                            }).join('');
-                        } else {
-                            // Simple decryption
-                            result = text.split('').map(char => {
-                                const code = char.charCodeAt(0);
-                                const keyCode = key.charCodeAt(0) % 26;
-                                return String.fromCharCode(code - keyCode);
-                            }).join('');
-                        }
-                        
-                        const operation = action === 'encrypt' ? 'Encrypted' : 'Decrypted';
-                        const resultText = `Original Text:\n${text}\n\n${operation} Text:\n${result}\n\nKey used: ${key}`;
-                        showResult(resultText);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 12. JSON FORMATTER & VALIDATOR - ACTUAL WORKING
-            jsonFormatter: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Enter JSON</label>
-                        <textarea id="jsonInput" placeholder='{"key": "value", "array": [1, 2, 3]}'></textarea>
-                    </div>
-                    <button id="formatJsonBtn" class="btn">Format & Validate JSON</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('formatJsonBtn').addEventListener('click', function() {
-                        const jsonText = document.getElementById('jsonInput').value;
-                        
-                        try {
-                            const jsonObj = JSON.parse(jsonText);
-                            const formatted = JSON.stringify(jsonObj, null, 2);
-                            const isValid = true;
-                            
-                            const result = `✅ Valid JSON\n\nFormatted JSON:\n${formatted}\n\nProperties:\n- Type: ${typeof jsonObj}\n- Is Array: ${Array.isArray(jsonObj)}\n- Total Keys: ${Object.keys(jsonObj).length}`;
-                            showResult(result);
-                        } catch (error) {
-                            const result = `❌ Invalid JSON\n\nError: ${error.message}\n\nTry to fix:\n1. Check for missing commas\n2. Check for missing quotes\n3. Check for trailing commas\n4. Validate your JSON structure`;
-                            showResult(result);
-                        }
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 13. BASE64 ENCODER/DECODER - ACTUAL WORKING
-            base64Encoder: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Enter Text</label>
-                        <textarea id="base64Input" placeholder="Enter text to encode/decode..."></textarea>
-                    </div>
-                    <div class="input-group">
-                        <label>Action</label>
-                        <select id="base64Action">
-                            <option value="encode">Encode to Base64</option>
-                            <option value="decode">Decode from Base64</option>
-                        </select>
-                    </div>
-                    <button id="base64Btn" class="btn">Process</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('base64Btn').addEventListener('click', function() {
-                        const text = document.getElementById('base64Input').value;
-                        const action = document.getElementById('base64Action').value;
-                        
-                        if (!text) {
-                            alert('Please enter text');
-                            return;
-                        }
-                        
-                        let result = '';
-                        try {
-                            if (action === 'encode') {
-                                result = btoa(text);
-                            } else {
-                                result = atob(text);
-                            }
-                            
-                            const operation = action === 'encode' ? 'Encoded' : 'Decoded';
-                            const resultText = `Original Text:\n${text}\n\n${operation} Text:\n${result}`;
-                            showResult(resultText);
-                        } catch (error) {
-                            const result = `Error: ${error.message}\n\nMake sure you're entering valid Base64 for decoding.`;
-                            showResult(result);
-                        }
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 14. URL ENCODER/DECODER - ACTUAL WORKING
-            urlEncoder: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Enter URL or Text</label>
-                        <textarea id="urlInput" placeholder="Enter text to encode/decode..."></textarea>
-                    </div>
-                    <div class="input-group">
-                        <label>Action</label>
-                        <select id="urlAction">
-                            <option value="encode">Encode URL</option>
-                            <option value="decode">Decode URL</option>
-                        </select>
-                    </div>
-                    <button id="urlBtn" class="btn">Process</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('urlBtn').addEventListener('click', function() {
-                        const text = document.getElementById('urlInput').value;
-                        const action = document.getElementById('urlAction').value;
-                        
-                        if (!text) {
-                            alert('Please enter text');
-                            return;
-                        }
-                        
-                        let result = '';
-                        try {
-                            if (action === 'encode') {
-                                result = encodeURIComponent(text);
-                            } else {
-                                result = decodeURIComponent(text);
-                            }
-                            
-                            const operation = action === 'encode' ? 'Encoded' : 'Decoded';
-                            const resultText = `Original Text:\n${text}\n\n${operation} Text:\n${result}`;
-                            showResult(resultText);
-                        } catch (error) {
-                            const result = `Error: ${error.message}\n\nMake sure you're entering valid encoded URL for decoding.`;
-                            showResult(result);
-                        }
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 15. HEX TO RGB CONVERTER - ACTUAL WORKING
-            hexRgbConverter: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Enter HEX or RGB Color</label>
-                        <input type="text" id="colorInput" placeholder="#FF5733 or rgb(255, 87, 51)" value="#2c3e8f">
-                    </div>
-                    <div class="input-group">
-                        <label>Conversion Direction</label>
-                        <select id="colorConversion">
-                            <option value="auto">Auto Detect</option>
-                            <option value="hexToRgb">HEX to RGB</option>
-                            <option value="rgbToHex">RGB to HEX</option>
-                        </select>
-                    </div>
-                    <button id="convertColorBtn" class="btn">Convert Color</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('convertColorBtn').addEventListener('click', function() {
-                        const colorInput = document.getElementById('colorInput').value.trim();
-                        const conversion = document.getElementById('colorConversion').value;
-                        
-                        if (!colorInput) {
-                            alert('Please enter color');
-                            return;
-                        }
-                        
-                        let result = '';
-                        let detectedType = '';
-                        
-                        // Auto detect input type
-                        let inputType = conversion;
-                        if (conversion === 'auto') {
-                            if (colorInput.startsWith('#') && (colorInput.length === 4 || colorInput.length === 7)) {
-                                inputType = 'hexToRgb';
-                                detectedType = 'HEX';
-                            } else if (colorInput.startsWith('rgb(') && colorInput.endsWith(')')) {
-                                inputType = 'rgbToHex';
-                                detectedType = 'RGB';
-                            } else {
-                                result = 'Unable to detect color format. Please specify conversion direction.';
-                                showResult(result);
-                                return;
-                            }
-                        }
-                        
-                        if (inputType === 'hexToRgb') {
-                            // HEX to RGB
-                            const hex = colorInput.replace('#', '');
-                            if (hex.length === 3) {
-                                const r = parseInt(hex[0] + hex[0], 16);
-                                const g = parseInt(hex[1] + hex[1], 16);
-                                const b = parseInt(hex[2] + hex[2], 16);
-                                result = `HEX: ${colorInput}\nRGB: rgb(${r}, ${g}, ${b})`;
-                            } else if (hex.length === 6) {
-                                const r = parseInt(hex.substr(0, 2), 16);
-                                const g = parseInt(hex.substr(2, 2), 16);
-                                const b = parseInt(hex.substr(4, 2), 16);
-                                result = `HEX: ${colorInput}\nRGB: rgb(${r}, ${g}, ${b})`;
-                            } else {
-                                result = 'Invalid HEX color format (use: #FFF or #FFFFFF)';
-                            }
-                        } else {
-                            // RGB to HEX
-                            const rgbMatch = colorInput.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
-                            if (rgbMatch) {
-                                const r = parseInt(rgbMatch[1]);
-                                const g = parseInt(rgbMatch[2]);
-                                const b = parseInt(rgbMatch[3]);
-                                
-                                const toHex = (c) => {
-                                    const hex = c.toString(16);
-                                    return hex.length === 1 ? '0' + hex : hex;
-                                };
-                                
-                                const hexColor = `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
-                                result = `RGB: ${colorInput}\nHEX: ${hexColor}`;
-                            } else {
-                                result = 'Invalid RGB color format (use: rgb(255, 255, 255))';
-                            }
-                        }
-                        
-                        if (detectedType) {
-                            result = `Detected: ${detectedType} color\n\n${result}`;
-                        }
-                        
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 16. QR CODE GENERATOR - ACTUAL WORKING
-            qrCodeGenerator: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Enter Text or URL for QR Code</label>
-                        <textarea id="qrText" placeholder="Enter text or URL...">https://anytasker.com</textarea>
-                    </div>
-                    <div class="input-group">
-                        <label>QR Code Size</label>
-                        <select id="qrSize">
-                            <option value="128">128x128</option>
-                            <option value="256" selected>256x256</option>
-                            <option value="512">512x512</option>
-                        </select>
-                    </div>
-                    <button id="generateQrBtn" class="btn">Generate QR Code</button>
-                    <div id="qrCodeOutput" style="margin-top: 20px; text-align: center;"></div>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('generateQrBtn').addEventListener('click', function() {
-                        const qrText = document.getElementById('qrText').value;
-                        const qrSize = document.getElementById('qrSize').value;
-                        
-                        if (!qrText) {
-                            alert('Please enter text for QR code');
-                            return;
-                        }
-                        
-                        // Create QR code using Google Charts API
-                        const qrCodeUrl = `https://chart.googleapis.com/chart?cht=qr&chs=${qrSize}x${qrSize}&chl=${encodeURIComponent(qrText)}&choe=UTF-8`;
-                        
-                        const qrCodeOutput = document.getElementById('qrCodeOutput');
-                        qrCodeOutput.innerHTML = `
-                            <img src="${qrCodeUrl}" alt="QR Code" style="max-width: 100%; border: 1px solid #ddd; border-radius: 8px;">
-                            <p style="margin-top: 10px; font-size: 14px;">Scan this QR code</p>
-                        `;
-                        
-                        const result = `QR Code generated successfully!\n\nDetails:\n- Size: ${qrSize}x${qrSize}px\n- Text: ${qrText}\n- URL: ${qrCodeUrl}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 17. UUID GENERATOR - ACTUAL WORKING
-            uuidGenerator: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Number of UUIDs to generate</label>
-                        <input type="number" id="uuidCount" min="1" max="50" value="1">
-                    </div>
-                    <div class="input-group">
-                        <label>UUID Version</label>
-                        <select id="uuidVersion">
-                            <option value="v4">Version 4 (Random)</option>
-                            <option value="v1">Version 1 (Timestamp)</option>
-                        </select>
-                    </div>
-                    <button id="generateUuidBtn" class="btn">Generate UUIDs</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('generateUuidBtn').addEventListener('click', function() {
-                        const count = parseInt(document.getElementById('uuidCount').value) || 1;
-                        const version = document.getElementById('uuidVersion').value;
-                        
-                        let uuids = [];
-                        for (let i = 0; i < count; i++) {
-                            if (version === 'v4') {
-                                // Version 4 UUID (random)
-                                uuids.push('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                                    const r = Math.random() * 16 | 0;
-                                    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-                                    return v.toString(16);
-                                }));
-                            } else {
-                                // Version 1 UUID (timestamp-based - simplified)
-                                const timestamp = Date.now();
-                                uuids.push(`1${timestamp.toString(16).slice(0,7)}-xxxx-1xxx-yxxx-xxxxxxxxxxxx`.replace(/[xy]/g, function(c) {
-                                    const r = Math.random() * 16 | 0;
-                                    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-                                    return v.toString(16);
-                                }));
-                            }
-                        }
-                        
-                        const result = `Generated ${count} UUID${count > 1 ? 's' : ''} (Version: ${version}):\n\n${uuids.join('\n')}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 18. UNIT CONVERTER - ACTUAL WORKING
-            unitConverter: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Value</label>
-                        <input type="number" id="unitValue" placeholder="Enter value" value="1" step="0.01">
-                    </div>
-                    <div class="input-group">
-                        <label>From Unit</label>
-                        <select id="fromUnit">
-                            <option value="meter">Meter (m)</option>
-                            <option value="kilometer">Kilometer (km)</option>
-                            <option value="centimeter">Centimeter (cm)</option>
-                            <option value="millimeter">Millimeter (mm)</option>
-                            <option value="mile">Mile</option>
-                            <option value="foot">Foot (ft)</option>
-                            <option value="inch">Inch (in)</option>
-                            <option value="kilogram">Kilogram (kg)</option>
-                            <option value="gram">Gram (g)</option>
-                            <option value="pound">Pound (lb)</option>
-                            <option value="ounce">Ounce (oz)</option>
-                            <option value="liter">Liter (L)</option>
-                            <option value="milliliter">Milliliter (mL)</option>
-                            <option value="gallon">Gallon (gal)</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>To Unit</label>
-                        <select id="toUnit">
-                            <option value="meter">Meter (m)</option>
-                            <option value="kilometer">Kilometer (km)</option>
-                            <option value="centimeter">Centimeter (cm)</option>
-                            <option value="millimeter">Millimeter (mm)</option>
-                            <option value="mile">Mile</option>
-                            <option value="foot">Foot (ft)</option>
-                            <option value="inch">Inch (in)</option>
-                            <option value="kilogram">Kilogram (kg)</option>
-                            <option value="gram">Gram (g)</option>
-                            <option value="pound">Pound (lb)</option>
-                            <option value="ounce">Ounce (oz)</option>
-                            <option value="liter">Liter (L)</option>
-                            <option value="milliliter">Milliliter (mL)</option>
-                            <option value="gallon">Gallon (gal)</option>
-                        </select>
-                    </div>
-                    <button id="convertUnitBtn" class="btn">Convert Units</button>
-                `;
-                
-                setTimeout(() => {
-                    document.getElementById('convertUnitBtn').addEventListener('click', function() {
-                        const value = parseFloat(document.getElementById('unitValue').value);
-                        const fromUnit = document.getElementById('fromUnit').value;
-                        const toUnit = document.getElementById('toUnit').value;
-                        
-                        if (!value) {
-                            alert('Please enter value');
-                            return;
-                        }
-                        
-                        // Conversion factors to base units (meters, kilograms, liters)
-                        const conversions = {
-                            // Length
-                            meter: 1,
-                            kilometer: 1000,
-                            centimeter: 0.01,
-                            millimeter: 0.001,
-                            mile: 1609.34,
-                            foot: 0.3048,
-                            inch: 0.0254,
-                            // Weight
-                            kilogram: 1,
-                            gram: 0.001,
-                            pound: 0.453592,
-                            ounce: 0.0283495,
-                            // Volume
-                            liter: 1,
-                            milliliter: 0.001,
-                            gallon: 3.78541
-                        };
-                        
-                        // Check if units are compatible
-                        const unitCategories = {
-                            // Length
-                            meter: 'length', kilometer: 'length', centimeter: 'length', millimeter: 'length', mile: 'length', foot: 'length', inch: 'length',
-                            // Weight
-                            kilogram: 'weight', gram: 'weight', pound: 'weight', ounce: 'weight',
-                            // Volume
-                            liter: 'volume', milliliter: 'volume', gallon: 'volume'
-                        };
-                        
-                        if (unitCategories[fromUnit] !== unitCategories[toUnit]) {
-                            alert('Cannot convert between different unit types (Length, Weight, Volume)');
-                            return;
-                        }
-                        
-                        const valueInBase = value * conversions[fromUnit];
-                        const convertedValue = valueInBase / conversions[toUnit];
-                        
-                        const category = unitCategories[fromUnit];
-                        const result = `${value} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}\n\nCategory: ${category}\nConversion Factor: 1 ${fromUnit} = ${(conversions[toUnit]/conversions[fromUnit]).toFixed(6)} ${toUnit}`;
-                        showResult(result);
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
-            // 19. RANDOM NUMBER/PASSWORD GENERATOR - ACTUAL WORKING
-            randomGenerator: function() {
-                const html = `
-                    <div class="input-group">
-                        <label>Generate</label>
-                        <select id="randomType">
-                            <option value="number">Random Number</option>
-                            <option value="password">Random Password</option>
-                        </select>
-                    </div>
-                    <div class="input-group" id="numberOptions">
-                        <label>Min Number</label>
-                        <input type="number" id="minNumber" value="1">
-                        <label>Max Number</label>
-                        <input type="number" id="maxNumber" value="100">
-                        <label>Count</label>
-                        <input type="number" id="numberCount" min="1" max="20" value="1">
-                    </div>
-                    <div class="input-group" id="passwordOptions" style="display: none;">
-                        <label>Password Length</label>
-                        <input type="number" id="passwordLength" min="6" max="50" value="12">
-                        <label>
-                            <input type="checkbox" id="includeUppercase" checked> Uppercase Letters (A-Z)
-                        </label>
-                        <label>
-                            <input type="checkbox" id="includeLowercase" checked> Lowercase Letters (a-z)
-                        </label>
-                        <label>
-                            <input type="checkbox" id="includeNumbers" checked> Numbers (0-9)
-                        </label>
-                        <label>
-                            <input type="checkbox" id="includeSymbols"> Symbols (!@#$%^&*)
-                        </label>
-                    </div>
-                    <button id="generateRandomBtn" class="btn">Generate</button>
-                `;
-                
-                setTimeout(() => {
-                    // Toggle between number and password options
-                    document.getElementById('randomType').addEventListener('change', function() {
-                        if (this.value === 'number') {
-                            document.getElementById('numberOptions').style.display = 'block';
-                            document.getElementById('passwordOptions').style.display = 'none';
-                        } else {
-                            document.getElementById('numberOptions').style.display = 'none';
-                            document.getElementById('passwordOptions').style.display = 'block';
-                        }
-                    });
-                    
-                    document.getElementById('generateRandomBtn').addEventListener('click', function() {
-                        const type = document.getElementById('randomType').value;
-                        
-                        if (type === 'number') {
-                            const min = parseInt(document.getElementById('minNumber').value) || 1;
-                            const max = parseInt(document.getElementById('maxNumber').value) || 100;
-                            const count = parseInt(document.getElementById('numberCount').value) || 1;
-                            
-                            if (min >= max) {
-                                alert('Max must be greater than min');
-                                return;
-                            }
-                            
-                            let numbers = [];
-                            for (let i = 0; i < count; i++) {
-                                numbers.push(Math.floor(Math.random() * (max - min + 1)) + min);
-                            }
-                            
-                            const result = `Random Numbers (${count}):\nMin: ${min}, Max: ${max}\n\n${numbers.join(', ')}\n\nSorted: ${numbers.sort((a,b) => a-b).join(', ')}`;
-                            showResult(result);
-                        } else {
-                            const length = parseInt(document.getElementById('passwordLength').value) || 12;
-                            const includeUppercase = document.getElementById('includeUppercase').checked;
-                            const includeLowercase = document.getElementById('includeLowercase').checked;
-                            const includeNumbers = document.getElementById('includeNumbers').checked;
-                            const includeSymbols = document.getElementById('includeSymbols').checked;
-                            
-                            if (!includeUppercase && !includeLowercase && !includeNumbers && !includeSymbols) {
-                                alert('Please select at least one character type');
-                                return;
-                            }
-                            
-                            const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                            const lowercase = 'abcdefghijklmnopqrstuvwxyz';
-                            const numbers = '0123456789';
-                            const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-                            
-                            let charset = '';
-                            if (includeUppercase) charset += uppercase;
-                            if (includeLowercase) charset += lowercase;
-                            if (includeNumbers) charset += numbers;
-                            if (includeSymbols) charset += symbols;
-                            
-                            let password = '';
-                            for (let i = 0; i < length; i++) {
-                                password += charset.charAt(Math.floor(Math.random() * charset.length));
-                            }
-                            
-                            let charTypes = [];
-                            if (includeUppercase) charTypes.push('Uppercase');
-                            if (includeLowercase) charTypes.push('Lowercase');
-                            if (includeNumbers) charTypes.push('Numbers');
-                            if (includeSymbols) charTypes.push('Symbols');
-                            
-                            const result = `Password Length: ${length}\nCharacter Types: ${charTypes.join(', ')}\n\nGenerated Password:\n${password}\n\nPassword Strength: ${length >= 12 && includeUppercase && includeLowercase && includeNumbers && includeSymbols ? 'Strong' : length >= 8 && includeUppercase && includeLowercase && includeNumbers ? 'Medium' : 'Weak'}`;
-                            showResult(result);
-                        }
-                    });
-                }, 100);
-                
-                return html;
-            },
-            
             // DEFAULT TOOL INTERFACE FOR TOOLS NOT YET IMPLEMENTED
             defaultTool: function(toolName) {
                 return `
-                    <div class="input-group">
-                        <label>${toolName}</label>
-                        <p>This tool functionality is coming soon. For now, you can use the similar tools available.</p>
+                    <div class="converter-box">
+                        <h3 style="text-align:center;color:var(--primary-blue);margin-top:0">${toolName}</h3>
+                        
+                        <div class="input-group">
+                            <p>This tool functionality is coming soon. For now, you can use the similar tools available.</p>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Sample Input</label>
+                            <input type="text" placeholder="Enter input here..." style="width:100%">
+                        </div>
+                        
+                        <button class="btn" style="width:100%">
+                            <i class="fas fa-play"></i> Process
+                        </button>
                     </div>
-                    <div class="input-group">
-                        <label>Sample Input</label>
-                        <input type="text" placeholder="Enter input here...">
-                    </div>
-                    <button class="btn">Process</button>
                 `;
             }
         };
@@ -2398,7 +2093,7 @@
             attachToolButtonListeners();
         }
 
-        // Open tool modal - AB HAR TOOL KA ACTUAL FUNCTION CALL HOGA
+        // Open tool modal
         function openToolModal(toolName, toolFunc) {
             const modal = document.getElementById('toolModal');
             const modalToolName = document.getElementById('modalToolName');
@@ -2411,7 +2106,7 @@
             // Clear previous interface
             toolInterface.innerHTML = '';
             
-            // Load tool interface - AB HAR TOOL KA APNA FUNCTION HOGA
+            // Load tool interface
             if (toolFunctions[toolFunc]) {
                 toolInterface.innerHTML = toolFunctions[toolFunc]();
             } else {
@@ -2491,6 +2186,15 @@
                 // Fallback to copying to clipboard
                 copyToClipboard(shareText);
             }
+        }
+
+        // Helper function to format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
         // Initialize the page
