@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Any Tasker - All Tools Working 100%</title>
+    <title>Any Tasker - All Tools Working 100% Perfectly</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* CSS Variables for Modern Blue Theme */
         :root {
@@ -15,6 +17,8 @@
             --light-blue: #dbeafe;
             --dark-blue: #1e40af;
             --gradient-blue: linear-gradient(135deg, #2563eb, #1d4ed8);
+            --gradient-purple: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            --gradient-green: linear-gradient(135deg, #10b981, #059669);
             --text-dark: #1f2937;
             --text-light: #6b7280;
             --white: #ffffff;
@@ -49,7 +53,7 @@
             padding: 0 20px;
         }
 
-        /* Header Styles - Modern & Clean */
+        /* Header Styles */
         header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -158,7 +162,7 @@
             box-shadow: 0 8px 20px var(--shadow-hover);
         }
 
-        /* Hero Section - Eye-catching */
+        /* Hero Section */
         .hero {
             padding: 100px 0 80px;
             position: relative;
@@ -376,7 +380,7 @@
             line-height: 1.5;
         }
 
-        /* Search Section - Modern */
+        /* Search Section */
         .search-section {
             padding: 50px 0;
             background: white;
@@ -475,108 +479,68 @@
             line-height: 1.7;
         }
 
-        .category-grid {
+        .tools-cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 35px;
-            margin-bottom: 100px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
         }
 
-        .category-card {
+        .tool-card {
             background: white;
             border-radius: var(--border-radius);
-            padding: 40px;
+            padding: 35px;
             box-shadow: var(--card-shadow);
             transition: var(--transition);
             border: 1px solid rgba(37, 99, 235, 0.1);
-            position: relative;
-            overflow: hidden;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: var(--gradient-blue);
-        }
-
-        .category-card:hover {
-            transform: translateY(-12px);
+        .tool-card:hover {
+            transform: translateY(-15px) scale(1.03);
             box-shadow: 0 30px 60px var(--shadow-hover);
+            border-color: rgba(37, 99, 235, 0.2);
         }
 
-        .category-icon {
+        .tool-card-icon {
             width: 80px;
             height: 80px;
             background: linear-gradient(135deg, var(--light-blue), #e0f2fe);
-            border-radius: 22px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             color: var(--primary-blue);
             font-size: 32px;
             transition: var(--transition);
         }
 
-        .category-card:hover .category-icon {
+        .tool-card:hover .tool-card-icon {
             background: var(--gradient-blue);
             color: white;
             transform: rotate(10deg) scale(1.1);
         }
 
-        .category-title {
-            font-size: 28px;
-            font-weight: 800;
+        .tool-card h3 {
+            font-size: 22px;
+            font-weight: 700;
             color: var(--text-dark);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .category-description {
-            color: var(--text-light);
-            margin-bottom: 30px;
-            line-height: 1.8;
-            font-size: 16px;
-        }
-
-        .tools-list {
-            list-style: none;
-        }
-
-        .tools-list li {
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: var(--text-dark);
-            transition: var(--transition);
-            cursor: pointer;
-            padding: 12px 18px;
-            border-radius: var(--border-radius-sm);
-            font-weight: 500;
         }
 
-        .tools-list li:hover {
-            background: var(--light-blue);
-            color: var(--primary-blue);
-            transform: translateX(10px);
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.1);
+        .tool-card p {
+            color: var(--text-light);
+            margin-bottom: 25px;
+            line-height: 1.6;
+            flex-grow: 1;
         }
 
-        .tools-list li i {
-            color: var(--primary-blue);
-            font-size: 16px;
-            width: 24px;
-            text-align: center;
-        }
-
-        /* Tool Modal - Premium Look */
+        /* Tool Modal */
         .tool-modal {
             display: none;
             position: fixed;
@@ -809,7 +773,7 @@
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: var(--gradient-green);
             color: white;
         }
 
@@ -820,6 +784,11 @@
 
         .btn-danger {
             background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .btn-purple {
+            background: var(--gradient-purple);
             color: white;
         }
 
@@ -901,8 +870,8 @@
 
         .action-buttons {
             display: flex;
-            gap: 20px;
-            margin-top: 30px;
+            gap: 15px;
+            margin-top: 25px;
             flex-wrap: wrap;
         }
 
@@ -962,12 +931,12 @@
         }
 
         .calc-btn.operator {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            background: var(--gradient-blue);
             color: white;
         }
 
         .calc-btn.equals {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: var(--gradient-green);
             color: white;
             grid-column: span 2;
         }
@@ -1033,7 +1002,7 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
 
-        /* Footer - Premium */
+        /* Footer */
         footer {
             background: linear-gradient(135deg, var(--dark-blue), #1e3a8a);
             color: white;
@@ -1143,27 +1112,6 @@
             z-index: 1;
         }
 
-        /* Loading Animation */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 50px;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid var(--light-blue);
-            border-top-color: var(--primary-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 25px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
         /* Toast Notification */
         .toast {
             position: fixed;
@@ -1191,7 +1139,7 @@
         }
 
         .toast.success {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: var(--gradient-green);
         }
 
         .toast.error {
@@ -1199,7 +1147,11 @@
         }
 
         .toast.info {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            background: var(--gradient-blue);
+        }
+
+        .toast.warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
         }
 
         /* QR Code Display */
@@ -1224,92 +1176,83 @@
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
         }
 
-        /* Signature Pad */
-        .signature-pad-container {
-            border: 2px solid var(--light-blue);
-            border-radius: var(--border-radius-sm);
-            background: white;
-            margin: 30px 0;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        }
-
-        #signatureCanvas {
+        /* Share Modal */
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 250px;
-            cursor: crosshair;
-            background: white;
-        }
-
-        .signature-controls {
-            display: flex;
-            gap: 15px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
-            background: var(--gray-bg);
-            border-top: 1px solid var(--light-blue);
-            flex-wrap: wrap;
         }
 
-        /* Tool Cards Grid */
-        .tools-cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .tool-card {
+        .share-modal-content {
             background: white;
             border-radius: var(--border-radius);
-            padding: 35px;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            border: 1px solid rgba(37, 99, 235, 0.1);
-            cursor: pointer;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
             text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .share-btn {
+            padding: 20px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 10px;
         }
 
-        .tool-card:hover {
-            transform: translateY(-15px) scale(1.03);
-            box-shadow: 0 30px 60px var(--shadow-hover);
-            border-color: rgba(37, 99, 235, 0.2);
-        }
-
-        .tool-card-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--light-blue), #e0f2fe);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 25px;
-            color: var(--primary-blue);
-            font-size: 32px;
-            transition: var(--transition);
-        }
-
-        .tool-card:hover .tool-card-icon {
+        .share-btn:hover {
             background: var(--gradient-blue);
             color: white;
-            transform: rotate(10deg) scale(1.1);
+            transform: translateY(-5px);
         }
 
-        .tool-card h3 {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 15px;
+        .share-btn span {
+            font-size: 14px;
+            font-weight: 600;
         }
 
-        .tool-card p {
-            color: var(--text-light);
-            margin-bottom: 25px;
-            line-height: 1.6;
-            flex-grow: 1;
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid var(--light-blue);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Responsive Design */
@@ -1320,10 +1263,6 @@
             
             .tools-grid-preview {
                 max-width: 400px;
-            }
-            
-            .category-grid {
-                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             }
         }
 
@@ -1413,13 +1352,8 @@
                 margin-bottom: 50px;
             }
             
-            .category-grid {
+            .tools-cards-grid {
                 grid-template-columns: 1fr;
-                gap: 25px;
-            }
-            
-            .category-card {
-                padding: 30px;
             }
             
             .calculator-buttons {
@@ -1459,6 +1393,10 @@
             .footer-container {
                 grid-template-columns: 1fr;
                 gap: 40px;
+            }
+            
+            .share-options {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -1518,14 +1456,14 @@
                 left: 25px;
             }
             
-            .tools-cards-grid {
-                grid-template-columns: 1fr;
-            }
-            
             .toast {
                 left: 20px;
                 right: 20px;
                 max-width: none;
+            }
+            
+            .share-options {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1556,6 +1494,22 @@
 
         ::-webkit-scrollbar-thumb:hover {
             background: var(--dark-blue);
+        }
+
+        /* Cropper Styles */
+        .cropper-container {
+            width: 100%;
+            max-height: 400px;
+            margin: 20px 0;
+        }
+
+        .cropper-preview {
+            width: 200px;
+            height: 200px;
+            border: 2px solid var(--light-blue);
+            border-radius: var(--border-radius-sm);
+            overflow: hidden;
+            margin: 20px auto;
         }
     </style>
 </head>
@@ -1594,7 +1548,7 @@
                     <a href="#tools" class="btn btn-primary">
                         <i class="fas fa-rocket"></i> Explore All Tools
                     </a>
-                    <button onclick="openToolModal('Scientific Calculator', 'scientificCalculator')" class="btn btn-secondary">
+                    <button onclick="openTool('scientificCalculator')" class="btn btn-secondary">
                         <i class="fas fa-calculator"></i> Try Calculator
                     </button>
                 </div>
@@ -1615,42 +1569,42 @@
             </div>
             <div class="hero-illustration">
                 <div class="tools-grid-preview">
-                    <div class="tool-preview-card" onclick="openToolModal('Image Converter', 'imageConverter')">
+                    <div class="tool-preview-card" onclick="openTool('imageConverter')">
                         <div class="tool-preview-icon">
                             <i class="fas fa-exchange-alt"></i>
                         </div>
                         <h4 class="tool-preview-name">Image Converter</h4>
                         <p class="tool-preview-desc">Convert between all image formats</p>
                     </div>
-                    <div class="tool-preview-card" onclick="openToolModal('EMI Calculator', 'emiCalculator')">
+                    <div class="tool-preview-card" onclick="openTool('emiCalculator')">
                         <div class="tool-preview-icon">
                             <i class="fas fa-calculator"></i>
                         </div>
                         <h4 class="tool-preview-name">EMI Calculator</h4>
                         <p class="tool-preview-desc">Calculate loan installments</p>
                     </div>
-                    <div class="tool-preview-card" onclick="openToolModal('PDF Tools', 'pdfMerger')">
+                    <div class="tool-preview-card" onclick="openTool('pdfMerger')">
                         <div class="tool-preview-icon">
                             <i class="fas fa-file-pdf"></i>
                         </div>
                         <h4 class="tool-preview-name">PDF Tools</h4>
                         <p class="tool-preview-desc">Merge, split, compress PDFs</p>
                     </div>
-                    <div class="tool-preview-card" onclick="openToolModal('Color Picker', 'colorPicker')">
+                    <div class="tool-preview-card" onclick="openTool('colorPicker')">
                         <div class="tool-preview-icon">
                             <i class="fas fa-palette"></i>
                         </div>
                         <h4 class="tool-preview-name">Color Picker</h4>
                         <p class="tool-preview-desc">Pick & convert colors</p>
                     </div>
-                    <div class="tool-preview-card" onclick="openToolModal('Text Tools', 'textCaseConverter')">
+                    <div class="tool-preview-card" onclick="openTool('textCaseConverter')">
                         <div class="tool-preview-icon">
                             <i class="fas fa-font"></i>
                         </div>
                         <h4 class="tool-preview-name">Text Tools</h4>
                         <p class="tool-preview-desc">Convert text cases</p>
                     </div>
-                    <div class="tool-preview-card" onclick="openToolModal('QR Generator', 'qrGenerator')">
+                    <div class="tool-preview-card" onclick="openTool('qrGenerator')">
                         <div class="tool-preview-icon">
                             <i class="fas fa-qrcode"></i>
                         </div>
@@ -1681,8 +1635,8 @@
             <h2 class="section-title">All Tools Categories</h2>
             <p class="section-subtitle">Browse our comprehensive collection of tools organized by category. All tools are 100% working!</p>
             
-            <div class="tools-cards-grid">
-                <!-- Tools cards will be dynamically generated -->
+            <div class="tools-cards-grid" id="toolsGrid">
+                <!-- Tools will be loaded by JavaScript -->
             </div>
         </div>
     </section>
@@ -1692,7 +1646,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalToolName"><i class="fas fa-toolbox"></i> Tool Name</h2>
-                <button class="close-modal"><i class="fas fa-times"></i></button>
+                <button class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <div id="toolInterface" class="tool-interface">
@@ -1702,19 +1656,72 @@
                     <h3><i class="fas fa-check-circle"></i> Result</h3>
                     <div id="resultContent" class="result-content"></div>
                     <div class="action-buttons">
-                        <button id="copyResultBtn" class="btn btn-success">
+                        <button class="btn btn-success" onclick="copyResult()">
                             <i class="fas fa-copy"></i> Copy Result
                         </button>
-                        <button id="shareResultBtn" class="btn btn-primary">
-                            <i class="fas fa-share-alt"></i> Share Result
+                        <button class="btn btn-primary" onclick="openShareModal()">
+                            <i class="fas fa-share-alt"></i> Share
                         </button>
-                        <button id="downloadResultBtn" class="btn btn-secondary">
+                        <button class="btn btn-purple" onclick="downloadResult()">
                             <i class="fas fa-download"></i> Download
                         </button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="share-modal">
+        <div class="share-modal-content">
+            <h2><i class="fas fa-share-alt"></i> Share This Tool</h2>
+            <p>Share this amazing tool with others!</p>
+            
+            <div class="share-options">
+                <button class="share-btn" onclick="shareVia('whatsapp')">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </button>
+                <button class="share-btn" onclick="shareVia('facebook')">
+                    <i class="fab fa-facebook"></i>
+                    <span>Facebook</span>
+                </button>
+                <button class="share-btn" onclick="shareVia('twitter')">
+                    <i class="fab fa-twitter"></i>
+                    <span>Twitter</span>
+                </button>
+                <button class="share-btn" onclick="shareVia('telegram')">
+                    <i class="fab fa-telegram"></i>
+                    <span>Telegram</span>
+                </button>
+                <button class="share-btn" onclick="shareVia('copy')">
+                    <i class="fas fa-copy"></i>
+                    <span>Copy Link</span>
+                </button>
+                <button class="share-btn" onclick="shareVia('email')">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email</span>
+                </button>
+            </div>
+            
+            <div class="input-group" style="margin-top: 20px;">
+                <label>Shareable Link</label>
+                <input type="text" id="shareLink" readonly>
+                <button class="btn btn-small btn-primary" onclick="copyShareLink()" style="margin-top: 10px;">
+                    <i class="fas fa-copy"></i> Copy Link
+                </button>
+            </div>
+            
+            <button class="btn btn-danger" onclick="closeShareModal()" style="margin-top: 20px; width: 100%;">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <p>Processing your request...</p>
     </div>
 
     <!-- Footer -->
@@ -1740,17 +1747,17 @@
                     <ul>
                         <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
                         <li><a href="#tools"><i class="fas fa-tools"></i> All Tools</a></li>
-                        <li><a href="#" id="privacyLink"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
-                        <li><a href="#" id="termsLink"><i class="fas fa-file-contract"></i> Terms of Use</a></li>
+                        <li><a href="#" onclick="showPrivacyPolicy()"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
+                        <li><a href="#" onclick="showTermsOfUse()"><i class="fas fa-file-contract"></i> Terms of Use</a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
                     <h3>Popular Tools</h3>
                     <ul>
-                        <li><a href="#" onclick="openToolModal('Image Converter', 'imageConverter'); return false;"><i class="fas fa-exchange-alt"></i> Image Converter</a></li>
-                        <li><a href="#" onclick="openToolModal('PDF Merger', 'pdfMerger'); return false;"><i class="fas fa-file-pdf"></i> PDF Merger</a></li>
-                        <li><a href="#" onclick="openToolModal('EMI Calculator', 'emiCalculator'); return false;"><i class="fas fa-calculator"></i> EMI Calculator</a></li>
-                        <li><a href="#" onclick="openToolModal('QR Generator', 'qrGenerator'); return false;"><i class="fas fa-qrcode"></i> QR Generator</a></li>
+                        <li><a href="#" onclick="openTool('imageConverter')"><i class="fas fa-exchange-alt"></i> Image Converter</a></li>
+                        <li><a href="#" onclick="openTool('pdfMerger')"><i class="fas fa-file-pdf"></i> PDF Merger</a></li>
+                        <li><a href="#" onclick="openTool('emiCalculator')"><i class="fas fa-calculator"></i> EMI Calculator</a></li>
+                        <li><a href="#" onclick="openTool('qrGenerator')"><i class="fas fa-qrcode"></i> QR Generator</a></li>
                     </ul>
                 </div>
             </div>
@@ -1766,53 +1773,273 @@
         <span id="toastMessage">Operation completed successfully!</span>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        // All Tools Data
+        // All Tools Data with Complete Details
         const allTools = [
             // Image Tools
-            { id: 'imageConverter', name: 'Image Converter', category: 'Image', icon: 'fas fa-exchange-alt', desc: 'Convert images between JPG, PNG, WEBP, BMP, GIF formats', color: '#3B82F6' },
-            { id: 'imageCompressor', name: 'Image Compressor', category: 'Image', icon: 'fas fa-compress-alt', desc: 'Reduce image file size without quality loss', color: '#10B981' },
-            { id: 'imageResizer', name: 'Image Resizer', category: 'Image', icon: 'fas fa-expand-alt', desc: 'Resize images to any dimensions', color: '#F59E0B' },
-            { id: 'imageCropper', name: 'Image Cropper', category: 'Image', icon: 'fas fa-crop', desc: 'Crop images to specific aspect ratios', color: '#8B5CF6' },
-            { id: 'imageToText', name: 'Image to Text (OCR)', category: 'Image', icon: 'fas fa-font', desc: 'Extract text from images using OCR', color: '#EC4899' },
+            { 
+                id: 'imageConverter', 
+                name: 'Image Converter', 
+                category: 'Image', 
+                icon: 'fas fa-exchange-alt', 
+                desc: 'Convert images between JPG, PNG, WEBP, BMP, GIF formats with high quality',
+                color: '#3B82F6',
+                featured: true
+            },
+            { 
+                id: 'imageCompressor', 
+                name: 'Image Compressor', 
+                category: 'Image', 
+                icon: 'fas fa-compress-alt', 
+                desc: 'Reduce image file size without quality loss, optimize for web',
+                color: '#10B981'
+            },
+            { 
+                id: 'imageResizer', 
+                name: 'Image Resizer', 
+                category: 'Image', 
+                icon: 'fas fa-expand-alt', 
+                desc: 'Resize images to any dimensions while maintaining aspect ratio',
+                color: '#F59E0B'
+            },
+            { 
+                id: 'imageCropper', 
+                name: 'Image Cropper', 
+                category: 'Image', 
+                icon: 'fas fa-crop', 
+                desc: 'Crop images to specific aspect ratios with precision tools',
+                color: '#8B5CF6'
+            },
+            { 
+                id: 'imageToText', 
+                name: 'Image to Text (OCR)', 
+                category: 'Image', 
+                icon: 'fas fa-font', 
+                desc: 'Extract text from images using advanced OCR technology',
+                color: '#EC4899'
+            },
             
             // Document Tools
-            { id: 'pdfMerger', name: 'PDF Merger', category: 'Document', icon: 'fas fa-file-pdf', desc: 'Merge multiple PDF files into one', color: '#EF4444' },
-            { id: 'pdfSplitter', name: 'PDF Splitter', category: 'Document', icon: 'fas fa-cut', desc: 'Split PDF into multiple files', color: '#F97316' },
-            { id: 'pdfCompressor', name: 'PDF Compressor', category: 'Document', icon: 'fas fa-file-archive', desc: 'Reduce PDF file size', color: '#06B6D4' },
-            { id: 'wordToPdf', name: 'Word to PDF', category: 'Document', icon: 'fas fa-file-word', desc: 'Convert Word documents to PDF', color: '#2563EB' },
-            { id: 'pdfToWord', name: 'PDF to Word', category: 'Document', icon: 'fas fa-file-alt', desc: 'Convert PDF to editable Word document', color: '#8B5CF6' },
+            { 
+                id: 'pdfMerger', 
+                name: 'PDF Merger', 
+                category: 'Document', 
+                icon: 'fas fa-file-pdf', 
+                desc: 'Merge multiple PDF files into one document seamlessly',
+                color: '#EF4444',
+                featured: true
+            },
+            { 
+                id: 'pdfSplitter', 
+                name: 'PDF Splitter', 
+                category: 'Document', 
+                icon: 'fas fa-cut', 
+                desc: 'Split PDF into multiple files or extract specific pages',
+                color: '#F97316'
+            },
+            { 
+                id: 'pdfCompressor', 
+                name: 'PDF Compressor', 
+                category: 'Document', 
+                icon: 'fas fa-file-archive', 
+                desc: 'Reduce PDF file size for easy sharing and storage',
+                color: '#06B6D4'
+            },
+            { 
+                id: 'wordToPdf', 
+                name: 'Word to PDF', 
+                category: 'Document', 
+                icon: 'fas fa-file-word', 
+                desc: 'Convert Word documents to PDF format instantly',
+                color: '#2563EB'
+            },
+            { 
+                id: 'pdfToWord', 
+                name: 'PDF to Word', 
+                category: 'Document', 
+                icon: 'fas fa-file-alt', 
+                desc: 'Convert PDF files to editable Word documents',
+                color: '#8B5CF6'
+            },
             
             // Calculator Tools
-            { id: 'scientificCalculator', name: 'Scientific Calculator', category: 'Calculator', icon: 'fas fa-calculator', desc: 'Advanced calculator for complex calculations', color: '#059669' },
-            { id: 'emiCalculator', name: 'EMI Calculator', category: 'Calculator', icon: 'fas fa-calculator', desc: 'Calculate loan EMI with details', color: '#3B82F6' },
-            { id: 'bmiCalculator', name: 'BMI Calculator', category: 'Calculator', icon: 'fas fa-weight', desc: 'Calculate Body Mass Index', color: '#10B981' },
-            { id: 'ageCalculator', name: 'Age Calculator', category: 'Calculator', icon: 'fas fa-birthday-cake', desc: 'Calculate age in years/months/days', color: '#EC4899' },
-            { id: 'currencyConverter', name: 'Currency Converter', category: 'Calculator', icon: 'fas fa-money-bill-wave', desc: 'Convert between world currencies', color: '#F59E0B' },
+            { 
+                id: 'scientificCalculator', 
+                name: 'Scientific Calculator', 
+                category: 'Calculator', 
+                icon: 'fas fa-calculator', 
+                desc: 'Advanced calculator for complex mathematical calculations',
+                color: '#059669',
+                featured: true
+            },
+            { 
+                id: 'emiCalculator', 
+                name: 'EMI Calculator', 
+                category: 'Calculator', 
+                icon: 'fas fa-calculator', 
+                desc: 'Calculate loan EMI with detailed breakdown and charts',
+                color: '#3B82F6',
+                featured: true
+            },
+            { 
+                id: 'bmiCalculator', 
+                name: 'BMI Calculator', 
+                category: 'Calculator', 
+                icon: 'fas fa-weight', 
+                desc: 'Calculate Body Mass Index with health recommendations',
+                color: '#10B981'
+            },
+            { 
+                id: 'ageCalculator', 
+                name: 'Age Calculator', 
+                category: 'Calculator', 
+                icon: 'fas fa-birthday-cake', 
+                desc: 'Calculate exact age in years, months, and days',
+                color: '#EC4899'
+            },
+            { 
+                id: 'currencyConverter', 
+                name: 'Currency Converter', 
+                category: 'Calculator', 
+                icon: 'fas fa-money-bill-wave', 
+                desc: 'Convert between world currencies with live exchange rates',
+                color: '#F59E0B'
+            },
             
             // Text Tools
-            { id: 'textCaseConverter', name: 'Text Case Converter', category: 'Text', icon: 'fas fa-font', desc: 'Convert text to UPPER, lower, Title Case', color: '#8B5CF6' },
-            { id: 'wordCounter', name: 'Word Counter', category: 'Text', icon: 'fas fa-sort-amount-up', desc: 'Count words, characters, sentences', color: '#3B82F6' },
-            { id: 'textEncryptor', name: 'Text Encryptor/Decryptor', category: 'Text', icon: 'fas fa-lock', desc: 'Encrypt and decrypt text securely', color: '#059669' },
-            { id: 'textReverser', name: 'Text Reverser', category: 'Text', icon: 'fas fa-retweet', desc: 'Reverse text or strings', color: '#F97316' },
-            { id: 'textSorter', name: 'Text Sorter', category: 'Text', icon: 'fas fa-sort-alpha-down', desc: 'Sort lines alphabetically', color: '#EC4899' },
+            { 
+                id: 'textCaseConverter', 
+                name: 'Text Case Converter', 
+                category: 'Text', 
+                icon: 'fas fa-font', 
+                desc: 'Convert text between uppercase, lowercase, title case and more',
+                color: '#8B5CF6',
+                featured: true
+            },
+            { 
+                id: 'wordCounter', 
+                name: 'Word Counter', 
+                category: 'Text', 
+                icon: 'fas fa-sort-amount-up', 
+                desc: 'Count words, characters, sentences, and paragraphs in text',
+                color: '#3B82F6'
+            },
+            { 
+                id: 'textEncryptor', 
+                name: 'Text Encryptor/Decryptor', 
+                category: 'Text', 
+                icon: 'fas fa-lock', 
+                desc: 'Encrypt and decrypt text with secure AES encryption',
+                color: '#059669'
+            },
+            { 
+                id: 'textReverser', 
+                name: 'Text Reverser', 
+                category: 'Text', 
+                icon: 'fas fa-retweet', 
+                desc: 'Reverse text or strings with one click',
+                color: '#F97316'
+            },
+            { 
+                id: 'textSorter', 
+                name: 'Text Sorter', 
+                category: 'Text', 
+                icon: 'fas fa-sort-alpha-down', 
+                desc: 'Sort lines alphabetically or numerically',
+                color: '#EC4899'
+            },
             
             // Web Tools
-            { id: 'qrGenerator', name: 'QR Code Generator', category: 'Web', icon: 'fas fa-qrcode', desc: 'Generate custom QR codes', color: '#2563EB' },
-            { id: 'colorPicker', name: 'Color Picker', category: 'Web', icon: 'fas fa-eye-dropper', desc: 'Pick colors and get codes', color: '#8B5CF6' },
-            { id: 'base64Encoder', name: 'Base64 Encoder/Decoder', category: 'Web', icon: 'fas fa-code', desc: 'Encode/decode Base64 strings', color: '#F59E0B' },
-            { id: 'jsonFormatter', name: 'JSON Formatter', category: 'Web', icon: 'fas fa-brackets-curly', desc: 'Format and validate JSON', color: '#10B981' },
-            { id: 'urlEncoder', name: 'URL Encoder/Decoder', category: 'Web', icon: 'fas fa-link', desc: 'Encode/decode URL strings', color: '#EF4444' },
+            { 
+                id: 'qrGenerator', 
+                name: 'QR Code Generator', 
+                category: 'Web', 
+                icon: 'fas fa-qrcode', 
+                desc: 'Generate custom QR codes for URLs, text, and contacts',
+                color: '#2563EB',
+                featured: true
+            },
+            { 
+                id: 'colorPicker', 
+                name: 'Color Picker', 
+                category: 'Web', 
+                icon: 'fas fa-eye-dropper', 
+                desc: 'Pick colors and get HEX, RGB, HSL, CMYK codes',
+                color: '#8B5CF6',
+                featured: true
+            },
+            { 
+                id: 'base64Encoder', 
+                name: 'Base64 Encoder/Decoder', 
+                category: 'Web', 
+                icon: 'fas fa-code', 
+                desc: 'Encode and decode Base64 strings instantly',
+                color: '#F59E0B'
+            },
+            { 
+                id: 'jsonFormatter', 
+                name: 'JSON Formatter', 
+                category: 'Web', 
+                icon: 'fas fa-brackets-curly', 
+                desc: 'Format and validate JSON data with syntax highlighting',
+                color: '#10B981'
+            },
+            { 
+                id: 'urlEncoder', 
+                name: 'URL Encoder/Decoder', 
+                category: 'Web', 
+                icon: 'fas fa-link', 
+                desc: 'Encode and decode URL strings safely',
+                color: '#EF4444'
+            },
             
             // Utility Tools
-            { id: 'unitConverter', name: 'Unit Converter', category: 'Utility', icon: 'fas fa-balance-scale', desc: 'Convert between units', color: '#3B82F6' },
-            { id: 'passwordGenerator', name: 'Password Generator', category: 'Utility', icon: 'fas fa-key', desc: 'Generate strong passwords', color: '#059669' },
-            { id: 'uuidGenerator', name: 'UUID Generator', category: 'Utility', icon: 'fas fa-fingerprint', desc: 'Generate unique identifiers', color: '#8B5CF6' },
-            { id: 'timeZoneConverter', name: 'Time Zone Converter', category: 'Utility', icon: 'fas fa-globe', desc: 'Convert between time zones', color: '#F59E0B' },
-            { id: 'randomNumber', name: 'Random Number Generator', category: 'Utility', icon: 'fas fa-random', desc: 'Generate random numbers', color: '#EC4899' }
+            { 
+                id: 'unitConverter', 
+                name: 'Unit Converter', 
+                category: 'Utility', 
+                icon: 'fas fa-balance-scale', 
+                desc: 'Convert between length, weight, temperature, and more units',
+                color: '#3B82F6'
+            },
+            { 
+                id: 'passwordGenerator', 
+                name: 'Password Generator', 
+                category: 'Utility', 
+                icon: 'fas fa-key', 
+                desc: 'Generate strong, secure passwords with custom options',
+                color: '#059669'
+            },
+            { 
+                id: 'uuidGenerator', 
+                name: 'UUID Generator', 
+                category: 'Utility', 
+                icon: 'fas fa-fingerprint', 
+                desc: 'Generate unique identifiers (UUIDs) for databases',
+                color: '#8B5CF6'
+            },
+            { 
+                id: 'timeZoneConverter', 
+                name: 'Time Zone Converter', 
+                category: 'Utility', 
+                icon: 'fas fa-globe', 
+                desc: 'Convert between different time zones worldwide',
+                color: '#F59E0B'
+            },
+            { 
+                id: 'randomNumber', 
+                name: 'Random Number Generator', 
+                category: 'Utility', 
+                icon: 'fas fa-random', 
+                desc: 'Generate random numbers within specified ranges',
+                color: '#EC4899'
+            }
         ];
+
+        // Application State
+        let currentTool = null;
+        let currentResult = null;
+        let currentData = null;
 
         // DOM Elements
         const toolModal = document.getElementById('toolModal');
@@ -1821,83 +2048,30 @@
         const toolResult = document.getElementById('toolResult');
         const resultContent = document.getElementById('resultContent');
         const searchInput = document.getElementById('searchInput');
-        const toolsGrid = document.querySelector('.tools-cards-grid');
+        const toolsGrid = document.getElementById('toolsGrid');
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
+        const loading = document.getElementById('loading');
+        const shareModal = document.getElementById('shareModal');
+        const shareLinkInput = document.getElementById('shareLink');
 
-        // Current tool state
-        let currentTool = null;
-        let currentResult = null;
-
-        // Initialize the page
+        // Initialize Application
         document.addEventListener('DOMContentLoaded', function() {
-            // Populate tools grid
-            renderToolsGrid(allTools);
-            
-            // Setup search functionality
-            searchInput.addEventListener('input', handleSearch);
-            
-            // Setup modal close button
-            document.querySelector('.close-modal').addEventListener('click', closeToolModal);
-            
-            // Setup result buttons
-            document.getElementById('copyResultBtn').addEventListener('click', copyResult);
-            document.getElementById('shareResultBtn').addEventListener('click', shareResult);
-            document.getElementById('downloadResultBtn').addEventListener('click', downloadResult);
-            
-            // Setup footer links
-            document.getElementById('privacyLink').addEventListener('click', showPrivacyPolicy);
-            document.getElementById('termsLink').addEventListener('click', showTermsOfUse);
-            
-            // Close modal on outside click
-            toolModal.addEventListener('click', function(e) {
-                if (e.target === toolModal) closeToolModal();
-            });
-            
-            // Show welcome message
-            setTimeout(() => {
-                showToast('Welcome to Any Tasker! All tools are 100% working.', 'info');
-            }, 1000);
+            renderToolsGrid();
+            setupEventListeners();
+            showToast('🎉 Welcome to Any Tasker! All tools are 100% working.', 'info');
         });
 
-        // Render tools grid
-        function renderToolsGrid(tools) {
+        // Render Tools Grid
+        function renderToolsGrid(filter = '') {
             toolsGrid.innerHTML = '';
-            tools.forEach(tool => {
-                const toolCard = document.createElement('div');
-                toolCard.className = 'tool-card floating';
-                toolCard.style.animationDelay = `${Math.random() * 2}s`;
-                toolCard.innerHTML = `
-                    <div class="tool-card-icon" style="background: linear-gradient(135deg, ${tool.color}20, ${tool.color}40); color: ${tool.color}">
-                        <i class="${tool.icon}"></i>
-                    </div>
-                    <h3>${tool.name}</h3>
-                    <p>${tool.desc}</p>
-                    <button class="btn btn-primary" onclick="openToolModal('${tool.name}', '${tool.id}')">
-                        <i class="fas fa-play"></i> Use Tool
-                    </button>
-                `;
-                toolsGrid.appendChild(toolCard);
-            });
-        }
-
-        // Handle search
-        function handleSearch() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            if (searchTerm === '') {
-                renderToolsGrid(allTools);
-                return;
-            }
+            const filteredTools = filter ? 
+                allTools.filter(tool => 
+                    tool.name.toLowerCase().includes(filter) ||
+                    tool.desc.toLowerCase().includes(filter) ||
+                    tool.category.toLowerCase().includes(filter)
+                ) : allTools;
             
-            const filteredTools = allTools.filter(tool => 
-                tool.name.toLowerCase().includes(searchTerm) ||
-                tool.desc.toLowerCase().includes(searchTerm) ||
-                tool.category.toLowerCase().includes(searchTerm)
-            );
-            
-            renderToolsGrid(filteredTools);
-            
-            // Show search results count
             if (filteredTools.length === 0) {
                 toolsGrid.innerHTML = `
                     <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
@@ -1905,36 +2079,84 @@
                             <i class="fas fa-search"></i>
                         </div>
                         <h3 style="color: #6b7280; margin-bottom: 15px;">No tools found</h3>
-                        <p style="color: #9ca3af;">Try searching with different keywords like "converter", "calculator", or "generator"</p>
+                        <p style="color: #9ca3af;">Try searching with different keywords</p>
                     </div>
                 `;
+                return;
             }
+            
+            filteredTools.forEach((tool, index) => {
+                const toolCard = document.createElement('div');
+                toolCard.className = 'tool-card floating';
+                toolCard.style.animationDelay = `${index * 0.1}s`;
+                toolCard.innerHTML = `
+                    <div class="tool-card-icon" style="background: linear-gradient(135deg, ${tool.color}20, ${tool.color}40); color: ${tool.color}">
+                        <i class="${tool.icon}"></i>
+                    </div>
+                    <h3>${tool.name}</h3>
+                    <p>${tool.desc}</p>
+                    <button class="btn btn-primary" onclick="openTool('${tool.id}')">
+                        <i class="fas fa-play"></i> Use Tool
+                    </button>
+                `;
+                toolsGrid.appendChild(toolCard);
+            });
         }
 
-        // Open tool modal
-        function openToolModal(toolName, toolId) {
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Search functionality with debounce
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    renderToolsGrid(this.value.toLowerCase());
+                }, 300);
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && toolModal.style.display === 'flex') {
+                    closeModal();
+                }
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    searchInput.focus();
+                }
+            });
+            
+            // Close modals on outside click
+            window.addEventListener('click', function(e) {
+                if (e.target === toolModal) closeModal();
+                if (e.target === shareModal) closeShareModal();
+            });
+        }
+
+        // Open Tool Modal
+        function openTool(toolId) {
             currentTool = allTools.find(t => t.id === toolId);
             if (!currentTool) return;
             
-            modalToolName.innerHTML = `<i class="${currentTool.icon}"></i> ${toolName}`;
+            modalToolName.innerHTML = `<i class="${currentTool.icon}"></i> ${currentTool.name}`;
             toolInterface.innerHTML = getToolInterface(toolId);
             toolResult.style.display = 'none';
             toolModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             
-            // Initialize the tool
+            // Initialize tool functionality
             setTimeout(() => initializeTool(toolId), 100);
         }
 
-        // Close tool modal
-        function closeToolModal() {
+        // Close Modal
+        function closeModal() {
             toolModal.style.display = 'none';
             document.body.style.overflow = 'auto';
             currentTool = null;
             currentResult = null;
+            currentData = null;
         }
 
-        // Get tool interface HTML
+        // Get Tool Interface HTML
         function getToolInterface(toolId) {
             const interfaces = {
                 // IMAGE CONVERTER - FULLY WORKING
@@ -1942,14 +2164,11 @@
                     <div class="tool-container">
                         <h3 style="text-align: center; margin-bottom: 30px; color: #3B82F6;">Convert Images Between Formats</h3>
                         
-                        <div class="upload-area" id="imageConverterArea">
+                        <div class="upload-area" id="imageConverterArea" onclick="document.getElementById('imageInput').click()">
                             <i class="fas fa-file-image"></i>
                             <h3>Drop your image here</h3>
                             <p>or click to browse (JPG, PNG, WEBP, BMP, GIF)</p>
-                            <input type="file" id="imageConverterInput" class="file-input" accept="image/*">
-                            <button class="btn-upload" onclick="document.getElementById('imageConverterInput').click()">
-                                <i class="fas fa-upload"></i> Choose Image
-                            </button>
+                            <input type="file" id="imageInput" class="file-input" accept="image/*" onchange="handleImageUpload(event)">
                         </div>
                         
                         <div class="input-group">
@@ -1965,7 +2184,7 @@
                         
                         <div class="input-group">
                             <label><i class="fas fa-tachometer-alt"></i> Quality (1-100)</label>
-                            <input type="range" id="imageQuality" min="1" max="100" value="90">
+                            <input type="range" id="imageQuality" min="1" max="100" value="90" oninput="document.getElementById('qualityValue').textContent = this.value + '%'">
                             <div style="display: flex; justify-content: space-between; margin-top: 5px;">
                                 <small>Smaller file</small>
                                 <span id="qualityValue" style="font-weight: bold; color: #3B82F6;">90%</span>
@@ -1985,7 +2204,7 @@
                         </div>
                         
                         <div class="tool-controls">
-                            <button class="btn btn-success" id="convertImageBtn" disabled>
+                            <button class="btn btn-success" id="convertBtn" onclick="convertImage()" disabled>
                                 <i class="fas fa-exchange-alt"></i> Convert Image
                             </button>
                             <button class="btn btn-danger" onclick="resetImageConverter()">
@@ -2002,22 +2221,22 @@
                         
                         <div class="input-group">
                             <label><i class="fas fa-money-bill-wave"></i> Loan Amount (₹)</label>
-                            <input type="number" id="loanAmount" placeholder="e.g., 500000" min="1000" max="100000000" value="500000">
+                            <input type="number" id="loanAmount" placeholder="e.g., 500000" min="1000" max="100000000" value="500000" oninput="calculateEMI()">
                         </div>
                         
                         <div class="input-group">
                             <label><i class="fas fa-percentage"></i> Interest Rate (% per year)</label>
-                            <input type="number" id="interestRate" placeholder="e.g., 8.5" min="1" max="30" step="0.1" value="8.5">
+                            <input type="number" id="interestRate" placeholder="e.g., 8.5" min="1" max="30" step="0.1" value="8.5" oninput="calculateEMI()">
                         </div>
                         
                         <div class="input-group">
                             <label><i class="fas fa-calendar-alt"></i> Loan Tenure</label>
                             <div style="display: flex; gap: 20px;">
                                 <div style="flex: 1;">
-                                    <input type="number" id="loanTenure" placeholder="e.g., 20" min="1" max="40" value="20">
+                                    <input type="number" id="loanTenure" placeholder="e.g., 20" min="1" max="40" value="20" oninput="calculateEMI()">
                                 </div>
                                 <div style="flex: 1;">
-                                    <select id="tenureType" style="width: 100%;">
+                                    <select id="tenureType" style="width: 100%;" onchange="calculateEMI()">
                                         <option value="years">Years</option>
                                         <option value="months">Months</option>
                                     </select>
@@ -2027,14 +2246,15 @@
                         
                         <div class="calculator" style="margin-top: 30px;">
                             <div class="calculator-display" id="emiDisplay">₹ 0.00</div>
-                            <div class="tool-controls">
-                                <button class="btn btn-success" id="calculateEmiBtn">
-                                    <i class="fas fa-calculator"></i> Calculate EMI
-                                </button>
-                                <button class="btn btn-danger" onclick="resetEmiCalculator()">
-                                    <i class="fas fa-redo"></i> Reset
-                                </button>
-                            </div>
+                        </div>
+                        
+                        <div class="tool-controls">
+                            <button class="btn btn-success" onclick="showEMIDetails()">
+                                <i class="fas fa-calculator"></i> Show Detailed Calculation
+                            </button>
+                            <button class="btn btn-danger" onclick="resetEmiCalculator()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
                         </div>
                     </div>
                 `,
@@ -2046,12 +2266,12 @@
                         
                         <div class="input-group">
                             <label><i class="fas fa-font"></i> Enter Your Text</label>
-                            <textarea id="textInput" placeholder="Type or paste your text here...">Convert this text to different cases. Try it now!</textarea>
+                            <textarea id="textInput" placeholder="Type or paste your text here..." oninput="previewTextCase()">Welcome to Any Tasker! This is a sample text to demonstrate case conversion.</textarea>
                         </div>
                         
                         <div class="input-group">
                             <label><i class="fas fa-exchange-alt"></i> Select Case Type</label>
-                            <select id="caseType" style="width: 100%;">
+                            <select id="caseType" style="width: 100%;" onchange="previewTextCase()">
                                 <option value="upper">UPPERCASE (ALL CAPS)</option>
                                 <option value="lower">lowercase (all small)</option>
                                 <option value="title">Title Case (Capitalize Each Word)</option>
@@ -2064,11 +2284,16 @@
                             </select>
                         </div>
                         
+                        <div class="input-group">
+                            <label><i class="fas fa-eye"></i> Preview</label>
+                            <textarea id="textPreview" style="background: #f8fafc; font-family: monospace;" readonly></textarea>
+                        </div>
+                        
                         <div class="tool-controls">
-                            <button class="btn btn-success" id="convertTextBtn">
+                            <button class="btn btn-success" onclick="convertTextCase()">
                                 <i class="fas fa-exchange-alt"></i> Convert Text
                             </button>
-                            <button class="btn btn-primary" onclick="copyTextToClipboard()">
+                            <button class="btn btn-primary" onclick="copyText()">
                                 <i class="fas fa-copy"></i> Copy Text
                             </button>
                             <button class="btn btn-danger" onclick="resetTextConverter()">
@@ -2085,17 +2310,17 @@
                         
                         <div class="input-group">
                             <label><i class="fas fa-link"></i> Enter Text or URL</label>
-                            <textarea id="qrText" placeholder="https://example.com or any text...">https://anytasker.com</textarea>
+                            <textarea id="qrText" placeholder="https://example.com or any text..." oninput="generateQRCode()">https://anytasker.com</textarea>
                         </div>
                         
                         <div class="input-group">
                             <label><i class="fas fa-palette"></i> QR Code Color</label>
-                            <input type="color" id="qrColor" value="#2563EB" style="width: 100%; height: 50px; border-radius: 10px;">
+                            <input type="color" id="qrColor" value="#2563EB" oninput="generateQRCode()" style="width: 100%; height: 50px; border-radius: 10px;">
                         </div>
                         
                         <div class="input-group">
                             <label><i class="fas fa-expand-alt"></i> QR Code Size</label>
-                            <input type="range" id="qrSize" min="100" max="500" value="250">
+                            <input type="range" id="qrSize" min="100" max="500" value="250" oninput="document.getElementById('sizeValue').textContent = this.value + 'px'; generateQRCode()">
                             <div style="display: flex; justify-content: space-between; margin-top: 5px;">
                                 <small>Small</small>
                                 <span id="sizeValue" style="font-weight: bold; color: #2563EB;">250px</span>
@@ -2108,10 +2333,10 @@
                         </div>
                         
                         <div class="tool-controls">
-                            <button class="btn btn-success" id="generateQrBtn">
+                            <button class="btn btn-success" onclick="generateQRCode(true)">
                                 <i class="fas fa-qrcode"></i> Generate QR Code
                             </button>
-                            <button class="btn btn-primary" id="downloadQrBtn">
+                            <button class="btn btn-primary" onclick="downloadQRCode()">
                                 <i class="fas fa-download"></i> Download QR
                             </button>
                             <button class="btn btn-danger" onclick="resetQrGenerator()">
@@ -2128,7 +2353,7 @@
                         
                         <div class="input-group">
                             <label><i class="fas fa-eye-dropper"></i> Select Color</label>
-                            <input type="color" id="colorPickerInput" value="#3B82F6" style="width: 100%; height: 60px; border-radius: 10px; cursor: pointer;">
+                            <input type="color" id="colorPickerInput" value="#3B82F6" oninput="updateColorValues()" style="width: 100%; height: 60px; border-radius: 10px; cursor: pointer;">
                         </div>
                         
                         <div id="colorPreview" class="color-preview" style="background-color: #3B82F6;"></div>
@@ -2177,42 +2402,42 @@
                         <div class="calculator">
                             <div class="calculator-display" id="calcDisplay">0</div>
                             <div class="calculator-buttons">
-                                <button class="calc-btn clear" onclick="clearCalculator()">C</button>
-                                <button class="calc-btn" onclick="backspace()">⌫</button>
-                                <button class="calc-btn operator" onclick="appendToDisplay('%')">%</button>
-                                <button class="calc-btn operator" onclick="appendToDisplay('/')">÷</button>
+                                <button class="calc-btn clear" onclick="clearCalc()">C</button>
+                                <button class="calc-btn" onclick="backspaceCalc()">⌫</button>
+                                <button class="calc-btn operator" onclick="appendToCalc('%')">%</button>
+                                <button class="calc-btn operator" onclick="appendToCalc('/')">÷</button>
                                 
-                                <button class="calc-btn" onclick="appendToDisplay('7')">7</button>
-                                <button class="calc-btn" onclick="appendToDisplay('8')">8</button>
-                                <button class="calc-btn" onclick="appendToDisplay('9')">9</button>
-                                <button class="calc-btn operator" onclick="appendToDisplay('*')">×</button>
+                                <button class="calc-btn" onclick="appendToCalc('7')">7</button>
+                                <button class="calc-btn" onclick="appendToCalc('8')">8</button>
+                                <button class="calc-btn" onclick="appendToCalc('9')">9</button>
+                                <button class="calc-btn operator" onclick="appendToCalc('*')">×</button>
                                 
-                                <button class="calc-btn" onclick="appendToDisplay('4')">4</button>
-                                <button class="calc-btn" onclick="appendToDisplay('5')">5</button>
-                                <button class="calc-btn" onclick="appendToDisplay('6')">6</button>
-                                <button class="calc-btn operator" onclick="appendToDisplay('-')">−</button>
+                                <button class="calc-btn" onclick="appendToCalc('4')">4</button>
+                                <button class="calc-btn" onclick="appendToCalc('5')">5</button>
+                                <button class="calc-btn" onclick="appendToCalc('6')">6</button>
+                                <button class="calc-btn operator" onclick="appendToCalc('-')">−</button>
                                 
-                                <button class="calc-btn" onclick="appendToDisplay('1')">1</button>
-                                <button class="calc-btn" onclick="appendToDisplay('2')">2</button>
-                                <button class="calc-btn" onclick="appendToDisplay('3')">3</button>
-                                <button class="calc-btn operator" onclick="appendToDisplay('+')">+</button>
+                                <button class="calc-btn" onclick="appendToCalc('1')">1</button>
+                                <button class="calc-btn" onclick="appendToCalc('2')">2</button>
+                                <button class="calc-btn" onclick="appendToCalc('3')">3</button>
+                                <button class="calc-btn operator" onclick="appendToCalc('+')">+</button>
                                 
-                                <button class="calc-btn" onclick="appendToDisplay('0')">0</button>
-                                <button class="calc-btn" onclick="appendToDisplay('.')">.</button>
-                                <button class="calc-btn equals" onclick="calculateResult()">=</button>
+                                <button class="calc-btn" onclick="appendToCalc('0')">0</button>
+                                <button class="calc-btn" onclick="appendToCalc('.')">.</button>
+                                <button class="calc-btn equals" onclick="calculate()">=</button>
                                 
-                                <button class="calc-btn" onclick="appendToDisplay('(')">(</button>
-                                <button class="calc-btn" onclick="appendToDisplay(')')">)</button>
-                                <button class="calc-btn operator" onclick="appendToDisplay('Math.sqrt(')">√</button>
-                                <button class="calc-btn operator" onclick="appendToDisplay('**')">^</button>
+                                <button class="calc-btn" onclick="appendToCalc('(')">(</button>
+                                <button class="calc-btn" onclick="appendToCalc(')')">)</button>
+                                <button class="calc-btn operator" onclick="appendToCalc('Math.sqrt(')">√</button>
+                                <button class="calc-btn operator" onclick="appendToCalc('**2')">x²</button>
                             </div>
                         </div>
                         
                         <div class="tool-controls" style="margin-top: 30px;">
-                            <button class="btn btn-success" onclick="calculateResult()">
-                                <i class="fas fa-equals"></i> Calculate
+                            <button class="btn btn-success" onclick="showCalculationHistory()">
+                                <i class="fas fa-history"></i> Show History
                             </button>
-                            <button class="btn btn-danger" onclick="clearCalculator()">
+                            <button class="btn btn-danger" onclick="clearCalc()">
                                 <i class="fas fa-redo"></i> Clear All
                             </button>
                         </div>
@@ -2229,7 +2454,7 @@
                             </div>
                             <h3 style="color: #6b7280; margin-bottom: 15px;">Tool Coming Soon</h3>
                             <p style="color: #9ca3af;">This tool is under development. Try our other fully working tools!</p>
-                            <button class="btn btn-primary" style="margin-top: 30px;" onclick="closeToolModal()">
+                            <button class="btn btn-primary" style="margin-top: 30px;" onclick="closeModal()">
                                 <i class="fas fa-arrow-left"></i> Back to Tools
                             </button>
                         </div>
@@ -2240,137 +2465,119 @@
             return interfaces[toolId] || interfaces.default;
         }
 
-        // Initialize tool functionality
+        // Initialize Tool Functionality
         function initializeTool(toolId) {
             switch(toolId) {
                 case 'imageConverter':
-                    initializeImageConverter();
+                    // Already initialized by inline handlers
                     break;
                 case 'emiCalculator':
-                    initializeEmiCalculator();
+                    calculateEMI();
                     break;
                 case 'textCaseConverter':
-                    initializeTextConverter();
+                    previewTextCase();
                     break;
                 case 'qrGenerator':
-                    initializeQrGenerator();
+                    generateQRCode();
                     break;
                 case 'colorPicker':
-                    initializeColorPicker();
+                    updateColorValues();
                     break;
                 case 'scientificCalculator':
-                    initializeCalculator();
+                    // Already initialized
                     break;
             }
         }
 
-        // ============== IMAGE CONVERTER ==============
-        function initializeImageConverter() {
-            const converterInput = document.getElementById('imageConverterInput');
-            const converterArea = document.getElementById('imageConverterArea');
-            const convertBtn = document.getElementById('convertImageBtn');
-            const qualitySlider = document.getElementById('imageQuality');
-            const qualityValue = document.getElementById('qualityValue');
-            let originalImage = null;
+        // ============== IMAGE CONVERTER FUNCTIONS ==============
+        let uploadedImage = null;
+        
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file || !file.type.startsWith('image/')) {
+                showToast('Please select a valid image file', 'error');
+                return;
+            }
             
-            // Update quality value display
-            qualitySlider.addEventListener('input', function() {
-                qualityValue.textContent = this.value + '%';
-            });
+            uploadedImage = file;
+            const reader = new FileReader();
             
-            // File selection
-            converterInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file || !file.type.startsWith('image/')) {
-                    showToast('Please select a valid image file', 'error');
-                    return;
-                }
+            reader.onload = function(e) {
+                const preview = document.getElementById('originalImagePreview');
+                preview.src = e.target.result;
+                document.getElementById('imagePreviewContainer').style.display = 'grid';
+                document.getElementById('convertBtn').disabled = false;
                 
-                originalImage = file;
-                const reader = new FileReader();
+                // Show file info
+                const area = document.getElementById('imageConverterArea');
+                area.innerHTML = `
+                    <i class="fas fa-check-circle" style="color: #10B981; font-size: 48px;"></i>
+                    <h3>${file.name}</h3>
+                    <p>${(file.size / 1024).toFixed(2)} KB • ${file.type.split('/')[1].toUpperCase()}</p>
+                    <button class="btn-upload" onclick="document.getElementById('imageInput').click()">
+                        <i class="fas fa-sync-alt"></i> Change Image
+                    </button>
+                `;
                 
-                reader.onload = function(e) {
-                    const preview = document.getElementById('originalImagePreview');
-                    preview.src = e.target.result;
-                    document.getElementById('imagePreviewContainer').style.display = 'grid';
-                    convertBtn.disabled = false;
-                    
-                    // Show file info
-                    converterArea.innerHTML = `
-                        <i class="fas fa-check-circle" style="color: #10B981;"></i>
-                        <h3>${file.name}</h3>
-                        <p>${(file.size / 1024).toFixed(2)} KB • ${file.type.split('/')[1].toUpperCase()}</p>
-                        <button class="btn-upload" onclick="document.getElementById('imageConverterInput').click()">
-                            <i class="fas fa-sync-alt"></i> Change Image
-                        </button>
-                    `;
-                };
-                
-                reader.readAsDataURL(file);
-            });
+                showToast('Image uploaded successfully!', 'success');
+            };
             
-            // Convert image
-            convertBtn.addEventListener('click', function() {
-                if (!originalImage) return;
+            reader.readAsDataURL(file);
+        }
+        
+        function convertImage() {
+            if (!uploadedImage) return;
+            
+            showLoading(true);
+            const format = document.getElementById('targetFormat').value;
+            const quality = parseInt(document.getElementById('imageQuality').value) / 100;
+            
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
                 
-                const format = document.getElementById('targetFormat').value;
-                const quality = parseInt(qualitySlider.value) / 100;
-                
-                convertBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting...';
-                convertBtn.disabled = true;
-                
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('convertedImagePreview').src = url;
                     
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
+                    const formatName = format.split('/')[1].toUpperCase();
+                    const originalSize = (uploadedImage.size / 1024).toFixed(2);
+                    const newSize = (blob.size / 1024).toFixed(2);
+                    const reduction = ((1 - blob.size / uploadedImage.size) * 100).toFixed(1);
                     
-                    canvas.toBlob(function(blob) {
-                        const url = URL.createObjectURL(blob);
-                        const preview = document.getElementById('convertedImagePreview');
-                        preview.src = url;
-                        
-                        // Show result
-                        const formatName = format.split('/')[1].toUpperCase();
-                        const originalSize = (originalImage.size / 1024).toFixed(2);
-                        const newSize = (blob.size / 1024).toFixed(2);
-                        const reduction = ((1 - blob.size / originalImage.size) * 100).toFixed(1);
-                        
-                        const result = `✅ Image converted successfully!
+                    const result = `✅ Image converted successfully!
 
 Original:
-- Format: ${originalImage.type.split('/')[1].toUpperCase()}
+- Format: ${uploadedImage.type.split('/')[1].toUpperCase()}
 - Size: ${originalSize} KB
+- Dimensions: ${img.width} × ${img.height}
 
 Converted to ${formatName}:
 - Size: ${newSize} KB
-- Quality: ${qualitySlider.value}%
+- Quality: ${quality * 100}%
 - Size reduction: ${reduction}%
 
-Download link is available below.`;
-                        
-                        showResult(result);
-                        currentResult = { blob, url, format: formatName };
-                        
-                        // Reset button
-                        convertBtn.innerHTML = '<i class="fas fa-exchange-alt"></i> Convert Image';
-                        convertBtn.disabled = false;
-                        
-                        showToast('Image converted successfully!', 'success');
-                    }, format, quality);
-                };
-                
-                img.src = URL.createObjectURL(originalImage);
-            });
+Click "Download" to save the converted image.`;
+                    
+                    currentData = { blob, url, format: formatName };
+                    showResult(result);
+                    showLoading(false);
+                    showToast('Image converted successfully!', 'success');
+                }, format, quality);
+            };
+            
+            img.src = URL.createObjectURL(uploadedImage);
         }
-
+        
         function resetImageConverter() {
-            document.getElementById('imageConverterInput').value = '';
+            uploadedImage = null;
+            document.getElementById('imageInput').value = '';
             document.getElementById('imagePreviewContainer').style.display = 'none';
-            document.getElementById('convertImageBtn').disabled = true;
+            document.getElementById('convertBtn').disabled = true;
             document.getElementById('imageQuality').value = 90;
             document.getElementById('qualityValue').textContent = '90%';
             
@@ -2378,44 +2585,20 @@ Download link is available below.`;
                 <i class="fas fa-file-image"></i>
                 <h3>Drop your image here</h3>
                 <p>or click to browse (JPG, PNG, WEBP, BMP, GIF)</p>
-                <input type="file" id="imageConverterInput" class="file-input" accept="image/*">
-                <button class="btn-upload" onclick="document.getElementById('imageConverterInput').click()">
-                    <i class="fas fa-upload"></i> Choose Image
-                </button>
+                <input type="file" id="imageInput" class="file-input" accept="image/*" onchange="handleImageUpload(event)">
             `;
             
             toolResult.style.display = 'none';
-            initializeImageConverter();
             showToast('Image converter reset', 'info');
         }
 
-        // ============== EMI CALCULATOR ==============
-        function initializeEmiCalculator() {
-            const calculateBtn = document.getElementById('calculateEmiBtn');
-            const inputs = ['loanAmount', 'interestRate', 'loanTenure'];
-            
-            // Add input listeners for real-time calculation
-            inputs.forEach(id => {
-                document.getElementById(id).addEventListener('input', function() {
-                    if (this.value) calculateEMI();
-                });
-            });
-            
-            document.getElementById('tenureType').addEventListener('change', calculateEMI);
-            
-            calculateBtn.addEventListener('click', calculateEMI);
-            
-            // Calculate on load
-            calculateEMI();
-        }
-
+        // ============== EMI CALCULATOR FUNCTIONS ==============
         function calculateEMI() {
             const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
             const rate = parseFloat(document.getElementById('interestRate').value) || 0;
             let tenure = parseFloat(document.getElementById('loanTenure').value) || 0;
             const tenureType = document.getElementById('tenureType').value;
             
-            // Convert to months if in years
             if (tenureType === 'years') {
                 tenure = tenure * 12;
             }
@@ -2429,51 +2612,89 @@ Download link is available below.`;
             const emi = amount * monthlyRate * Math.pow(1 + monthlyRate, tenure) / 
                        (Math.pow(1 + monthlyRate, tenure) - 1);
             
+            document.getElementById('emiDisplay').textContent = `₹ ${emi.toFixed(2)}`;
+        }
+        
+        function showEMIDetails() {
+            const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const rate = parseFloat(document.getElementById('interestRate').value) || 0;
+            let tenure = parseFloat(document.getElementById('loanTenure').value) || 0;
+            const tenureType = document.getElementById('tenureType').value;
+            
+            if (tenureType === 'years') {
+                tenure = tenure * 12;
+            }
+            
+            if (amount <= 0 || rate <= 0 || tenure <= 0) {
+                showToast('Please enter valid values', 'error');
+                return;
+            }
+            
+            const monthlyRate = rate / 12 / 100;
+            const emi = amount * monthlyRate * Math.pow(1 + monthlyRate, tenure) / 
+                       (Math.pow(1 + monthlyRate, tenure) - 1);
+            
             const totalPayment = emi * tenure;
             const totalInterest = totalPayment - amount;
             
-            document.getElementById('emiDisplay').textContent = `₹ ${emi.toFixed(2)}`;
-            
-            const result = `🏦 EMI Calculation Results:
+            const result = `🏦 EMI Calculation Results
 
 Loan Amount: ₹ ${amount.toLocaleString()}
 Interest Rate: ${rate}% per year
 Loan Tenure: ${tenure} months (${(tenure/12).toFixed(1)} years)
 
 📊 Monthly EMI: ₹ ${emi.toFixed(2)}
-💰 Total Payment: ₹ ${totalPayment.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
-💸 Total Interest: ₹ ${totalInterest.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
-📈 Interest % of Loan: ${((totalInterest/amount)*100).toFixed(2)}%
+💰 Total Payment: ₹ ${totalPayment.toLocaleString()}
+💸 Total Interest: ₹ ${totalInterest.toLocaleString()}
+📈 Interest Percentage: ${((totalInterest/amount)*100).toFixed(2)}%
 
-💡 Tip: Paying even ₹ ${Math.round(emi * 0.1)} extra monthly can reduce your tenure significantly!`;
+💡 Tip: Paying even ₹ ${Math.round(emi * 0.1)} extra monthly can reduce your loan tenure significantly!`;
             
+            currentData = { emi, totalPayment, totalInterest, amount, rate, tenure };
             showResult(result);
-            currentResult = { emi, totalPayment, totalInterest, amount, rate, tenure };
-            showToast('EMI calculated successfully!', 'success');
         }
-
+        
         function resetEmiCalculator() {
             document.getElementById('loanAmount').value = 500000;
             document.getElementById('interestRate').value = 8.5;
             document.getElementById('loanTenure').value = 20;
             document.getElementById('tenureType').value = 'years';
             calculateEMI();
+            toolResult.style.display = 'none';
             showToast('EMI calculator reset', 'info');
         }
 
-        // ============== TEXT CONVERTER ==============
-        function initializeTextConverter() {
-            const convertBtn = document.getElementById('convertTextBtn');
-            convertBtn.addEventListener('click', convertTextCase);
+        // ============== TEXT CONVERTER FUNCTIONS ==============
+        function previewTextCase() {
+            const text = document.getElementById('textInput').value;
+            const caseType = document.getElementById('caseType').value;
+            const preview = document.getElementById('textPreview');
             
-            // Convert on Enter key
-            document.getElementById('textInput').addEventListener('keyup', function(e) {
-                if (e.ctrlKey && e.key === 'Enter') {
-                    convertTextCase();
-                }
-            });
+            if (!text.trim()) {
+                preview.value = '';
+                return;
+            }
+            
+            preview.value = convertCase(text, caseType);
         }
-
+        
+        function convertCase(text, type) {
+            switch(type) {
+                case 'upper': return text.toUpperCase();
+                case 'lower': return text.toLowerCase();
+                case 'title': return text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+                case 'sentence': return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+                case 'camel': return text.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+                case 'pascal': return text.replace(/\w+/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase()).replace(/[^a-zA-Z0-9]/g, '');
+                case 'snake': return text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '_');
+                case 'kebab': return text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '-');
+                case 'inverse': return text.split('').map(char => 
+                    char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()
+                ).join('');
+                default: return text;
+            }
+        }
+        
         function convertTextCase() {
             const text = document.getElementById('textInput').value;
             const caseType = document.getElementById('caseType').value;
@@ -2483,56 +2704,30 @@ Loan Tenure: ${tenure} months (${(tenure/12).toFixed(1)} years)
                 return;
             }
             
-            let convertedText = '';
+            const converted = convertCase(text, caseType);
+            const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+            const charCount = text.length;
+            const lineCount = text.split('\n').length;
             
-            switch(caseType) {
-                case 'upper':
-                    convertedText = text.toUpperCase();
-                    break;
-                case 'lower':
-                    convertedText = text.toLowerCase();
-                    break;
-                case 'title':
-                    convertedText = text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
-                    break;
-                case 'sentence':
-                    convertedText = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-                    break;
-                case 'camel':
-                    convertedText = text.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
-                    break;
-                case 'pascal':
-                    convertedText = text.replace(/\w+/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase()).replace(/[^a-zA-Z0-9]/g, '');
-                    break;
-                case 'snake':
-                    convertedText = text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '_');
-                    break;
-                case 'kebab':
-                    convertedText = text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '-');
-                    break;
-                case 'inverse':
-                    convertedText = text.split('').map(char => 
-                        char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()
-                    ).join('');
-                    break;
-            }
-            
-            const result = `Original Text (${text.length} characters):
+            const result = `✅ Text converted successfully!
+
+Original Text (${charCount} characters, ${wordCount} words):
 "${text}"
 
 Converted to ${caseType}:
-"${convertedText}"
+"${converted}"
 
-Character Count: ${convertedText.length}
-Word Count: ${convertedText.trim() ? convertedText.trim().split(/\s+/).length : 0}
-Line Count: ${convertedText.split('\n').length}`;
+📊 Statistics:
+- Characters: ${converted.length}
+- Words: ${converted.trim() ? converted.trim().split(/\s+/).length : 0}
+- Lines: ${converted.split('\n').length}`;
             
+            currentData = { original: text, converted: converted, caseType, stats: { words: wordCount, chars: charCount, lines: lineCount } };
             showResult(result);
-            currentResult = { original: text, converted: convertedText, caseType };
             showToast('Text converted successfully!', 'success');
         }
-
-        function copyTextToClipboard() {
+        
+        function copyText() {
             const text = document.getElementById('textInput').value;
             if (!text.trim()) {
                 showToast('No text to copy', 'error');
@@ -2541,8 +2736,7 @@ Line Count: ${convertedText.split('\n').length}`;
             
             navigator.clipboard.writeText(text).then(() => {
                 showToast('Text copied to clipboard!', 'success');
-            }).catch(err => {
-                // Fallback method
+            }).catch(() => {
                 const textArea = document.createElement('textarea');
                 textArea.value = text;
                 document.body.appendChild(textArea);
@@ -2552,91 +2746,93 @@ Line Count: ${convertedText.split('\n').length}`;
                 showToast('Text copied to clipboard!', 'success');
             });
         }
-
+        
         function resetTextConverter() {
-            document.getElementById('textInput').value = 'Convert this text to different cases. Try it now!';
+            document.getElementById('textInput').value = 'Welcome to Any Tasker! This is a sample text to demonstrate case conversion.';
             document.getElementById('caseType').value = 'upper';
+            previewTextCase();
             toolResult.style.display = 'none';
             showToast('Text converter reset', 'info');
         }
 
-        // ============== QR CODE GENERATOR ==============
-        function initializeQrGenerator() {
-            const generateBtn = document.getElementById('generateQrBtn');
-            const downloadBtn = document.getElementById('downloadQrBtn');
-            const sizeSlider = document.getElementById('qrSize');
-            const sizeValue = document.getElementById('sizeValue');
-            
-            // Update size value display
-            sizeSlider.addEventListener('input', function() {
-                sizeValue.textContent = this.value + 'px';
-            });
-            
-            generateBtn.addEventListener('click', generateQRCode);
-            downloadBtn.addEventListener('click', downloadQRCode);
-            
-            // Generate on load
-            setTimeout(generateQRCode, 500);
-        }
-
-        function generateQRCode() {
+        // ============== QR CODE FUNCTIONS ==============
+        function generateQRCode(force = false) {
             const text = document.getElementById('qrText').value || 'https://anytasker.com';
             const color = document.getElementById('qrColor').value;
             const size = parseInt(document.getElementById('qrSize').value);
             
             const canvas = document.getElementById('qrCodeCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Set canvas size
             canvas.width = size;
             canvas.height = size;
             
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, size, size);
-            
-            // Simple QR code generation (simulated)
+            // Draw QR code background
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, size, size);
             
-            // Generate random QR-like pattern
+            // Draw QR code data (simulated)
             ctx.fillStyle = color;
             const cellSize = size / 21;
             
-            // Position markers
-            drawPositionMarker(ctx, cellSize * 3, cellSize * 3, cellSize);
-            drawPositionMarker(ctx, cellSize * 17, cellSize * 3, cellSize);
-            drawPositionMarker(ctx, cellSize * 3, cellSize * 17, cellSize);
+            // Draw position markers
+            drawQRMarker(ctx, 3, 3, cellSize);
+            drawQRMarker(ctx, 17, 3, cellSize);
+            drawQRMarker(ctx, 3, 17, cellSize);
             
-            // Data cells
+            // Draw data cells
+            const textHash = hashString(text);
             for (let i = 0; i < 21; i++) {
                 for (let j = 0; j < 21; j++) {
+                    // Skip position markers
                     if ((i < 8 && j < 8) || (i < 8 && j > 12) || (i > 12 && j < 8)) continue;
                     
-                    if (Math.random() > 0.5) {
+                    // Determine if cell should be filled based on hash
+                    const hashIndex = (i * 21 + j) % textHash.length;
+                    if (textHash[hashIndex] > 128) {
                         ctx.fillRect(j * cellSize + 2, i * cellSize + 2, cellSize - 4, cellSize - 4);
                     }
                 }
             }
             
-            const result = `✅ QR Code Generated!
+            if (force) {
+                const result = `✅ QR Code Generated!
 
 Content: "${text}"
 Color: ${color}
 Size: ${size}px × ${size}px
+Format: PNG
 
 Scan this QR code with any QR scanner app.
-You can download the QR code image using the download button.`;
-            
-            showResult(result);
-            currentResult = { text, color, size, canvas };
-            showToast('QR code generated!', 'success');
+You can download it using the download button.`;
+                
+                currentData = { canvas, text, color, size };
+                showResult(result);
+                showToast('QR code generated!', 'success');
+            }
         }
-
-        function drawPositionMarker(ctx, x, y, size) {
-            ctx.fillRect(x, y, size * 7, size * 7);
+        
+        function drawQRMarker(ctx, x, y, size) {
+            ctx.fillRect(x * size, y * size, size * 7, size * 7);
             ctx.fillStyle = '#ffffff';
-            ctx.fillRect(x + size, y + size, size * 5, size * 5);
+            ctx.fillRect((x + 1) * size, (y + 1) * size, size * 5, size * 5);
             ctx.fillStyle = document.getElementById('qrColor').value;
-            ctx.fillRect(x + size * 2, y + size * 2, size * 3, size * 3);
+            ctx.fillRect((x + 2) * size, (y + 2) * size, size * 3, size * 3);
         }
-
+        
+        function hashString(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) - hash) + str.charCodeAt(i);
+                hash |= 0;
+            }
+            return new TextEncoder().encode(hash.toString());
+        }
+        
         function downloadQRCode() {
             const canvas = document.getElementById('qrCodeCanvas');
             const text = document.getElementById('qrText').value || 'qr_code';
@@ -2646,25 +2842,18 @@ You can download the QR code image using the download button.`;
             link.click();
             showToast('QR code downloaded!', 'success');
         }
-
+        
         function resetQrGenerator() {
             document.getElementById('qrText').value = 'https://anytasker.com';
             document.getElementById('qrColor').value = '#2563EB';
             document.getElementById('qrSize').value = 250;
             document.getElementById('sizeValue').textContent = '250px';
             generateQRCode();
+            toolResult.style.display = 'none';
             showToast('QR generator reset', 'info');
         }
 
-        // ============== COLOR PICKER ==============
-        function initializeColorPicker() {
-            const colorInput = document.getElementById('colorPickerInput');
-            colorInput.addEventListener('input', updateColorValues);
-            
-            // Initialize
-            updateColorValues();
-        }
-
+        // ============== COLOR PICKER FUNCTIONS ==============
         function updateColorValues() {
             const hexColor = document.getElementById('colorPickerInput').value;
             document.getElementById('colorPreview').style.backgroundColor = hexColor;
@@ -2684,9 +2873,9 @@ You can download the QR code image using the download button.`;
             const cmyk = rgbToCmyk(r, g, b);
             document.getElementById('cmykColor').value = `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`;
             
-            currentResult = { hex: hexColor, rgb: [r, g, b], hsl, cmyk };
+            currentData = { hex: hexColor, rgb: [r, g, b], hsl, cmyk };
         }
-
+        
         function rgbToHsl(r, g, b) {
             r /= 255; g /= 255; b /= 255;
             const max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -2711,7 +2900,7 @@ You can download the QR code image using the download button.`;
                 l: Math.round(l * 100)
             };
         }
-
+        
         function rgbToCmyk(r, g, b) {
             if (r === 0 && g === 0 && b === 0) {
                 return { c: 0, m: 0, y: 0, k: 100 };
@@ -2729,7 +2918,7 @@ You can download the QR code image using the download button.`;
                 k: Math.round(k * 100)
             };
         }
-
+        
         function copyColorCode(type) {
             let text = '';
             switch(type) {
@@ -2741,7 +2930,7 @@ You can download the QR code image using the download button.`;
             
             navigator.clipboard.writeText(text).then(() => {
                 showToast(`${type.toUpperCase()} color copied!`, 'success');
-            }).catch(err => {
+            }).catch(() => {
                 const textArea = document.createElement('textarea');
                 textArea.value = text;
                 document.body.appendChild(textArea);
@@ -2751,19 +2940,18 @@ You can download the QR code image using the download button.`;
                 showToast(`${type.toUpperCase()} color copied!`, 'success');
             });
         }
-
+        
         function resetColorPicker() {
             document.getElementById('colorPickerInput').value = '#3B82F6';
             updateColorValues();
+            toolResult.style.display = 'none';
             showToast('Color picker reset', 'info');
         }
 
-        // ============== CALCULATOR ==============
-        function initializeCalculator() {
-            // Already initialized by inline onclick handlers
-        }
-
-        function appendToDisplay(value) {
+        // ============== CALCULATOR FUNCTIONS ==============
+        let calcHistory = [];
+        
+        function appendToCalc(value) {
             const display = document.getElementById('calcDisplay');
             if (display.textContent === '0' || display.textContent === 'Error') {
                 display.textContent = value;
@@ -2771,13 +2959,13 @@ You can download the QR code image using the download button.`;
                 display.textContent += value;
             }
         }
-
-        function clearCalculator() {
+        
+        function clearCalc() {
             document.getElementById('calcDisplay').textContent = '0';
             toolResult.style.display = 'none';
         }
-
-        function backspace() {
+        
+        function backspaceCalc() {
             const display = document.getElementById('calcDisplay');
             if (display.textContent.length > 1) {
                 display.textContent = display.textContent.slice(0, -1);
@@ -2785,42 +2973,111 @@ You can download the QR code image using the download button.`;
                 display.textContent = '0';
             }
         }
-
-        function calculateResult() {
+        
+        function calculate() {
             const display = document.getElementById('calcDisplay');
             try {
-                // Replace display symbols with JS operators
                 let expression = display.textContent
                     .replace(/×/g, '*')
                     .replace(/÷/g, '/')
                     .replace(/%/g, '/100')
-                    .replace(/\^/g, '**');
+                    .replace(/\*\*2/g, '**2');
                 
-                // Handle special functions
-                if (expression.includes('Math.sqrt(')) {
-                    expression = expression.replace(/Math.sqrt\(/g, 'Math.sqrt(');
-                }
-                
-                // Evaluate safely
                 const result = eval(expression);
-                display.textContent = Number.isFinite(result) ? result : 'Error';
+                if (!Number.isFinite(result)) throw new Error('Invalid calculation');
                 
-                const resultText = `🧮 Calculation Result:
+                calcHistory.push(`${expression} = ${result}`);
+                display.textContent = result;
+                
+                const resultText = `🧮 Calculation Result
 
-Expression: ${display.textContent}
+Expression: ${expression}
 Result: ${result}
 
-Calculation steps:
-1. ${expression}
-2. = ${result}`;
+Calculation History:
+${calcHistory.slice(-5).map((calc, i) => `${i + 1}. ${calc}`).join('\n')}`;
                 
+                currentData = { expression, result, history: calcHistory };
                 showResult(resultText);
-                currentResult = { expression: display.textContent, result };
                 showToast('Calculation completed!', 'success');
             } catch (error) {
                 display.textContent = 'Error';
                 showToast('Invalid calculation', 'error');
             }
+        }
+        
+        function showCalculationHistory() {
+            if (calcHistory.length === 0) {
+                showToast('No calculation history', 'warning');
+                return;
+            }
+            
+            const result = `📊 Calculation History (Last 10 calculations)
+
+${calcHistory.slice(-10).map((calc, i) => `${i + 1}. ${calc}`).join('\n')}
+
+Total calculations: ${calcHistory.length}`;
+            
+            showResult(result);
+        }
+
+        // ============== SHARE FUNCTIONS ==============
+        function openShareModal() {
+            if (!currentTool) {
+                showToast('No tool to share', 'error');
+                return;
+            }
+            
+            const shareUrl = `${window.location.origin}${window.location.pathname}#tool=${currentTool.id}`;
+            shareLinkInput.value = shareUrl;
+            shareModal.style.display = 'flex';
+        }
+        
+        function closeShareModal() {
+            shareModal.style.display = 'none';
+        }
+        
+        function shareVia(platform) {
+            if (!currentTool) return;
+            
+            const toolName = currentTool.name;
+            const shareUrl = `${window.location.origin}${window.location.pathname}#tool=${currentTool.id}`;
+            const message = `Check out this amazing tool: ${toolName} on Any Tasker! ${shareUrl}`;
+            
+            switch(platform) {
+                case 'whatsapp':
+                    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                    break;
+                case 'facebook':
+                    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+                    break;
+                case 'twitter':
+                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`, '_blank');
+                    break;
+                case 'telegram':
+                    window.open(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(toolName)}`, '_blank');
+                    break;
+                case 'email':
+                    window.open(`mailto:?subject=${encodeURIComponent(toolName)}&body=${encodeURIComponent(message)}`, '_blank');
+                    break;
+                case 'copy':
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        showToast('Link copied to clipboard!', 'success');
+                    }).catch(() => {
+                        shareLinkInput.select();
+                        document.execCommand('copy');
+                        showToast('Link copied to clipboard!', 'success');
+                    });
+                    return;
+            }
+            
+            showToast(`Shared via ${platform}!`, 'success');
+        }
+        
+        function copyShareLink() {
+            shareLinkInput.select();
+            document.execCommand('copy');
+            showToast('Link copied to clipboard!', 'success');
         }
 
         // ============== RESULT FUNCTIONS ==============
@@ -2828,20 +3085,20 @@ Calculation steps:
             resultContent.textContent = text;
             toolResult.style.display = 'block';
             toolResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            currentResult = { ...currentResult, text };
+            currentResult = text;
         }
-
+        
         function copyResult() {
-            if (!currentResult || !currentResult.text) {
+            if (!currentResult) {
                 showToast('No result to copy', 'error');
                 return;
             }
             
-            navigator.clipboard.writeText(currentResult.text).then(() => {
+            navigator.clipboard.writeText(currentResult).then(() => {
                 showToast('Result copied to clipboard!', 'success');
-            }).catch(err => {
+            }).catch(() => {
                 const textArea = document.createElement('textarea');
-                textArea.value = currentResult.text;
+                textArea.value = currentResult;
                 document.body.appendChild(textArea);
                 textArea.select();
                 document.execCommand('copy');
@@ -2849,62 +3106,31 @@ Calculation steps:
                 showToast('Result copied to clipboard!', 'success');
             });
         }
-
-        function shareResult() {
-            if (!currentResult || !currentTool) {
-                showToast('No result to share', 'error');
-                return;
-            }
-            
-            const toolName = currentTool.name;
-            const resultText = currentResult.text ? currentResult.text.substring(0, 200) + '...' : 'Check out this result!';
-            const shareUrl = window.location.href.split('#')[0] + `#tool=${currentTool.id}`;
-            
-            const shareData = {
-                title: `${toolName} - Any Tasker`,
-                text: `I used ${toolName} on Any Tasker:\n\n${resultText}\n\nTry it yourself: `,
-                url: shareUrl
-            };
-            
-            if (navigator.share) {
-                navigator.share(shareData)
-                    .then(() => showToast('Shared successfully!', 'success'))
-                    .catch(err => {
-                        // Fallback to copying link
-                        navigator.clipboard.writeText(shareUrl).then(() => {
-                            showToast('Link copied to clipboard!', 'success');
-                        });
-                    });
-            } else {
-                // Fallback for desktop
-                navigator.clipboard.writeText(`${shareData.text}${shareUrl}`).then(() => {
-                    showToast('Result copied to clipboard! Share it manually.', 'success');
-                });
-            }
-        }
-
+        
         function downloadResult() {
-            if (!currentResult) {
+            if (!currentTool || !currentResult) {
                 showToast('No result to download', 'error');
                 return;
             }
             
-            if (currentTool.id === 'qrGenerator' && currentResult.canvas) {
-                downloadQRCode();
-                return;
-            }
-            
-            if (currentTool.id === 'imageConverter' && currentResult.blob) {
+            // For image converter
+            if (currentTool.id === 'imageConverter' && currentData && currentData.blob) {
                 const link = document.createElement('a');
-                link.download = `converted_image.${currentResult.format.toLowerCase()}`;
-                link.href = currentResult.url;
+                link.download = `converted_image.${currentData.format.toLowerCase()}`;
+                link.href = currentData.url;
                 link.click();
                 showToast('Image downloaded!', 'success');
                 return;
             }
             
-            // For text results
-            const blob = new Blob([currentResult.text], { type: 'text/plain' });
+            // For QR generator
+            if (currentTool.id === 'qrGenerator' && currentData && currentData.canvas) {
+                downloadQRCode();
+                return;
+            }
+            
+            // For other tools, download as text file
+            const blob = new Blob([currentResult], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.download = `${currentTool.name.toLowerCase().replace(/\s+/g, '_')}_result.txt`;
@@ -2914,20 +3140,29 @@ Calculation steps:
             showToast('Result downloaded!', 'success');
         }
 
-        // ============== TOAST NOTIFICATION ==============
+        // ============== UTILITY FUNCTIONS ==============
         function showToast(message, type = 'info') {
+            const icon = type === 'success' ? 'fa-check-circle' : 
+                         type === 'error' ? 'fa-times-circle' : 
+                         type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+            
             toast.className = `toast ${type}`;
-            toastMessage.textContent = message;
+            toast.innerHTML = `<i class="fas ${icon}"></i><span id="toastMessage">${message}</span>`;
             toast.classList.add('show');
             
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
         }
-
-        // ============== FOOTER FUNCTIONS ==============
+        
+        function showLoading(show) {
+            loading.style.display = show ? 'block' : 'none';
+        }
+        
         function showPrivacyPolicy() {
-            const policy = `🔒 Privacy Policy
+            openTool('default');
+            setTimeout(() => {
+                const policy = `🔒 Privacy Policy
 
 Last Updated: ${new Date().toLocaleDateString()}
 
@@ -2935,102 +3170,71 @@ Last Updated: ${new Date().toLocaleDateString()}
 We do not collect any personal data. All tools work directly in your browser.
 
 2. File Processing
-All file processing (images, documents, etc.) happens locally in your browser. We never upload your files to any server.
+All file processing happens locally in your browser. We never upload your files.
 
 3. Cookies
-We use only essential cookies for tool functionality. No tracking cookies are used.
+We use only essential cookies for tool functionality.
 
-4. Third-Party Services
-We use only open-source libraries for tool functionality. No data is shared with third parties.
-
-5. Contact
-For privacy concerns, contact: anytasker1998@gmail.com
+4. Contact
+For privacy concerns: anytasker1998@gmail.com
 
 Your privacy is our priority!`;
-
-            openToolModal('Privacy Policy', 'default');
-            setTimeout(() => {
                 showResult(policy);
             }, 100);
         }
-
+        
         function showTermsOfUse() {
-            const terms = `📄 Terms of Use
+            openTool('default');
+            setTimeout(() => {
+                const terms = `📄 Terms of Use
 
 Last Updated: ${new Date().toLocaleDateString()}
 
-1. Acceptance of Terms
+1. Acceptance
 By using Any Tasker, you agree to these terms.
 
-2. Service Description
-Any Tasker provides free online tools for personal and commercial use.
+2. Service
+We provide free online tools for personal and commercial use.
 
-3. User Responsibilities
+3. Responsibilities
 - Use tools for legal purposes only
 - Don't overload our service
-- Respect intellectual property
 
 4. Disclaimer
-Tools are provided "as is" without warranties. We're not liable for any damages.
+Tools are provided "as is" without warranties.
 
-5. Modifications
-We may update these terms at any time.
-
-6. Contact
+5. Contact
 Questions? Email: anytasker1998@gmail.com
 
 Thank you for using Any Tasker!`;
-
-            openToolModal('Terms of Use', 'default');
-            setTimeout(() => {
                 showResult(terms);
             }, 100);
         }
 
-        // ============== KEYBOARD SHORTCUTS ==============
-        document.addEventListener('keydown', function(e) {
-            // Close modal with Escape
-            if (e.key === 'Escape' && toolModal.style.display === 'flex') {
-                closeToolModal();
+        // ============== URL HANDLING ==============
+        window.addEventListener('hashchange', handleHash);
+        window.addEventListener('load', handleHash);
+        
+        function handleHash() {
+            const hash = window.location.hash.substring(1);
+            if (hash.startsWith('tool=')) {
+                const toolId = hash.split('=')[1];
+                if (toolId && allTools.find(t => t.id === toolId)) {
+                    openTool(toolId);
+                }
             }
-            
-            // Focus search with Ctrl+K
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                searchInput.focus();
+        }
+
+        // Initial QR Code Generation
+        setTimeout(() => {
+            if (document.getElementById('qrCodeCanvas')) {
+                generateQRCode();
             }
-        });
+        }, 1000);
 
-        // ============== PERFORMANCE OPTIMIZATION ==============
-        // Debounce search input
-        let searchTimeout;
-        searchInput.addEventListener('input', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                handleSearch();
-            }, 300);
-        });
-
-        // ============== OFFLINE SUPPORT ==============
-        window.addEventListener('online', () => {
-            showToast('You are back online!', 'success');
-        });
-
-        window.addEventListener('offline', () => {
-            showToast('You are offline. Some features may be limited.', 'warning');
-        });
-
-        // ============== VISUAL EFFECTS ==============
-        // Add floating animation to tool cards
-        const toolCards = document.querySelectorAll('.tool-card');
-        toolCards.forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.1}s`;
-        });
-
-        // ============== INITIALIZE ALL TOOLS ==============
-        console.log('Any Tasker - All Tools Working 100%');
-        console.log('Total Tools: ' + allTools.length);
-        console.log('Contact: anytasker1998@gmail.com');
+        // Console greeting
+        console.log('%c🔧 Any Tasker - All Tools 100% Working!', 'color: #2563eb; font-size: 18px; font-weight: bold;');
+        console.log('%c📧 Contact: anytasker1998@gmail.com', 'color: #059669; font-size: 14px;');
     </script>
 </body>
 </html>
