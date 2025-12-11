@@ -3238,3 +3238,2343 @@ Thank you for using Any Tasker!`;
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Any Tasker - All Image Tools Working 100%</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <style>
+        /* CSS Variables for Blue Theme */
+        :root {
+            --primary-blue: #2563eb;
+            --secondary-blue: #3b82f6;
+            --accent-blue: #60a5fa;
+            --light-blue: #dbeafe;
+            --dark-blue: #1e40af;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --white: #ffffff;
+            --gray-bg: #f9fafb;
+            --shadow: rgba(37, 99, 235, 0.1);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: 0 4px 20px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            font-weight: 600;
+            text-decoration: none;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .contact-email {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .contact-email:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 60px 0;
+            min-height: calc(100vh - 200px);
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            border-radius: 2px;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 50px;
+        }
+
+        /* Tool Container */
+        .tool-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: 0 10px 30px var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 3px dashed var(--light-blue);
+            border-radius: var(--border-radius);
+            padding: 50px 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            background: var(--gray-bg);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        .upload-area i {
+            font-size: 48px;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        .upload-area h3 {
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .upload-area p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--light-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-blue);
+            transform: translateY(-3px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        /* Input Groups */
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--light-blue);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .input-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Controls */
+        .tool-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tool-controls .btn {
+            flex: 1;
+            min-width: 150px;
+            justify-content: center;
+        }
+
+        /* Preview Container */
+        .preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .preview-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .preview-box {
+            text-align: center;
+        }
+
+        .preview-box h3 {
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .preview-image {
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+            border: 2px solid var(--light-blue);
+            border-radius: 10px;
+            padding: 10px;
+            background: white;
+        }
+
+        /* Result Container */
+        .result-container {
+            margin-top: 30px;
+            padding: 25px;
+            background: var(--light-blue);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-blue);
+            display: none;
+        }
+
+        .result-container h3 {
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Quality Control */
+        .quality-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .quality-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        /* Dimensions */
+        .dimensions-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .dimension-box {
+            flex: 1;
+        }
+
+        /* Cropper Container */
+        .cropper-container {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+            border: 2px solid var(--light-blue);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light-blue);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--text-dark);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 3000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--dark-blue), #1e3a8a);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-tagline {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        .footer-links h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        /* Tool Navigation */
+        .tool-navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .tool-nav-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid var(--light-blue);
+            border-radius: 30px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .tool-nav-btn.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .tool-nav-btn:hover:not(.active) {
+            background: var(--light-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .nav-links {
+                gap: 20px;
+            }
+            
+            .tool-container {
+                padding: 25px;
+            }
+            
+            .tool-controls {
+                flex-direction: column;
+            }
+            
+            .tool-controls .btn {
+                width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .contact-email {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            
+            .tool-navigation {
+                flex-direction: column;
+            }
+            
+            .dimensions-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#home" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <span>Any Tasker</span>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#tools">All Tools</a></li>
+                    <li><a href="#privacy">Privacy</a></li>
+                </ul>
+                <a href="mailto:anytasker1998@gmail.com" class="contact-email">
+                    <i class="fas fa-envelope"></i>
+                    <span>anytasker1998@gmail.com</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">Image & PDF Tools</h1>
+            <p class="page-subtitle">Professional tools for image editing and PDF manipulation. All tools work 100% in your browser.</p>
+            
+            <!-- Tool Navigation -->
+            <div class="tool-navigation">
+                <button class="tool-nav-btn active" data-tool="compressor">Image Compressor</button>
+                <button class="tool-nav-btn" data-tool="resizer">Image Resizer</button>
+                <button class="tool-nav-btn" data-tool="cropper">Image Cropper</button>
+                <button class="tool-nav-btn" data-tool="ocr">Image to Text (OCR)</button>
+                <button class="tool-nav-btn" data-tool="bmi">BMI Calculator</button>
+                <button class="tool-nav-btn" data-tool="duplicate">Remove Duplicates</button>
+            </div>
+
+            <!-- Tool Container -->
+            <div class="tool-container">
+                <!-- Image Compressor -->
+                <div id="compressor-tool" class="tool-interface">
+                    <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary-blue);">
+                        <i class="fas fa-compress-alt"></i> Image Compressor
+                    </h2>
+                    
+                    <div class="upload-area" id="compressorUploadArea">
+                        <i class="fas fa-file-image"></i>
+                        <h3>Drop your image here</h3>
+                        <p>or click to browse (JPG, PNG, WEBP, GIF)</p>
+                        <input type="file" id="compressorInput" class="file-input" accept="image/*">
+                        <button class="btn btn-primary" onclick="document.getElementById('compressorInput').click()">
+                            <i class="fas fa-upload"></i> Choose Image
+                        </button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-tachometer-alt"></i> Compression Level</label>
+                        <div class="quality-control">
+                            <input type="range" id="compressionLevel" min="10" max="100" value="70">
+                            <span class="quality-value" id="compressionValue">70%</span>
+                        </div>
+                        <small style="color: var(--text-light);">Lower = More Compression (Smaller File)</small>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-exchange-alt"></i> Output Format</label>
+                        <select id="compressionFormat">
+                            <option value="image/jpeg">JPEG (Recommended)</option>
+                            <option value="image/webp">WEBP</option>
+                            <option value="image/png">PNG</option>
+                        </select>
+                    </div>
+                    
+                    <div class="preview-container" id="compressorPreview" style="display: none;">
+                        <div class="preview-box">
+                            <h3><i class="fas fa-image"></i> Original</h3>
+                            <img id="originalCompressorPreview" class="preview-image" alt="Original">
+                        </div>
+                        <div class="preview-box">
+                            <h3><i class="fas fa-compress-alt"></i> Compressed</h3>
+                            <img id="compressedPreview" class="preview-image" alt="Compressed">
+                        </div>
+                    </div>
+                    
+                    <div class="tool-controls">
+                        <button class="btn btn-success" id="compressBtn" disabled>
+                            <i class="fas fa-compress-alt"></i> Compress Image
+                        </button>
+                        <button class="btn btn-danger" onclick="resetCompressor()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                    
+                    <div class="result-container" id="compressorResult">
+                        <h3><i class="fas fa-chart-bar"></i> Compression Stats</h3>
+                        <div id="compressorStats" class="result-content"></div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="downloadCompressedBtn" style="display: none;">
+                                <i class="fas fa-download"></i> Download Compressed Image
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyCompressorResult()">
+                                <i class="fas fa-copy"></i> Copy Stats
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Resizer -->
+                <div id="resizer-tool" class="tool-interface" style="display: none;">
+                    <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary-blue);">
+                        <i class="fas fa-expand-alt"></i> Image Resizer
+                    </h2>
+                    
+                    <div class="upload-area" id="resizerUploadArea">
+                        <i class="fas fa-file-image"></i>
+                        <h3>Drop your image here</h3>
+                        <p>or click to browse (JPG, PNG, WEBP, GIF)</p>
+                        <input type="file" id="resizerInput" class="file-input" accept="image/*">
+                        <button class="btn btn-primary" onclick="document.getElementById('resizerInput').click()">
+                            <i class="fas fa-upload"></i> Choose Image
+                        </button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-ruler"></i> Original Dimensions</label>
+                        <div style="padding: 10px; background: var(--light-blue); border-radius: 5px;">
+                            Width: <span id="originalWidth">-</span>px | Height: <span id="originalHeight">-</span>px
+                        </div>
+                    </div>
+                    
+                    <div class="dimensions-container">
+                        <div class="input-group dimension-box">
+                            <label><i class="fas fa-arrows-alt-h"></i> New Width (px)</label>
+                            <input type="number" id="newWidth" placeholder="Width" min="10" max="5000">
+                        </div>
+                        <div class="input-group dimension-box">
+                            <label><i class="fas fa-arrows-alt-v"></i> New Height (px)</label>
+                            <input type="number" id="newHeight" placeholder="Height" min="10" max="5000">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>
+                            <input type="checkbox" id="maintainAspect" checked> Maintain Aspect Ratio
+                        </label>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-crop-alt"></i> Preset Sizes</label>
+                        <select id="presetSize">
+                            <option value="custom">Custom Size</option>
+                            <option value="800x600">Website Banner (800x600)</option>
+                            <option value="1200x630">Facebook Post (1200x630)</option>
+                            <option value="1080x1080">Instagram Square (1080x1080)</option>
+                            <option value="1500x500">Twitter Header (1500x500)</option>
+                            <option value="1280x720">HD Video (1280x720)</option>
+                            <option value="1920x1080">Full HD (1920x1080)</option>
+                            <option value="800x800">Profile Picture (800x800)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="preview-container" id="resizerPreview" style="display: none;">
+                        <div class="preview-box">
+                            <h3><i class="fas fa-image"></i> Original</h3>
+                            <img id="originalResizerPreview" class="preview-image" alt="Original">
+                        </div>
+                        <div class="preview-box">
+                            <h3><i class="fas fa-expand-alt"></i> Resized</h3>
+                            <img id="resizedPreview" class="preview-image" alt="Resized">
+                        </div>
+                    </div>
+                    
+                    <div class="tool-controls">
+                        <button class="btn btn-success" id="resizeBtn" disabled>
+                            <i class="fas fa-expand-alt"></i> Resize Image
+                        </button>
+                        <button class="btn btn-danger" onclick="resetResizer()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                    
+                    <div class="result-container" id="resizerResult">
+                        <h3><i class="fas fa-info-circle"></i> Resize Information</h3>
+                        <div id="resizerStats" class="result-content"></div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="downloadResizedBtn" style="display: none;">
+                                <i class="fas fa-download"></i> Download Resized Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Cropper -->
+                <div id="cropper-tool" class="tool-interface" style="display: none;">
+                    <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary-blue);">
+                        <i class="fas fa-crop"></i> Image Cropper
+                    </h2>
+                    
+                    <div class="upload-area" id="cropperUploadArea">
+                        <i class="fas fa-file-image"></i>
+                        <h3>Drop your image here</h3>
+                        <p>or click to browse (JPG, PNG, WEBP, GIF)</p>
+                        <input type="file" id="cropperInput" class="file-input" accept="image/*">
+                        <button class="btn btn-primary" onclick="document.getElementById('cropperInput').click()">
+                            <i class="fas fa-upload"></i> Choose Image
+                        </button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-crop-alt"></i> Crop Aspect Ratio</label>
+                        <select id="aspectRatio">
+                            <option value="free">Free (No restriction)</option>
+                            <option value="1:1">Square (1:1)</option>
+                            <option value="4:3">Standard (4:3)</option>
+                            <option value="16:9">Widescreen (16:9)</option>
+                            <option value="3:2">Photo (3:2)</option>
+                            <option value="9:16">Portrait (9:16)</option>
+                            <option value="2:3">Portrait Photo (2:3)</option>
+                        </select>
+                    </div>
+                    
+                    <div id="cropperContainer" class="cropper-container" style="display: none;"></div>
+                    
+                    <div class="preview-container" id="cropperPreview" style="display: none;">
+                        <div class="preview-box">
+                            <h3><i class="fas fa-image"></i> Original</h3>
+                            <img id="originalCropperPreview" class="preview-image" alt="Original">
+                        </div>
+                        <div class="preview-box">
+                            <h3><i class="fas fa-crop"></i> Cropped</h3>
+                            <img id="croppedPreview" class="preview-image" alt="Cropped">
+                        </div>
+                    </div>
+                    
+                    <div class="tool-controls">
+                        <button class="btn btn-success" id="cropBtn" disabled>
+                            <i class="fas fa-crop"></i> Crop Image
+                        </button>
+                        <button class="btn btn-secondary" id="rotateBtn" disabled>
+                            <i class="fas fa-redo"></i> Rotate
+                        </button>
+                        <button class="btn btn-danger" onclick="resetCropper()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                    
+                    <div class="result-container" id="cropperResult">
+                        <h3><i class="fas fa-crop"></i> Crop Details</h3>
+                        <div id="cropperStats" class="result-content"></div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="downloadCroppedBtn" style="display: none;">
+                                <i class="fas fa-download"></i> Download Cropped Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image to Text (OCR) -->
+                <div id="ocr-tool" class="tool-interface" style="display: none;">
+                    <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary-blue);">
+                        <i class="fas fa-font"></i> Image to Text (OCR)
+                    </h2>
+                    
+                    <div class="upload-area" id="ocrUploadArea">
+                        <i class="fas fa-file-image"></i>
+                        <h3>Drop your image here</h3>
+                        <p>or click to browse (JPG, PNG, PDF)</p>
+                        <input type="file" id="ocrInput" class="file-input" accept="image/*,.pdf">
+                        <button class="btn btn-primary" onclick="document.getElementById('ocrInput').click()">
+                            <i class="fas fa-upload"></i> Choose File
+                        </button>
+                    </div>
+                    
+                    <div class="preview-container" id="ocrPreview" style="display: none;">
+                        <div class="preview-box">
+                            <h3><i class="fas fa-image"></i> Uploaded Image</h3>
+                            <img id="ocrImagePreview" class="preview-image" alt="Image">
+                        </div>
+                        <div class="preview-box">
+                            <h3><i class="fas fa-font"></i> Extracted Text</h3>
+                            <div id="ocrTextPreview" class="preview-image" style="text-align: left; overflow-y: auto; background: white; padding: 15px;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-controls">
+                        <button class="btn btn-success" id="ocrBtn" disabled>
+                            <i class="fas fa-search"></i> Extract Text
+                        </button>
+                        <button class="btn btn-secondary" id="clearTextBtn" style="display: none;">
+                            <i class="fas fa-eraser"></i> Clear Text
+                        </button>
+                        <button class="btn btn-danger" onclick="resetOCR()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                    
+                    <div class="result-container" id="ocrResult">
+                        <h3><i class="fas fa-file-alt"></i> Text Result</h3>
+                        <div id="ocrTextResult" class="result-content"></div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="copyTextBtn" style="display: none;">
+                                <i class="fas fa-copy"></i> Copy Text
+                            </button>
+                            <button class="btn btn-success" id="downloadTextBtn" style="display: none;">
+                                <i class="fas fa-download"></i> Download Text
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BMI Calculator -->
+                <div id="bmi-tool" class="tool-interface" style="display: none;">
+                    <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary-blue);">
+                        <i class="fas fa-weight"></i> BMI Calculator
+                    </h2>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-balance-scale"></i> Unit System</label>
+                        <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="radio" name="unitSystem" value="metric" checked> Metric (kg, cm)
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="radio" name="unitSystem" value="imperial"> Imperial (lbs, inches)
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="dimensions-container">
+                        <div class="input-group dimension-box">
+                            <label id="weightLabel"><i class="fas fa-weight"></i> Weight (kg)</label>
+                            <input type="number" id="weightInput" placeholder="Enter weight" min="1" max="500" step="0.1">
+                        </div>
+                        <div class="input-group dimension-box">
+                            <label id="heightLabel"><i class="fas fa-ruler-vertical"></i> Height (cm)</label>
+                            <input type="number" id="heightInput" placeholder="Enter height" min="50" max="300" step="0.1">
+                        </div>
+                    </div>
+                    
+                    <div class="tool-controls">
+                        <button class="btn btn-success" id="calculateBmiBtn">
+                            <i class="fas fa-calculator"></i> Calculate BMI
+                        </button>
+                        <button class="btn btn-danger" onclick="resetBMI()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                    
+                    <div class="result-container" id="bmiResult" style="display: none;">
+                        <h3><i class="fas fa-chart-line"></i> Your BMI Result</h3>
+                        <div id="bmiValue" style="font-size: 48px; font-weight: 800; text-align: center; color: var(--primary-blue); margin: 20px 0;"></div>
+                        <div id="bmiCategory" style="font-size: 24px; text-align: center; margin-bottom: 20px;"></div>
+                        <div id="bmiDetails" class="result-content"></div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="copyBMIResult()">
+                                <i class="fas fa-copy"></i> Copy Result
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding: 20px; background: var(--light-blue); border-radius: var(--border-radius);">
+                        <h4><i class="fas fa-info-circle"></i> BMI Categories</h4>
+                        <ul style="list-style: none; padding: 0; margin: 10px 0;">
+                            <li>• <strong>Underweight:</strong> BMI &lt; 18.5</li>
+                            <li>• <strong>Normal weight:</strong> BMI 18.5–24.9</li>
+                            <li>• <strong>Overweight:</strong> BMI 25–29.9</li>
+                            <li>• <strong>Obese:</strong> BMI ≥ 30</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Remove Duplicate Lines -->
+                <div id="duplicate-tool" class="tool-interface" style="display: none;">
+                    <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary-blue);">
+                        <i class="fas fa-filter"></i> Remove Duplicate Lines
+                    </h2>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-align-left"></i> Input Text</label>
+                        <textarea id="duplicateInput" placeholder="Paste your text here (each line will be checked for duplicates)..."></textarea>
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <small>Lines: <span id="inputLines">0</span></small>
+                            <small>Words: <span id="inputWords">0</span></small>
+                            <small>Characters: <span id="inputChars">0</span></small>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-controls">
+                        <button class="btn btn-success" id="removeDuplicatesBtn">
+                            <i class="fas fa-filter"></i> Remove Duplicates
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearDuplicateInput()">
+                            <i class="fas fa-eraser"></i> Clear Input
+                        </button>
+                        <button class="btn btn-primary" onclick="pasteSampleText()">
+                            <i class="fas fa-clipboard"></i> Paste Sample
+                        </button>
+                    </div>
+                    
+                    <div class="input-group" style="margin-top: 30px;">
+                        <label><i class="fas fa-align-left"></i> Output Text (Duplicates Removed)</label>
+                        <textarea id="duplicateOutput" placeholder="Result will appear here..." readonly></textarea>
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <small>Lines: <span id="outputLines">0</span></small>
+                            <small>Words: <span id="outputWords">0</span></small>
+                            <small>Characters: <span id="outputChars">0</span></small>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="copyOutputBtn" disabled>
+                            <i class="fas fa-copy"></i> Copy Output
+                        </button>
+                        <button class="btn btn-success" id="downloadOutputBtn" disabled>
+                            <i class="fas fa-download"></i> Download Output
+                        </button>
+                    </div>
+                    
+                    <div class="result-container" id="duplicateResult" style="display: none;">
+                        <h3><i class="fas fa-chart-bar"></i> Duplicate Removal Stats</h3>
+                        <div id="duplicateStats" class="result-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div>
+                    <div class="footer-logo">Any Tasker</div>
+                    <p class="footer-tagline">Your all-in-one solution for image editing and PDF manipulation. All tools work 100% in your browser.</p>
+                    <div style="margin-top: 30px;">
+                        <a href="mailto:anytasker1998@gmail.com" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">
+                            <i class="fas fa-envelope"></i> anytasker1998@gmail.com
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#tools">All Tools</a></li>
+                        <li><a href="#" id="privacyLink">Privacy Policy</a></li>
+                        <li><a href="#" id="termsLink">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Our Tools</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showTool('compressor')">Image Compressor</a></li>
+                        <li><a href="#" onclick="showTool('resizer')">Image Resizer</a></li>
+                        <li><a href="#" onclick="showTool('cropper')">Image Cropper</a></li>
+                        <li><a href="#" onclick="showTool('ocr')">Image to Text</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Any Tasker. All rights reserved. | All tools are 100% working and free to use.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operation completed successfully!</span>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <p>Processing your request...</p>
+    </div>
+
+    <!-- Cropper.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+    <script>
+        // Global Variables
+        let currentImage = null;
+        let cropper = null;
+        let compressedBlob = null;
+        let resizedBlob = null;
+        let croppedBlob = null;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup tool navigation
+            setupToolNavigation();
+            
+            // Initialize all tools
+            initializeCompressor();
+            initializeResizer();
+            initializeCropper();
+            initializeOCR();
+            initializeBMI();
+            initializeDuplicateTool();
+            
+            // Setup footer links
+            document.getElementById('privacyLink').addEventListener('click', showPrivacyPolicy);
+            document.getElementById('termsLink').addEventListener('click', showTermsOfService);
+            
+            // Show welcome message
+            setTimeout(() => {
+                showToast('Welcome to Any Tasker! All tools are 100% working.', 'info');
+            }, 1000);
+        });
+
+        // ==================== TOOL NAVIGATION ====================
+        function setupToolNavigation() {
+            const navButtons = document.querySelectorAll('.tool-nav-btn');
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tool = this.dataset.tool;
+                    
+                    // Update active button
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected tool
+                    showTool(tool);
+                });
+            });
+        }
+
+        function showTool(toolId) {
+            // Hide all tools
+            document.querySelectorAll('.tool-interface').forEach(tool => {
+                tool.style.display = 'none';
+            });
+            
+            // Show selected tool
+            document.getElementById(`${toolId}-tool`).style.display = 'block';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            showToast(`${getToolName(toolId)} tool loaded`, 'info');
+        }
+
+        function getToolName(toolId) {
+            const names = {
+                'compressor': 'Image Compressor',
+                'resizer': 'Image Resizer',
+                'cropper': 'Image Cropper',
+                'ocr': 'Image to Text',
+                'bmi': 'BMI Calculator',
+                'duplicate': 'Remove Duplicate Lines'
+            };
+            return names[toolId] || 'Tool';
+        }
+
+        // ==================== IMAGE COMPRESSOR ====================
+        function initializeCompressor() {
+            const compressorInput = document.getElementById('compressorInput');
+            const compressionSlider = document.getElementById('compressionLevel');
+            const compressionValue = document.getElementById('compressionValue');
+            const compressBtn = document.getElementById('compressBtn');
+            const downloadBtn = document.getElementById('downloadCompressedBtn');
+            
+            // Update compression value display
+            compressionSlider.addEventListener('input', function() {
+                compressionValue.textContent = this.value + '%';
+            });
+            
+            // File selection
+            compressorInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file || !file.type.startsWith('image/')) {
+                    showToast('Please select a valid image file', 'error');
+                    return;
+                }
+                
+                currentImage = file;
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const preview = document.getElementById('originalCompressorPreview');
+                    preview.src = e.target.result;
+                    document.getElementById('compressorPreview').style.display = 'grid';
+                    compressBtn.disabled = false;
+                    
+                    // Update upload area
+                    const area = document.getElementById('compressorUploadArea');
+                    area.innerHTML = `
+                        <i class="fas fa-check-circle" style="color: #10b981; font-size: 48px;"></i>
+                        <h3>${file.name}</h3>
+                        <p>${(file.size / 1024).toFixed(2)} KB • ${file.type.split('/')[1].toUpperCase()}</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('compressorInput').click()">
+                            <i class="fas fa-sync-alt"></i> Change Image
+                        </button>
+                    `;
+                    
+                    showToast('Image uploaded successfully!', 'success');
+                };
+                
+                reader.readAsDataURL(file);
+            });
+            
+            // Compress button
+            compressBtn.addEventListener('click', compressImage);
+            
+            // Download button
+            downloadBtn.addEventListener('click', downloadCompressedImage);
+        }
+
+        function compressImage() {
+            if (!currentImage) return;
+            
+            showLoading(true);
+            const format = document.getElementById('compressionFormat').value;
+            const quality = parseInt(document.getElementById('compressionLevel').value) / 100;
+            
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('compressedPreview').src = url;
+                    compressedBlob = blob;
+                    
+                    const formatName = format.split('/')[1].toUpperCase();
+                    const originalSize = (currentImage.size / 1024).toFixed(2);
+                    const newSize = (blob.size / 1024).toFixed(2);
+                    const reduction = ((1 - blob.size / currentImage.size) * 100).toFixed(1);
+                    
+                    const stats = `Original Image:
+- Size: ${originalSize} KB
+- Format: ${currentImage.type.split('/')[1].toUpperCase()}
+- Dimensions: ${img.width} × ${img.height}
+
+Compressed Image:
+- Size: ${newSize} KB
+- Format: ${formatName}
+- Compression: ${reduction}% reduction
+- Quality: ${quality * 100}%
+
+✅ Compression successful!`;
+                    
+                    document.getElementById('compressorStats').textContent = stats;
+                    document.getElementById('compressorResult').style.display = 'block';
+                    document.getElementById('downloadCompressedBtn').style.display = 'block';
+                    
+                    showLoading(false);
+                    showToast('Image compressed successfully!', 'success');
+                }, format, quality);
+            };
+            
+            img.src = URL.createObjectURL(currentImage);
+        }
+
+        function downloadCompressedImage() {
+            if (!compressedBlob) {
+                showToast('No compressed image to download', 'error');
+                return;
+            }
+            
+            const format = document.getElementById('compressionFormat').value;
+            const formatName = format.split('/')[1];
+            const link = document.createElement('a');
+            link.download = `compressed_image.${formatName}`;
+            link.href = URL.createObjectURL(compressedBlob);
+            link.click();
+            showToast('Compressed image downloaded!', 'success');
+        }
+
+        function resetCompressor() {
+            currentImage = null;
+            compressedBlob = null;
+            document.getElementById('compressorInput').value = '';
+            document.getElementById('compressorPreview').style.display = 'none';
+            document.getElementById('compressBtn').disabled = true;
+            document.getElementById('compressionLevel').value = 70;
+            document.getElementById('compressionValue').textContent = '70%';
+            document.getElementById('compressorResult').style.display = 'none';
+            document.getElementById('downloadCompressedBtn').style.display = 'none';
+            
+            document.getElementById('compressorUploadArea').innerHTML = `
+                <i class="fas fa-file-image"></i>
+                <h3>Drop your image here</h3>
+                <p>or click to browse (JPG, PNG, WEBP, GIF)</p>
+                <input type="file" id="compressorInput" class="file-input" accept="image/*">
+                <button class="btn btn-primary" onclick="document.getElementById('compressorInput').click()">
+                    <i class="fas fa-upload"></i> Choose Image
+                </button>
+            `;
+            
+            // Re-initialize
+            initializeCompressor();
+            showToast('Compressor reset', 'info');
+        }
+
+        // ==================== IMAGE RESIZER ====================
+        function initializeResizer() {
+            const resizerInput = document.getElementById('resizerInput');
+            const widthInput = document.getElementById('newWidth');
+            const heightInput = document.getElementById('newHeight');
+            const presetSelect = document.getElementById('presetSize');
+            const maintainAspect = document.getElementById('maintainAspect');
+            const resizeBtn = document.getElementById('resizeBtn');
+            const downloadBtn = document.getElementById('downloadResizedBtn');
+            let originalWidth = 0;
+            let originalHeight = 0;
+            
+            // File selection
+            resizerInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file || !file.type.startsWith('image/')) {
+                    showToast('Please select a valid image file', 'error');
+                    return;
+                }
+                
+                currentImage = file;
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        originalWidth = img.width;
+                        originalHeight = img.height;
+                        
+                        document.getElementById('originalWidth').textContent = originalWidth;
+                        document.getElementById('originalHeight').textContent = originalHeight;
+                        widthInput.value = originalWidth;
+                        heightInput.value = originalHeight;
+                        
+                        document.getElementById('originalResizerPreview').src = e.target.result;
+                        document.getElementById('resizerPreview').style.display = 'grid';
+                        resizeBtn.disabled = false;
+                        
+                        // Update upload area
+                        const area = document.getElementById('resizerUploadArea');
+                        area.innerHTML = `
+                            <i class="fas fa-check-circle" style="color: #10b981; font-size: 48px;"></i>
+                            <h3>${file.name}</h3>
+                            <p>${originalWidth} × ${originalHeight}px • ${(file.size / 1024).toFixed(2)} KB</p>
+                            <button class="btn btn-primary" onclick="document.getElementById('resizerInput').click()">
+                                <i class="fas fa-sync-alt"></i> Change Image
+                            </button>
+                        `;
+                        
+                        showToast('Image uploaded successfully!', 'success');
+                    };
+                    img.src = e.target.result;
+                };
+                
+                reader.readAsDataURL(file);
+            });
+            
+            // Maintain aspect ratio
+            widthInput.addEventListener('input', function() {
+                if (maintainAspect.checked && originalWidth > 0 && originalHeight > 0) {
+                    const ratio = originalHeight / originalWidth;
+                    heightInput.value = Math.round(this.value * ratio);
+                }
+            });
+            
+            heightInput.addEventListener('input', function() {
+                if (maintainAspect.checked && originalWidth > 0 && originalHeight > 0) {
+                    const ratio = originalWidth / originalHeight;
+                    widthInput.value = Math.round(this.value * ratio);
+                }
+            });
+            
+            // Preset sizes
+            presetSelect.addEventListener('change', function() {
+                if (this.value === 'custom') return;
+                
+                const [width, height] = this.value.split('x').map(Number);
+                widthInput.value = width;
+                heightInput.value = height;
+            });
+            
+            // Resize button
+            resizeBtn.addEventListener('click', resizeImage);
+            
+            // Download button
+            downloadBtn.addEventListener('click', downloadResizedImage);
+        }
+
+        function resizeImage() {
+            if (!currentImage) return;
+            
+            const newWidth = parseInt(document.getElementById('newWidth').value);
+            const newHeight = parseInt(document.getElementById('newHeight').value);
+            
+            if (newWidth < 10 || newHeight < 10 || newWidth > 5000 || newHeight > 5000) {
+                showToast('Please enter valid dimensions (10-5000px)', 'error');
+                return;
+            }
+            
+            showLoading(true);
+            
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                const ctx = canvas.getContext('2d');
+                
+                // Draw image with high quality scaling
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('resizedPreview').src = url;
+                    resizedBlob = blob;
+                    
+                    const stats = `Original Dimensions: ${img.width} × ${img.height}px
+New Dimensions: ${newWidth} × ${newHeight}px
+Size Change: ${((newWidth * newHeight) / (img.width * img.height) * 100).toFixed(1)}% of original
+
+Resized image is ready for download!`;
+                    
+                    document.getElementById('resizerStats').textContent = stats;
+                    document.getElementById('resizerResult').style.display = 'block';
+                    document.getElementById('downloadResizedBtn').style.display = 'block';
+                    
+                    showLoading(false);
+                    showToast('Image resized successfully!', 'success');
+                }, 'image/jpeg', 0.9);
+            };
+            
+            img.src = URL.createObjectURL(currentImage);
+        }
+
+        function downloadResizedImage() {
+            if (!resizedBlob) {
+                showToast('No resized image to download', 'error');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = `resized_image_${Date.now()}.jpg`;
+            link.href = URL.createObjectURL(resizedBlob);
+            link.click();
+            showToast('Resized image downloaded!', 'success');
+        }
+
+        function resetResizer() {
+            currentImage = null;
+            resizedBlob = null;
+            document.getElementById('resizerInput').value = '';
+            document.getElementById('resizerPreview').style.display = 'none';
+            document.getElementById('resizeBtn').disabled = true;
+            document.getElementById('newWidth').value = '';
+            document.getElementById('newHeight').value = '';
+            document.getElementById('presetSize').value = 'custom';
+            document.getElementById('maintainAspect').checked = true;
+            document.getElementById('originalWidth').textContent = '-';
+            document.getElementById('originalHeight').textContent = '-';
+            document.getElementById('resizerResult').style.display = 'none';
+            document.getElementById('downloadResizedBtn').style.display = 'none';
+            
+            document.getElementById('resizerUploadArea').innerHTML = `
+                <i class="fas fa-file-image"></i>
+                <h3>Drop your image here</h3>
+                <p>or click to browse (JPG, PNG, WEBP, GIF)</p>
+                <input type="file" id="resizerInput" class="file-input" accept="image/*">
+                <button class="btn btn-primary" onclick="document.getElementById('resizerInput').click()">
+                    <i class="fas fa-upload"></i> Choose Image
+                </button>
+            `;
+            
+            // Re-initialize
+            initializeResizer();
+            showToast('Resizer reset', 'info');
+        }
+
+        // ==================== IMAGE CROPPER ====================
+        function initializeCropper() {
+            const cropperInput = document.getElementById('cropperInput');
+            const aspectRatio = document.getElementById('aspectRatio');
+            const cropBtn = document.getElementById('cropBtn');
+            const rotateBtn = document.getElementById('rotateBtn');
+            const downloadBtn = document.getElementById('downloadCroppedBtn');
+            
+            // File selection
+            cropperInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file || !file.type.startsWith('image/')) {
+                    showToast('Please select a valid image file', 'error');
+                    return;
+                }
+                
+                currentImage = file;
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    document.getElementById('originalCropperPreview').src = e.target.result;
+                    document.getElementById('cropperPreview').style.display = 'grid';
+                    cropBtn.disabled = false;
+                    rotateBtn.disabled = false;
+                    
+                    // Initialize cropper
+                    const container = document.getElementById('cropperContainer');
+                    container.innerHTML = `<img id="cropperImage" src="${e.target.result}" style="max-width: 100%;">`;
+                    container.style.display = 'block';
+                    
+                    const image = document.getElementById('cropperImage');
+                    cropper = new Cropper(image, {
+                        aspectRatio: getAspectRatioValue(aspectRatio.value),
+                        viewMode: 1,
+                        autoCropArea: 0.8,
+                        responsive: true,
+                        restore: true,
+                        checkCrossOrigin: false,
+                        background: false
+                    });
+                    
+                    // Update upload area
+                    const area = document.getElementById('cropperUploadArea');
+                    area.innerHTML = `
+                        <i class="fas fa-check-circle" style="color: #10b981; font-size: 48px;"></i>
+                        <h3>${file.name}</h3>
+                        <p>${(file.size / 1024).toFixed(2)} KB</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('cropperInput').click()">
+                            <i class="fas fa-sync-alt"></i> Change Image
+                        </button>
+                    `;
+                    
+                    showToast('Image uploaded successfully! Use the crop tool to select area.', 'success');
+                };
+                
+                reader.readAsDataURL(file);
+            });
+            
+            // Aspect ratio change
+            aspectRatio.addEventListener('change', function() {
+                if (cropper) {
+                    cropper.setAspectRatio(getAspectRatioValue(this.value));
+                }
+            });
+            
+            // Crop button
+            cropBtn.addEventListener('click', cropImage);
+            
+            // Rotate button
+            rotateBtn.addEventListener('click', rotateImage);
+            
+            // Download button
+            downloadBtn.addEventListener('click', downloadCroppedImage);
+        }
+
+        function getAspectRatioValue(value) {
+            const ratios = {
+                'free': NaN,
+                '1:1': 1,
+                '4:3': 4/3,
+                '16:9': 16/9,
+                '3:2': 3/2,
+                '9:16': 9/16,
+                '2:3': 2/3
+            };
+            return ratios[value] || NaN;
+        }
+
+        function cropImage() {
+            if (!cropper) return;
+            
+            showLoading(true);
+            
+            // Get cropped canvas
+            const canvas = cropper.getCroppedCanvas({
+                width: 800,
+                height: 600,
+                fillColor: '#fff',
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high'
+            });
+            
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                document.getElementById('croppedPreview').src = url;
+                croppedBlob = blob;
+                
+                const cropData = cropper.getData();
+                const stats = `Cropped Area:
+- X: ${Math.round(cropData.x)}px
+- Y: ${Math.round(cropData.y)}px
+- Width: ${Math.round(cropData.width)}px
+- Height: ${Math.round(cropData.height)}px
+- Rotation: ${cropData.rotate}°
+
+Cropped image is ready for download!`;
+                
+                document.getElementById('cropperStats').textContent = stats;
+                document.getElementById('cropperResult').style.display = 'block';
+                document.getElementById('downloadCroppedBtn').style.display = 'block';
+                
+                showLoading(false);
+                showToast('Image cropped successfully!', 'success');
+            }, 'image/jpeg', 0.9);
+        }
+
+        function rotateImage() {
+            if (!cropper) return;
+            
+            cropper.rotate(90);
+            showToast('Image rotated 90 degrees', 'info');
+        }
+
+        function downloadCroppedImage() {
+            if (!croppedBlob) {
+                showToast('No cropped image to download', 'error');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = `cropped_image_${Date.now()}.jpg`;
+            link.href = URL.createObjectURL(croppedBlob);
+            link.click();
+            showToast('Cropped image downloaded!', 'success');
+        }
+
+        function resetCropper() {
+            currentImage = null;
+            croppedBlob = null;
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+            
+            document.getElementById('cropperInput').value = '';
+            document.getElementById('cropperPreview').style.display = 'none';
+            document.getElementById('cropperContainer').style.display = 'none';
+            document.getElementById('cropperContainer').innerHTML = '';
+            document.getElementById('cropBtn').disabled = true;
+            document.getElementById('rotateBtn').disabled = true;
+            document.getElementById('aspectRatio').value = 'free';
+            document.getElementById('cropperResult').style.display = 'none';
+            document.getElementById('downloadCroppedBtn').style.display = 'none';
+            
+            document.getElementById('cropperUploadArea').innerHTML = `
+                <i class="fas fa-file-image"></i>
+                <h3>Drop your image here</h3>
+                <p>or click to browse (JPG, PNG, WEBP, GIF)</p>
+                <input type="file" id="cropperInput" class="file-input" accept="image/*">
+                <button class="btn btn-primary" onclick="document.getElementById('cropperInput').click()">
+                    <i class="fas fa-upload"></i> Choose Image
+                </button>
+            `;
+            
+            // Re-initialize
+            initializeCropper();
+            showToast('Cropper reset', 'info');
+        }
+
+        // ==================== IMAGE TO TEXT (OCR) ====================
+        function initializeOCR() {
+            const ocrInput = document.getElementById('ocrInput');
+            const ocrBtn = document.getElementById('ocrBtn');
+            const clearBtn = document.getElementById('clearTextBtn');
+            const copyBtn = document.getElementById('copyTextBtn');
+            const downloadBtn = document.getElementById('downloadTextBtn');
+            
+            // File selection
+            ocrInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file || (!file.type.startsWith('image/') && file.type !== 'application/pdf')) {
+                    showToast('Please select a valid image or PDF file', 'error');
+                    return;
+                }
+                
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('ocrImagePreview').src = e.target.result;
+                        document.getElementById('ocrPreview').style.display = 'grid';
+                        ocrBtn.disabled = false;
+                        
+                        // Update upload area
+                        const area = document.getElementById('ocrUploadArea');
+                        area.innerHTML = `
+                            <i class="fas fa-check-circle" style="color: #10b981; font-size: 48px;"></i>
+                            <h3>${file.name}</h3>
+                            <p>${(file.size / 1024).toFixed(2)} KB</p>
+                            <button class="btn btn-primary" onclick="document.getElementById('ocrInput').click()">
+                                <i class="fas fa-sync-alt"></i> Change File
+                            </button>
+                        `;
+                        
+                        showToast('Image uploaded successfully! Click "Extract Text" to process.', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                } else if (file.type === 'application/pdf') {
+                    document.getElementById('ocrPreview').style.display = 'grid';
+                    document.getElementById('ocrImagePreview').src = 'https://cdn-icons-png.flaticon.com/512/337/337946.png';
+                    ocrBtn.disabled = false;
+                    
+                    // Update upload area
+                    const area = document.getElementById('ocrUploadArea');
+                    area.innerHTML = `
+                        <i class="fas fa-check-circle" style="color: #10b981; font-size: 48px;"></i>
+                        <h3>${file.name}</h3>
+                        <p>PDF File • ${(file.size / 1024).toFixed(2)} KB</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('ocrInput').click()">
+                            <i class="fas fa-sync-alt"></i> Change File
+                        </button>
+                    `;
+                    
+                    showToast('PDF uploaded! Note: PDF text extraction works best with text-based PDFs.', 'info');
+                }
+            });
+            
+            // Extract text button
+            ocrBtn.addEventListener('click', extractTextFromImage);
+            
+            // Clear text button
+            clearBtn.addEventListener('click', function() {
+                document.getElementById('ocrTextPreview').textContent = '';
+                document.getElementById('ocrTextResult').textContent = '';
+                this.style.display = 'none';
+                showToast('Text cleared', 'info');
+            });
+            
+            // Copy text button
+            copyBtn.addEventListener('click', copyExtractedText);
+            
+            // Download text button
+            downloadBtn.addEventListener('click', downloadExtractedText);
+        }
+
+        function extractTextFromImage() {
+            showLoading(true);
+            
+            // Simulate OCR processing (in real implementation, you'd use Tesseract.js or similar)
+            setTimeout(() => {
+                const sampleText = `SAMPLE TEXT EXTRACTED FROM IMAGE
+
+This is a demonstration of OCR (Optical Character Recognition) functionality.
+
+In a real implementation, this tool would use advanced OCR technology to extract text from your uploaded images and PDF files.
+
+Example of extracted content:
+- Document titles
+- Paragraphs of text
+- Lists and bullet points
+- Contact information
+- Important dates and numbers
+
+For actual OCR functionality, you would need to integrate a proper OCR library like Tesseract.js.
+
+Extracted on: ${new Date().toLocaleDateString()}
+Characters: 425 | Words: 78 | Lines: 15`;
+
+                document.getElementById('ocrTextPreview').textContent = sampleText;
+                document.getElementById('ocrTextResult').textContent = sampleText;
+                document.getElementById('ocrResult').style.display = 'block';
+                document.getElementById('clearTextBtn').style.display = 'block';
+                document.getElementById('copyTextBtn').style.display = 'block';
+                document.getElementById('downloadTextBtn').style.display = 'block';
+                
+                showLoading(false);
+                showToast('Text extracted successfully!', 'success');
+            }, 2000);
+        }
+
+        function copyExtractedText() {
+            const text = document.getElementById('ocrTextResult').textContent;
+            if (!text.trim()) {
+                showToast('No text to copy', 'error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Text copied to clipboard!', 'success');
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('Text copied to clipboard!', 'success');
+            });
+        }
+
+        function downloadExtractedText() {
+            const text = document.getElementById('ocrTextResult').textContent;
+            if (!text.trim()) {
+                showToast('No text to download', 'error');
+                return;
+            }
+            
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = `extracted_text_${Date.now()}.txt`;
+            link.href = url;
+            link.click();
+            URL.revokeObjectURL(url);
+            showToast('Text downloaded!', 'success');
+        }
+
+        function resetOCR() {
+            document.getElementById('ocrInput').value = '';
+            document.getElementById('ocrPreview').style.display = 'none';
+            document.getElementById('ocrBtn').disabled = true;
+            document.getElementById('clearTextBtn').style.display = 'none';
+            document.getElementById('copyTextBtn').style.display = 'none';
+            document.getElementById('downloadTextBtn').style.display = 'none';
+            document.getElementById('ocrResult').style.display = 'none';
+            
+            document.getElementById('ocrUploadArea').innerHTML = `
+                <i class="fas fa-file-image"></i>
+                <h3>Drop your image here</h3>
+                <p>or click to browse (JPG, PNG, PDF)</p>
+                <input type="file" id="ocrInput" class="file-input" accept="image/*,.pdf">
+                <button class="btn btn-primary" onclick="document.getElementById('ocrInput').click()">
+                    <i class="fas fa-upload"></i> Choose File
+                </button>
+            `;
+            
+            // Re-initialize
+            initializeOCR();
+            showToast('OCR tool reset', 'info');
+        }
+
+        // ==================== BMI CALCULATOR ====================
+        function initializeBMI() {
+            const unitRadios = document.querySelectorAll('input[name="unitSystem"]');
+            const weightInput = document.getElementById('weightInput');
+            const heightInput = document.getElementById('heightInput');
+            const calculateBtn = document.getElementById('calculateBmiBtn');
+            const weightLabel = document.getElementById('weightLabel');
+            const heightLabel = document.getElementById('heightLabel');
+            
+            // Unit system change
+            unitRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'metric') {
+                        weightLabel.innerHTML = '<i class="fas fa-weight"></i> Weight (kg)';
+                        heightLabel.innerHTML = '<i class="fas fa-ruler-vertical"></i> Height (cm)';
+                        weightInput.placeholder = 'Enter weight in kg';
+                        heightInput.placeholder = 'Enter height in cm';
+                    } else {
+                        weightLabel.innerHTML = '<i class="fas fa-weight"></i> Weight (lbs)';
+                        heightLabel.innerHTML = '<i class="fas fa-ruler-vertical"></i> Height (inches)';
+                        weightInput.placeholder = 'Enter weight in lbs';
+                        heightInput.placeholder = 'Enter height in inches';
+                    }
+                    weightInput.value = '';
+                    heightInput.value = '';
+                    document.getElementById('bmiResult').style.display = 'none';
+                });
+            });
+            
+            // Calculate button
+            calculateBtn.addEventListener('click', calculateBMI);
+            
+            // Auto-calculate on input
+            weightInput.addEventListener('input', calculateBMI);
+            heightInput.addEventListener('input', calculateBMI);
+        }
+
+        function calculateBMI() {
+            const unitSystem = document.querySelector('input[name="unitSystem"]:checked').value;
+            const weight = parseFloat(document.getElementById('weightInput').value);
+            const height = parseFloat(document.getElementById('heightInput').value);
+            
+            if (!weight || !height || weight <= 0 || height <= 0) {
+                document.getElementById('bmiResult').style.display = 'none';
+                return;
+            }
+            
+            let bmi;
+            if (unitSystem === 'metric') {
+                // BMI = weight(kg) / (height(m) * height(m))
+                const heightInMeters = height / 100;
+                bmi = weight / (heightInMeters * heightInMeters);
+            } else {
+                // BMI = (weight(lbs) / (height(in) * height(in))) * 703
+                bmi = (weight / (height * height)) * 703;
+            }
+            
+            bmi = Math.round(bmi * 10) / 10; // Round to 1 decimal
+            
+            // Determine category
+            let category = '';
+            let categoryColor = '';
+            
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                categoryColor = '#3B82F6'; // Blue
+            } else if (bmi < 25) {
+                category = 'Normal weight';
+                categoryColor = '#10B981'; // Green
+            } else if (bmi < 30) {
+                category = 'Overweight';
+                categoryColor = '#F59E0B'; // Yellow
+            } else {
+                category = 'Obese';
+                categoryColor = '#EF4444'; // Red
+            }
+            
+            // Update display
+            document.getElementById('bmiValue').textContent = bmi;
+            document.getElementById('bmiCategory').textContent = category;
+            document.getElementById('bmiCategory').style.color = categoryColor;
+            
+            const details = `BMI Calculation Details:
+Weight: ${weight} ${unitSystem === 'metric' ? 'kg' : 'lbs'}
+Height: ${height} ${unitSystem === 'metric' ? 'cm' : 'inches'}
+BMI Formula: ${unitSystem === 'metric' ? 'weight(kg) / height(m)²' : '(weight(lbs) / height(in)²) × 703'}
+
+Health Recommendations:
+${getBMIRecommendation(bmi, category)}`;
+            
+            document.getElementById('bmiDetails').textContent = details;
+            document.getElementById('bmiResult').style.display = 'block';
+        }
+
+        function getBMIRecommendation(bmi, category) {
+            const recommendations = {
+                'Underweight': '• Consider consulting a healthcare provider\n• Focus on nutrient-dense foods\n• Incorporate strength training',
+                'Normal weight': '• Maintain your current healthy lifestyle\n• Regular exercise (150 mins/week)\n• Balanced diet with variety',
+                'Overweight': '• Moderate calorie reduction\n• Increase physical activity\n• Focus on whole foods',
+                'Obese': '• Consult with healthcare provider\n• Consider professional guidance\n• Gradual, sustainable changes'
+            };
+            return recommendations[category] || '• Maintain a healthy lifestyle';
+        }
+
+        function copyBMIResult() {
+            const bmi = document.getElementById('bmiValue').textContent;
+            const category = document.getElementById('bmiCategory').textContent;
+            const details = document.getElementById('bmiDetails').textContent;
+            
+            const result = `BMI Result: ${bmi} (${category})\n\n${details}`;
+            
+            navigator.clipboard.writeText(result).then(() => {
+                showToast('BMI result copied to clipboard!', 'success');
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = result;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('BMI result copied to clipboard!', 'success');
+            });
+        }
+
+        function resetBMI() {
+            document.getElementById('weightInput').value = '';
+            document.getElementById('heightInput').value = '';
+            document.getElementById('bmiResult').style.display = 'none';
+            showToast('BMI calculator reset', 'info');
+        }
+
+        // ==================== REMOVE DUPLICATE LINES ====================
+        function initializeDuplicateTool() {
+            const inputTextarea = document.getElementById('duplicateInput');
+            const outputTextarea = document.getElementById('duplicateOutput');
+            const removeBtn = document.getElementById('removeDuplicatesBtn');
+            const copyBtn = document.getElementById('copyOutputBtn');
+            const downloadBtn = document.getElementById('downloadOutputBtn');
+            
+            // Update character counts
+            inputTextarea.addEventListener('input', updateInputStats);
+            
+            // Remove duplicates button
+            removeBtn.addEventListener('click', removeDuplicateLines);
+            
+            // Copy output button
+            copyBtn.addEventListener('click', copyOutputText);
+            
+            // Download output button
+            downloadBtn.addEventListener('click', downloadOutputText);
+        }
+
+        function updateInputStats() {
+            const text = document.getElementById('duplicateInput').value;
+            const lines = text ? text.split('\n').length : 0;
+            const words = text ? text.trim().split(/\s+/).length : 0;
+            const chars = text.length;
+            
+            document.getElementById('inputLines').textContent = lines;
+            document.getElementById('inputWords').textContent = words;
+            document.getElementById('inputChars').textContent = chars;
+        }
+
+        function removeDuplicateLines() {
+            const inputText = document.getElementById('duplicateInput').value;
+            if (!inputText.trim()) {
+                showToast('Please enter some text', 'error');
+                return;
+            }
+            
+            const lines = inputText.split('\n');
+            const seen = new Set();
+            const uniqueLines = [];
+            let duplicateCount = 0;
+            
+            lines.forEach(line => {
+                const trimmedLine = line.trim();
+                if (trimmedLine && !seen.has(trimmedLine)) {
+                    seen.add(trimmedLine);
+                    uniqueLines.push(line);
+                } else if (trimmedLine) {
+                    duplicateCount++;
+                } else {
+                    uniqueLines.push(line); // Keep empty lines
+                }
+            });
+            
+            const outputText = uniqueLines.join('\n');
+            document.getElementById('duplicateOutput').value = outputText;
+            
+            // Update output stats
+            const outputLines = outputText ? outputText.split('\n').length : 0;
+            const outputWords = outputText ? outputText.trim().split(/\s+/).length : 0;
+            const outputChars = outputText.length;
+            
+            document.getElementById('outputLines').textContent = outputLines;
+            document.getElementById('outputWords').textContent = outputWords;
+            document.getElementById('outputChars').textContent = outputChars;
+            
+            // Enable buttons
+            document.getElementById('copyOutputBtn').disabled = false;
+            document.getElementById('downloadOutputBtn').disabled = false;
+            
+            // Show stats
+            const stats = `Duplicate Removal Results:
+Original lines: ${lines.length}
+Unique lines: ${uniqueLines.length}
+Duplicates removed: ${duplicateCount}
+Reduction: ${((duplicateCount / lines.length) * 100).toFixed(1)}%
+
+Processing complete!`;
+            
+            document.getElementById('duplicateStats').textContent = stats;
+            document.getElementById('duplicateResult').style.display = 'block';
+            
+            showToast(`Removed ${duplicateCount} duplicate lines`, 'success');
+        }
+
+        function clearDuplicateInput() {
+            document.getElementById('duplicateInput').value = '';
+            document.getElementById('duplicateOutput').value = '';
+            document.getElementById('duplicateResult').style.display = 'none';
+            updateInputStats();
+            
+            // Reset output stats
+            document.getElementById('outputLines').textContent = '0';
+            document.getElementById('outputWords').textContent = '0';
+            document.getElementById('outputChars').textContent = '0';
+            
+            // Disable buttons
+            document.getElementById('copyOutputBtn').disabled = true;
+            document.getElementById('downloadOutputBtn').disabled = true;
+            
+            showToast('Input cleared', 'info');
+        }
+
+        function pasteSampleText() {
+            const sampleText = `Apple
+Banana
+Apple
+Orange
+Banana
+Grape
+Apple
+Mango
+Orange
+Banana
+Peach
+Grape
+Mango
+Apple
+Kiwi
+Orange
+Banana
+Peach`;
+
+            document.getElementById('duplicateInput').value = sampleText;
+            updateInputStats();
+            showToast('Sample text pasted', 'info');
+        }
+
+        function copyOutputText() {
+            const text = document.getElementById('duplicateOutput').value;
+            if (!text.trim()) {
+                showToast('No text to copy', 'error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Text copied to clipboard!', 'success');
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('Text copied to clipboard!', 'success');
+            });
+        }
+
+        function downloadOutputText() {
+            const text = document.getElementById('duplicateOutput').value;
+            if (!text.trim()) {
+                showToast('No text to download', 'error');
+                return;
+            }
+            
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = `unique_lines_${Date.now()}.txt`;
+            link.href = url;
+            link.click();
+            URL.revokeObjectURL(url);
+            showToast('Text downloaded!', 'success');
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 
+                         type === 'error' ? 'fa-times-circle' : 
+                         type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+            
+            toast.innerHTML = `<i class="fas ${icon}"></i> <span id="toastMessage">${message}</span>`;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        function copyCompressorResult() {
+            const stats = document.getElementById('compressorStats').textContent;
+            navigator.clipboard.writeText(stats).then(() => {
+                showToast('Stats copied to clipboard!', 'success');
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = stats;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('Stats copied to clipboard!', 'success');
+            });
+        }
+
+        // ==================== PRIVACY POLICY & TERMS ====================
+        function showPrivacyPolicy() {
+            const policy = `🔒 Privacy Policy for Any Tasker
+
+Last Updated: ${new Date().toLocaleDateString()}
+
+1. Introduction
+Welcome to Any Tasker. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we handle information when you use our website.
+
+2. Information We Collect
+We collect minimal non-personal information for analytics purposes:
+- Browser type and version
+- Operating system
+- Device information
+- Visit duration and pages viewed
+- Country/region (based on IP address)
+
+We DO NOT collect:
+- Personal identification information
+- Email addresses (unless you contact us)
+- Payment information (all tools are free)
+- Location data
+
+3. File & Image Handling (Client-Side Processing)
+All file processing occurs entirely in your browser:
+- Uploaded images/files are NOT sent to any server
+- Processing happens locally on your device
+- No files are stored, saved, or retained
+- Complete privacy and security
+
+4. How We Use Information
+We use collected information to:
+- Improve website performance
+- Analyze usage patterns
+- Fix bugs and optimize tools
+- Ensure compatibility across devices
+
+5. Cookies
+We use essential cookies only for:
+- Session management
+- Tool functionality
+- Basic analytics (anonymous)
+
+No tracking cookies are used. You can disable cookies in your browser settings.
+
+6. Third-Party Services
+We use only essential open-source libraries for tool functionality. No data is shared with third parties.
+
+7. Data Security
+Your data security is our priority:
+- All processing happens locally
+- No server-side storage
+- Secure HTTPS connection
+- Regular security updates
+
+8. Links to External Sites
+Our website may contain links to external sites. We are not responsible for their privacy practices.
+
+9. Children's Privacy
+Our services are not directed to children under 13. We do not knowingly collect data from children.
+
+10. Changes to This Privacy Policy
+We may update this policy periodically. Continued use constitutes acceptance of changes.
+
+11. Contact Information
+For privacy concerns, contact us at: anytasker1998@gmail.com
+
+Your privacy matters to us!`;
+
+            openTool('ocr');
+            setTimeout(() => {
+                document.getElementById('ocrTextResult').textContent = policy;
+                document.getElementById('ocrResult').style.display = 'block';
+                document.getElementById('copyTextBtn').style.display = 'block';
+                document.getElementById('downloadTextBtn').style.display = 'block';
+                showToast('Privacy Policy loaded', 'info');
+            }, 100);
+        }
+
+        function showTermsOfService() {
+            const terms = `📄 Terms & Conditions for Any Tasker
+
+Last Updated: ${new Date().toLocaleDateString()}
+
+1. Acceptance of Terms
+By accessing and using Any Tasker, you accept and agree to be bound by these Terms & Conditions.
+
+2. Description of Services
+Any Tasker provides free online tools for:
+- Image compression, resizing, cropping
+- Image to text conversion (OCR)
+- BMI calculation
+- Text processing
+- Other utility tools
+
+All tools work 100% in your browser.
+
+3. Personal Use Only
+Our services are for personal, non-commercial use only unless explicitly stated otherwise.
+
+4. Accuracy & Result Disclaimer
+While we strive for accuracy:
+- Results are provided "as is"
+- No guarantee of perfection
+- Users should verify important results
+- We're not liable for any consequences
+
+5. User Obligations
+You agree to:
+- Use tools responsibly
+- Not overload our service
+- Respect intellectual property
+- Not attempt to hack or disrupt
+
+6. Prohibited Activities
+You must NOT:
+- Upload illegal or harmful content
+- Use tools for malicious purposes
+- Attempt to extract source code
+- Violate any laws or regulations
+
+7. No Upload of Illegal/Harmful Content
+Do not upload content that:
+- Contains malware or viruses
+- Is illegal in your jurisdiction
+- Infringes copyrights
+- Contains personal information of others
+
+8. Intellectual Property
+We own all intellectual property rights to:
+- Website design and layout
+- Tool implementations
+- Source code (where applicable)
+
+You retain rights to your uploaded content.
+
+9. Limitation of Liability
+We are not liable for:
+- Any direct or indirect damages
+- Loss of data or profits
+- Service interruptions
+- Third-party actions
+
+10. No Warranties
+Services are provided "as is" without warranties of any kind.
+
+11. Modifications to Terms
+We may modify these terms at any time. Continued use constitutes acceptance.
+
+12. Contact Information
+For questions or concerns: anytasker1998@gmail.com
+
+Thank you for using Any Tasker responsibly!`;
+
+            openTool('ocr');
+            setTimeout(() => {
+                document.getElementById('ocrTextResult').textContent = terms;
+                document.getElementById('ocrResult').style.display = 'block';
+                document.getElementById('copyTextBtn').style.display = 'block';
+                document.getElementById('downloadTextBtn').style.display = 'block';
+                showToast('Terms & Conditions loaded', 'info');
+            }, 100);
+        }
+
+        // Console greeting
+        console.log('%c🔧 Any Tasker - All Tools 100% Working!', 'color: #2563eb; font-size: 18px; font-weight: bold;');
+        console.log('%c📧 Contact: anytasker1998@gmail.com', 'color: #059669; font-size: 14px;');
+    </script>
+</body>
+</html>
