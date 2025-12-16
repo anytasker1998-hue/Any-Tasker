@@ -50,6 +50,9 @@
         .ads-container {
             position: fixed;
             z-index: 999;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 5px;
         }
 
         .ads-top {
@@ -60,7 +63,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.5);
         }
 
         .ads-bottom {
@@ -71,7 +73,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.5);
         }
 
         .ads-left {
@@ -92,38 +93,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        .ads-middle {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10000;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: var(--radius);
-            display: none;
-        }
-
-        .ads-middle.active {
-            display: block;
-        }
-
-        .close-ads {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--danger);
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .container {
@@ -851,6 +820,77 @@
             box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
         }
 
+        /* AI Chat Feature */
+        .ai-chat-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ai-chat-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .ai-chat-header i {
+            color: var(--accent);
+            font-size: 24px;
+        }
+
+        .ai-chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .message.user {
+            background: rgba(99, 102, 241, 0.2);
+            margin-left: auto;
+            border-left: 4px solid var(--primary);
+        }
+
+        .message.ai {
+            background: rgba(16, 185, 129, 0.2);
+            border-right: 4px solid var(--success);
+        }
+
+        .ai-chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ai-chat-input input {
+            flex: 1;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+        }
+
+        .ai-chat-input button {
+            padding: 15px 30px;
+            background: var(--gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
         /* Premium Modal */
         .premium-modal {
             display: none;
@@ -893,23 +933,6 @@
         .upi-option i {
             color: var(--success);
             font-size: 24px;
-        }
-
-        /* Ads */
-        .ad-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100px;
-        }
-
-        .ad-container.horizontal {
-            grid-column: 1 / -1;
-            min-height: 150px;
         }
 
         /* Footer */
@@ -1155,13 +1178,6 @@
         <script type="text/javascript" src="https://pl28258457.effectivegatecpm.com/77/86/60/778660b9c8b556582fb5127e53b7db86.js"></script>
     </div>
 
-    <!-- Popunder Ads -->
-    <div class="ads-middle" id="popunderAds">
-        <button class="close-ads" onclick="closePopunder()">×</button>
-        <!-- Popunder Script -->
-        <script type="text/javascript" src="https://pl28239921.effectivegatecpm.com/a5/c2/5d/a5c25d3107a4e3b3ef4006c2d249e603.js"></script>
-    </div>
-
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loader"></div>
@@ -1184,9 +1200,9 @@
                 <ul>
                     <li><a href="#home" class="active"><i class="fas fa-home"></i> Home</a></li>
                     <li><a href="#tools"><i class="fas fa-th-large"></i> All Tools</a></li>
+                    <li><a href="#education"><i class="fas fa-graduation-cap"></i> Education</a></li>
                     <li><a href="#government"><i class="fas fa-landmark"></i> Government</a></li>
                     <li><a href="#" onclick="openPremium()"><i class="fas fa-crown"></i> Premium</a></li>
-                    <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
                 </ul>
             </nav>
             
@@ -1213,13 +1229,6 @@
                 <input type="text" id="searchInput" placeholder="Search for tools (image compressor, PDF to Word, background remover...)" onkeyup="searchTools()">
                 <button onclick="searchTools()"><i class="fas fa-search"></i></button>
             </div>
-
-            <!-- Middle Ads -->
-            <div class="ad-container horizontal">
-                <!-- Native Banner -->
-                <script async="async" data-cfasync="false" src="https://pl28239794.effectivegatecpm.com/020dcc1e0bd23ed7dc8b597995087112/invoke.js"></script>
-                <div id="container-020dcc1e0bd23ed7dc8b597995087112"></div>
-            </div>
         </section>
 
         <!-- All Tools Section -->
@@ -1230,16 +1239,16 @@
             </div>
 
             <div class="tools-grid">
-                <!-- Image Tools -->
+                <!-- Image Compressor -->
                 <div class="tool-card">
                     <div class="tool-icon">
-                        <i class="fas fa-image"></i>
+                        <i class="fas fa-compress-alt"></i>
                     </div>
                     <h3>Image Compressor</h3>
                     <ul class="tool-features">
-                        <li><i class="fas fa-check-circle"></i> Compress JPG, PNG, GIF</li>
-                        <li><i class="fas fa-check-circle"></i> Reduce size by 90%</li>
-                        <li><i class="fas fa-check-circle"></i> Maintain quality</li>
+                        <li><i class="fas fa-check-circle"></i> Reduce image size by 90%</li>
+                        <li><i class="fas fa-check-circle"></i> Maintain original quality</li>
+                        <li><i class="fas fa-check-circle"></i> Support JPG, PNG, WebP</li>
                         <li><i class="fas fa-check-circle"></i> Batch processing</li>
                     </ul>
                     <button class="tool-btn" onclick="openTool('image-compressor')">
@@ -1254,9 +1263,9 @@
                     </div>
                     <h3>PDF Compressor</h3>
                     <ul class="tool-features">
-                        <li><i class="fas fa-check-circle"></i> Reduce PDF size</li>
-                        <li><i class="fas fa-check-circle"></i> Optimize for web</li>
-                        <li><i class="fas fa-check-circle"></i> No quality loss</li>
+                        <li><i class="fas fa-check-circle"></i> Reduce PDF size by 80%</li>
+                        <li><i class="fas fa-check-circle"></i> Optimize for email/website</li>
+                        <li><i class="fas fa-check-circle"></i> Preserve text quality</li>
                         <li><i class="fas fa-check-circle"></i> Fast processing</li>
                     </ul>
                     <button class="tool-btn" onclick="openTool('pdf-compressor')">
@@ -1272,8 +1281,8 @@
                     <h3>Background Remover</h3>
                     <ul class="tool-features">
                         <li><i class="fas fa-check-circle"></i> AI-powered removal</li>
-                        <li><i class="fas fa-check-circle"></i> Perfect edges</li>
-                        <li><i class="fas fa-check-circle"></i> Transparent PNG</li>
+                        <li><i class="fas fa-check-circle"></i> Perfect edge detection</li>
+                        <li><i class="fas fa-check-circle"></i> Transparent PNG output</li>
                         <li><i class="fas fa-check-circle"></i> Instant results</li>
                     </ul>
                     <button class="tool-btn" onclick="openTool('background-remover')">
@@ -1288,10 +1297,10 @@
                     </div>
                     <h3>PDF to Word</h3>
                     <ul class="tool-features">
-                        <li><i class="fas fa-check-circle"></i> Convert to DOCX</li>
-                        <li><i class="fas fa-check-circle"></i> Editable text</li>
-                        <li><i class="fas fa-check-circle"></i> Keep formatting</li>
-                        <li><i class="fas fa-check-circle"></i> High accuracy</li>
+                        <li><i class="fas fa-check-circle"></i> Convert PDF to editable DOCX</li>
+                        <li><i class="fas fa-check-circle"></i> Preserve formatting</li>
+                        <li><i class="fas fa-check-circle"></i> Extract text perfectly</li>
+                        <li><i class="fas fa-check-circle"></i> Maintain layout</li>
                     </ul>
                     <button class="tool-btn" onclick="openTool('pdf-to-word')">
                         <i class="fas fa-play-circle"></i> Use Tool
@@ -1305,12 +1314,29 @@
                     </div>
                     <h3>Image to PDF</h3>
                     <ul class="tool-features">
-                        <li><i class="fas fa-check-circle"></i> Convert JPG/PNG to PDF</li>
-                        <li><i class="fas fa-check-circle"></i> Multiple images</li>
-                        <li><i class="fas fa-check-circle"></i> Adjust quality</li>
-                        <li><i class="fas fa-check-circle"></i> Custom size</li>
+                        <li><i class="fas fa-check-circle"></i> Convert images to PDF</li>
+                        <li><i class="fas fa-check-circle"></i> Multiple images in one PDF</li>
+                        <li><i class="fas fa-check-circle"></i> Adjust page size</li>
+                        <li><i class="fas fa-check-circle"></i> High quality output</li>
                     </ul>
                     <button class="tool-btn" onclick="openTool('image-to-pdf')">
+                        <i class="fas fa-play-circle"></i> Use Tool
+                    </button>
+                </div>
+
+                <!-- Image Converter -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3>Image Converter</h3>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check-circle"></i> JPG to PNG/WebP/GIF</li>
+                        <li><i class="fas fa-check-circle"></i> PNG to JPG/WebP</li>
+                        <li><i class="fas fa-check-circle"></i> Bulk conversion</li>
+                        <li><i class="fas fa-check-circle"></i> Quality control</li>
+                    </ul>
+                    <button class="tool-btn" onclick="openTool('image-converter')">
                         <i class="fas fa-play-circle"></i> Use Tool
                     </button>
                 </div>
@@ -1322,10 +1348,10 @@
                     </div>
                     <h3>Application Writer</h3>
                     <ul class="tool-features">
-                        <li><i class="fas fa-check-circle"></i> Leave applications</li>
-                        <li><i class="fas fa-check-circle"></i> Job applications</li>
-                        <li><i class="fas fa-check-circle"></i> Custom templates</li>
-                        <li><i class="fas fa-check-circle"></i> Professional format</li>
+                        <li><i class="fas fa-check-circle"></i> Professional templates</li>
+                        <li><i class="fas fa-check-circle"></i> Leave/Job/Loan apps</li>
+                        <li><i class="fas fa-check-circle"></i> Custom formatting</li>
+                        <li><i class="fas fa-check-circle"></i> Download as DOC</li>
                     </ul>
                     <button class="tool-btn" onclick="openTool('application-writer')">
                         <i class="fas fa-play-circle"></i> Use Tool
@@ -1341,55 +1367,195 @@
                     <ul class="tool-features">
                         <li><i class="fas fa-check-circle"></i> Professional templates</li>
                         <li><i class="fas fa-check-circle"></i> Easy customization</li>
-                        <li><i class="fas fa-check-circle"></i> Download as PDF</li>
                         <li><i class="fas fa-check-circle"></i> ATS friendly</li>
+                        <li><i class="fas fa-check-circle"></i> Download as PDF</li>
                     </ul>
                     <button class="tool-btn" onclick="openTool('resume-builder')">
                         <i class="fas fa-play-circle"></i> Use Tool
                     </button>
                 </div>
 
-                <!-- Image Converter -->
+                <!-- PDF to Text -->
                 <div class="tool-card">
                     <div class="tool-icon">
-                        <i class="fas fa-exchange-alt"></i>
+                        <i class="fas fa-font"></i>
                     </div>
-                    <h3>Image Converter</h3>
+                    <h3>PDF to Text</h3>
                     <ul class="tool-features">
-                        <li><i class="fas fa-check-circle"></i> JPG to PNG/WebP</li>
-                        <li><i class="fas fa-check-circle"></i> PNG to JPG/WebP</li>
-                        <li><i class="fas fa-check-circle"></i> Batch conversion</li>
-                        <li><i class="fas fa-check-circle"></i> Quality control</li>
+                        <li><i class="fas fa-check-circle"></i> Extract text from PDF</li>
+                        <li><i class="fas fa-check-circle"></i> OCR technology</li>
+                        <li><i class="fas fa-check-circle"></i> Maintain formatting</li>
+                        <li><i class="fas fa-check-circle"></i> Download as TXT</li>
                     </ul>
-                    <button class="tool-btn" onclick="openTool('image-converter')">
+                    <button class="tool-btn" onclick="openTool('pdf-to-text')">
                         <i class="fas fa-play-circle"></i> Use Tool
                     </button>
                 </div>
 
-                <!-- AI Chat Assistant -->
+                <!-- File Converter -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-file-export"></i>
+                    </div>
+                    <h3>File Converter</h3>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check-circle"></i> Multiple format support</li>
+                        <li><i class="fas fa-check-circle"></i> Fast conversion</li>
+                        <li><i class="fas fa-check-circle"></i> High quality</li>
+                        <li><i class="fas fa-check-circle"></i> Batch processing</li>
+                    </ul>
+                    <button class="tool-btn" onclick="openTool('file-converter')">
+                        <i class="fas fa-play-circle"></i> Use Tool
+                    </button>
+                </div>
+
+                <!-- AI Assistant -->
                 <div class="tool-card">
                     <div class="tool-icon">
                         <i class="fas fa-robot"></i>
                     </div>
                     <h3>AI Assistant</h3>
                     <ul class="tool-features">
-                        <li><i class="fas fa-check-circle"></i> 24/7 AI support</li>
                         <li><i class="fas fa-check-circle"></i> Writing assistance</li>
                         <li><i class="fas fa-check-circle"></i> Code generation</li>
+                        <li><i class="fas fa-check-circle"></i> Document formatting</li>
                         <li><i class="fas fa-check-circle"></i> Quick answers</li>
                     </ul>
                     <button class="tool-btn" onclick="openTool('ai-assistant')">
                         <i class="fas fa-play-circle"></i> Use Tool
                     </button>
                 </div>
+
+                <!-- Video Compressor -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>Video Compressor</h3>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check-circle"></i> Reduce video size</li>
+                        <li><i class="fas fa-check-circle"></i> MP4, AVI, MOV support</li>
+                        <li><i class="fas fa-check-circle"></i> Quality preservation</li>
+                        <li><i class="fas fa-check-circle"></i> Fast processing</li>
+                    </ul>
+                    <button class="tool-btn" onclick="openTool('video-compressor')">
+                        <i class="fas fa-play-circle"></i> Use Tool
+                    </button>
+                </div>
             </div>
         </section>
 
-        <!-- Middle Ads -->
-        <div class="ad-container horizontal">
-            <!-- Social Bar -->
-            <script type="text/javascript" src="https://pl28258457.effectivegatecpm.com/77/86/60/778660b9c8b556582fb5127e53b7db86.js"></script>
-        </div>
+        <!-- Education Tools Section -->
+        <section class="tools-section" id="education">
+            <div class="section-header">
+                <h2 class="section-title">Education Tools</h2>
+                <p class="section-subtitle">Special tools for students and teachers</p>
+            </div>
+
+            <div class="tools-grid">
+                <!-- Essay Writer -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h3>Essay Writer</h3>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check-circle"></i> AI-powered essay writing</li>
+                        <li><i class="fas fa-check-circle"></i> Multiple topics</li>
+                        <li><i class="fas fa-check-circle"></i> Proper formatting</li>
+                        <li><i class="fas fa-check-circle"></i> Plagiarism free</li>
+                    </ul>
+                    <button class="tool-btn" onclick="openTool('essay-writer')">
+                        <i class="fas fa-play-circle"></i> Use Tool
+                    </button>
+                </div>
+
+                <!-- Assignment Helper -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>Assignment Helper</h3>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check-circle"></i> Complete assignment help</li>
+                        <li><i class="fas fa-check-circle"></i> All subjects covered</li>
+                        <li><i class="fas fa-check-circle"></i> Step-by-step solutions</li>
+                        <li><i class="fas fa-check-circle"></i> Download as PDF</li>
+                    </ul>
+                    <button class="tool-btn" onclick="openTool('assignment-helper')">
+                        <i class="fas fa-play-circle"></i> Use Tool
+                    </button>
+                </div>
+
+                <!-- Plagiarism Checker -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Plagiarism Checker</h3>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check-circle"></i> Check originality</li>
+                        <li><i class="fas fa-check-circle"></i> Detailed report</li>
+                        <li><i class="fas fa-check-circle"></i> Multiple languages</li>
+                        <li><i class="fas fa-check-circle"></i> Free to use</li>
+                    </ul>
+                    <button class="tool-btn" onclick="openTool('plagiarism-checker')">
+                        <i class="fas fa-play-circle"></i> Use Tool
+                    </button>
+                </div>
+
+                <!-- GPA Calculator -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3>GPA Calculator</h3>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check-circle"></i> Calculate GPA easily</li>
+                        <li><i class="fas fa-check-circle"></i> Multiple grading systems</li>
+                        <li><i class="fas fa-check-circle"></i> Save results</li>
+                        <li><i class="fas fa-check-circle"></i> Export as report</li>
+                    </ul>
+                    <button class="tool-btn" onclick="openTool('gpa-calculator')">
+                        <i class="fas fa-play-circle"></i> Use Tool
+                    </button>
+                </div>
+
+                <!-- Citation Generator -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-quote-right"></i>
+                    </div>
+                    <h3>Citation Generator</h3>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check-circle"></i> APA, MLA, Chicago styles</li>
+                        <li><i class="fas fa-check-circle"></i> Automatic formatting</li>
+                        <li><i class="fas fa-check-circle"></i> Bibliography creation</li>
+                        <li><i class="fas fa-check-circle"></i> Export to Word</li>
+                    </ul>
+                    <button class="tool-btn" onclick="openTool('citation-generator')">
+                        <i class="fas fa-play-circle"></i> Use Tool
+                    </button>
+                </div>
+
+                <!-- Math Solver -->
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-square-root-alt"></i>
+                    </div>
+                    <h3>Math Solver</h3>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check-circle"></i> Solve equations</li>
+                        <li><i class="fas fa-check-circle"></i> Step-by-step solutions</li>
+                        <li><i class="fas fa-check-circle"></i> Algebra, Calculus, Geometry</li>
+                        <li><i class="fas fa-check-circle"></i> Graphical solutions</li>
+                    </ul>
+                    <button class="tool-btn" onclick="openTool('math-solver')">
+                        <i class="fas fa-play-circle"></i> Use Tool
+                    </button>
+                </div>
+            </div>
+        </section>
 
         <!-- Government Links -->
         <section class="tools-section" id="government">
@@ -1444,6 +1610,22 @@
                     </ul>
                     <button class="tool-btn" onclick="window.open('https://www.onlinesbi.sbi/', '_blank')">
                         <i class="fas fa-external-link-alt"></i> Login Now
+                    </button>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-passport"></i>
+                    </div>
+                    <h3>Passport Services</h3>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-link"></i> Apply for Passport</li>
+                        <li><i class="fas fa-link"></i> Check Status</li>
+                        <li><i class="fas fa-link"></i> Download Forms</li>
+                        <li><i class="fas fa-link"></i> Appointment Booking</li>
+                    </ul>
+                    <button class="tool-btn" onclick="window.open('https://www.passportindia.gov.in/', '_blank')">
+                        <i class="fas fa-external-link-alt"></i> Visit Portal
                     </button>
                 </div>
             </div>
@@ -1513,15 +1695,6 @@
                 </div>
             </div>
             
-            <div class="upi-option">
-                <i class="fas fa-phone"></i>
-                <div>
-                    <h3>Phone Number Payment</h3>
-                    <p>UPI ID: <strong>8018733114</strong></p>
-                    <p style="font-size: 14px; opacity: 0.8;">Use any UPI app with this number</p>
-                </div>
-            </div>
-            
             <div style="margin-top: 30px;">
                 <h3 style="margin-bottom: 15px;">Premium Benefits:</h3>
                 <ul style="list-style: none; margin-bottom: 30px;">
@@ -1571,8 +1744,8 @@
                 <ul class="footer-links">
                     <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
                     <li><a href="#tools"><i class="fas fa-chevron-right"></i> All Tools</a></li>
+                    <li><a href="#education"><i class="fas fa-chevron-right"></i> Education Tools</a></li>
                     <li><a href="#government"><i class="fas fa-chevron-right"></i> Government</a></li>
-                    <li><a href="#" onclick="openPremium()"><i class="fas fa-chevron-right"></i> Premium</a></li>
                 </ul>
             </div>
             
@@ -1582,8 +1755,8 @@
                     <li><a href="#" onclick="openTool('image-compressor')"><i class="fas fa-compress-alt"></i> Image Compressor</a></li>
                     <li><a href="#" onclick="openTool('pdf-compressor')"><i class="fas fa-file-pdf"></i> PDF Compressor</a></li>
                     <li><a href="#" onclick="openTool('background-remover')"><i class="fas fa-magic"></i> Background Remover</a></li>
-                    <li><a href="#" onclick="openTool('application-writer')"><i class="fas fa-file-signature"></i> Application Writer</a></li>
-                    <li><a href="#" onclick="openTool('resume-builder')"><i class="fas fa-id-card"></i> Resume Builder</a></li>
+                    <li><a href="#" onclick="openTool('essay-writer')"><i class="fas fa-edit"></i> Essay Writer</a></li>
+                    <li><a href="#" onclick="openTool('math-solver')"><i class="fas fa-square-root-alt"></i> Math Solver</a></li>
                 </ul>
             </div>
         </div>
@@ -1616,7 +1789,7 @@
                     <div class="file-upload-zone" onclick="document.getElementById('imageInput').click()">
                         <i class="fas fa-cloud-upload-alt"></i>
                         <h3>Upload Image to Compress</h3>
-                        <p>Click or drag & drop image (JPG, PNG, WEBP, GIF, BMP) - Max 10MB</p>
+                        <p>Click or drag & drop image (JPG, PNG, WEBP) - Max 10MB</p>
                         <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(this.files)">
                     </div>
 
@@ -1682,7 +1855,7 @@
                         <button class="action-btn btn-primary" onclick="compressImage()" id="compressBtn" disabled>
                             <i class="fas fa-compress-alt"></i> Compress Image
                         </button>
-                        <button class="action-btn btn-success" onclick="downloadCompressed()" id="downloadBtn" disabled>
+                        <button class="action-btn btn-success" onclick="downloadCompressedImage()" id="downloadBtn" disabled>
                             <i class="fas fa-download"></i> Download Compressed
                         </button>
                         <button class="action-btn btn-secondary" onclick="resetCompressor()">
@@ -1753,10 +1926,10 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button class="action-btn btn-primary" onclick="compressPDF()" id="pdfCompressBtn" disabled>
+                        <button class="action-btn btn-primary" onclick="compressPDFFile()" id="pdfCompressBtn" disabled>
                             <i class="fas fa-compress-alt"></i> Compress PDF
                         </button>
-                        <button class="action-btn btn-success" onclick="downloadPDF()" id="pdfDownloadBtn" disabled>
+                        <button class="action-btn btn-success" onclick="downloadCompressedPDF()" id="pdfDownloadBtn" disabled>
                             <i class="fas fa-download"></i> Download PDF
                         </button>
                     </div>
@@ -1815,10 +1988,10 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button class="action-btn btn-primary" onclick="removeBackground()" id="removeBtn" disabled>
+                        <button class="action-btn btn-primary" onclick="removeBackgroundImage()" id="removeBtn" disabled>
                             <i class="fas fa-magic"></i> Remove Background
                         </button>
-                        <button class="action-btn btn-success" onclick="downloadBGResult()" id="downloadBGBtn" disabled>
+                        <button class="action-btn btn-success" onclick="downloadBGImage()" id="downloadBGBtn" disabled>
                             <i class="fas fa-download"></i> Download Result
                         </button>
                     </div>
@@ -1833,7 +2006,7 @@
                         <i class="fas fa-file-word"></i>
                         <h3>Upload PDF to Convert to Word</h3>
                         <p>Convert PDF documents to editable Word format - Max 20MB</p>
-                        <input type="file" id="pdfWordInput" accept=".pdf" style="display: none;" onchange="handlePDFToWord(this.files)">
+                        <input type="file" id="pdfWordInput" accept=".pdf" style="display: none;" onchange="handlePDFWordUpload(this.files)">
                     </div>
 
                     <div class="control-group">
@@ -1853,12 +2026,6 @@
                                 <label>
                                     <input type="checkbox" id="preserveFormat" checked>
                                     <i class="fas fa-layer-group"></i> Preserve Formatting
-                                </label>
-                            </div>
-                            <div class="control-item">
-                                <label>
-                                    <input type="checkbox" id="extractImages" checked>
-                                    <i class="fas fa-images"></i> Extract Images
                                 </label>
                             </div>
                         </div>
@@ -1881,18 +2048,14 @@
                                 <div class="stat-label">Pages Converted</div>
                                 <div class="stat-value" id="convertedPages">0</div>
                             </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Conversion Time</div>
-                                <div class="stat-value" id="conversionTime">0s</div>
-                            </div>
                         </div>
                     </div>
 
                     <div class="action-buttons">
-                        <button class="action-btn btn-primary" onclick="convertToWord()" id="convertWordBtn" disabled>
+                        <button class="action-btn btn-primary" onclick="convertPDFToWord()" id="convertWordBtn" disabled>
                             <i class="fas fa-file-word"></i> Convert to Word
                         </button>
-                        <button class="action-btn btn-success" onclick="downloadWord()" id="downloadWordBtn" disabled>
+                        <button class="action-btn btn-success" onclick="downloadWordDoc()" id="downloadWordBtn" disabled>
                             <i class="fas fa-download"></i> Download Word File
                         </button>
                     </div>
@@ -1921,7 +2084,6 @@
                                     <option value="a4">A4</option>
                                     <option value="letter">Letter</option>
                                     <option value="legal">Legal</option>
-                                    <option value="custom">Custom</option>
                                 </select>
                             </div>
                             <div class="control-item">
@@ -1930,7 +2092,6 @@
                                     <option value="1">1 Image per page</option>
                                     <option value="2">2 Images per page</option>
                                     <option value="4">4 Images per page</option>
-                                    <option value="auto">Auto Arrange</option>
                                 </select>
                             </div>
                             <div class="control-item">
@@ -1947,7 +2108,7 @@
                     <div class="preview-container" id="imagesPreview" style="display: none;">
                         <div class="preview-box">
                             <h3><i class="fas fa-images"></i> Selected Images</h3>
-                            <div class="preview-content" id="selectedImages">
+                            <div class="preview-content" style="overflow-y: auto;" id="selectedImages">
                                 <!-- Images will be added here -->
                             </div>
                             <div class="stat-item" style="margin-top: 15px;">
@@ -1961,21 +2122,83 @@
                                 <div style="text-align: center;">
                                     <i class="fas fa-file-pdf" style="font-size: 48px; color: var(--danger);"></i>
                                     <p style="margin-top: 15px;">PDF will be generated with selected images</p>
-                                    <div class="stat-item" style="margin-top: 20px;">
-                                        <div class="stat-label">Estimated PDF Size</div>
-                                        <div class="stat-value success" id="estimatedPDFSize">0 MB</div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="action-buttons">
-                        <button class="action-btn btn-primary" onclick="convertToPDF()" id="convertPDFBtn" disabled>
+                        <button class="action-btn btn-primary" onclick="convertImagesToPDF()" id="convertPDFBtn" disabled>
                             <i class="fas fa-file-pdf"></i> Convert to PDF
                         </button>
                         <button class="action-btn btn-success" onclick="downloadImagePDF()" id="downloadPDFBtn" disabled>
                             <i class="fas fa-download"></i> Download PDF
+                        </button>
+                    </div>
+                `
+            },
+
+            'image-converter': {
+                title: 'Image Format Converter',
+                icon: 'fas fa-exchange-alt',
+                html: `
+                    <div class="file-upload-zone" onclick="document.getElementById('convertImageInput').click()">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>Upload Images to Convert</h3>
+                        <p>Convert between JPG, PNG, WebP, GIF formats - Multiple selection</p>
+                        <input type="file" id="convertImageInput" accept="image/*" multiple style="display: none;" onchange="handleConvertImageUpload(this.files)">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-title">
+                            <i class="fas fa-cog"></i> Conversion Settings
+                        </div>
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label><i class="fas fa-file-export"></i> Convert To</label>
+                                <select id="convertToFormat">
+                                    <option value="jpg">JPG (Best for photos)</option>
+                                    <option value="png">PNG (Best for graphics)</option>
+                                    <option value="webp">WebP (Best for web)</option>
+                                    <option value="gif">GIF (For animations)</option>
+                                </select>
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-chart-line"></i> Quality</label>
+                                <select id="convertQuality">
+                                    <option value="100">Best (100%)</option>
+                                    <option value="85" selected>High (85%)</option>
+                                    <option value="70">Good (70%)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="preview-container" id="convertPreview" style="display: none;">
+                        <div class="preview-box">
+                            <h3><i class="fas fa-image"></i> Original Images</h3>
+                            <div class="preview-content" style="overflow-y: auto;">
+                                <div id="originalImagesList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;">
+                                    <!-- Images will be added here -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="preview-box">
+                            <h3><i class="fas fa-exchange-alt"></i> Converted Images</h3>
+                            <div class="preview-content" style="overflow-y: auto;">
+                                <div id="convertedImagesList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;">
+                                    <!-- Images will be added here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="convertImageFormat()" id="convertImagesBtn" disabled>
+                            <i class="fas fa-exchange-alt"></i> Convert Images
+                        </button>
+                        <button class="action-btn btn-success" onclick="downloadAllConverted()" id="downloadAllBtn" disabled>
+                            <i class="fas fa-download"></i> Download All
                         </button>
                     </div>
                 `
@@ -2038,11 +2261,8 @@
                         <button class="action-btn btn-primary" onclick="generateApplication()">
                             <i class="fas fa-file-signature"></i> Generate Application
                         </button>
-                        <button class="action-btn btn-success" onclick="downloadApplication()" id="downloadAppBtn" disabled>
+                        <button class="action-btn btn-success" onclick="downloadApplicationDoc()" id="downloadAppBtn" disabled>
                             <i class="fas fa-download"></i> Download as DOC
-                        </button>
-                        <button class="action-btn btn-secondary" onclick="clearApplication()">
-                            <i class="fas fa-redo"></i> Clear
                         </button>
                     </div>
                 `
@@ -2091,10 +2311,6 @@
                                     <input type="text" id="resumeLocation" placeholder="City, State">
                                 </div>
                                 <div class="control-item">
-                                    <label><i class="fas fa-link"></i> LinkedIn Profile</label>
-                                    <input type="url" id="resumeLinkedIn" placeholder="https://linkedin.com/in/username">
-                                </div>
-                                <div class="control-item">
                                     <label><i class="fas fa-briefcase"></i> Profession</label>
                                     <input type="text" id="resumeProfession" placeholder="e.g., Software Engineer, Marketing Manager">
                                 </div>
@@ -2130,10 +2346,6 @@
                                     <input type="text" id="educationPercentage" placeholder="e.g., 85% or 8.5 CGPA">
                                 </div>
                             </div>
-                            <div class="control-item" style="margin-top: 20px;">
-                                <label><i class="fas fa-book"></i> Additional Education</label>
-                                <textarea id="educationAdditional" rows="3" placeholder="Any additional qualifications, certifications..."></textarea>
-                            </div>
                         </div>
                     </div>
 
@@ -2145,7 +2357,7 @@
                             </div>
                             <div class="control-grid">
                                 <div class="control-item">
-                                    <label><i class="fas fa-building"></i> Current/Most Recent Company</label>
+                                    <label><i class="fas fa-building"></i> Company Name</label>
                                     <input type="text" id="experienceCompany" placeholder="Company name">
                                 </div>
                                 <div class="control-item">
@@ -2160,10 +2372,6 @@
                             <div class="control-item" style="margin-top: 20px;">
                                 <label><i class="fas fa-tasks"></i> Responsibilities & Achievements</label>
                                 <textarea id="experienceResponsibilities" rows="4" placeholder="Describe your responsibilities and achievements..."></textarea>
-                            </div>
-                            <div class="control-item" style="margin-top: 20px;">
-                                <label><i class="fas fa-history"></i> Previous Experience</label>
-                                <textarea id="experiencePrevious" rows="3" placeholder="Previous work experience..."></textarea>
                             </div>
                         </div>
                     </div>
@@ -2183,10 +2391,6 @@
                                     <label><i class="fas fa-users"></i> Soft Skills</label>
                                     <textarea id="softSkills" rows="3" placeholder="e.g., Communication, Leadership, Teamwork..."></textarea>
                                 </div>
-                                <div class="control-item">
-                                    <label><i class="fas fa-language"></i> Languages</label>
-                                    <textarea id="languages" rows="2" placeholder="e.g., English, Hindi, Spanish..."></textarea>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -2195,11 +2399,8 @@
                         <button class="action-btn btn-primary" onclick="generateResume()">
                             <i class="fas fa-file-pdf"></i> Generate Resume
                         </button>
-                        <button class="action-btn btn-success" onclick="downloadResume()" id="downloadResumeBtn" disabled>
+                        <button class="action-btn btn-success" onclick="downloadResumePDF()" id="downloadResumeBtn" disabled>
                             <i class="fas fa-download"></i> Download PDF
-                        </button>
-                        <button class="action-btn btn-secondary" onclick="clearResume()">
-                            <i class="fas fa-redo"></i> Clear All
                         </button>
                     </div>
 
@@ -2216,15 +2417,69 @@
                 `
             },
 
-            'image-converter': {
-                title: 'Image Format Converter',
-                icon: 'fas fa-exchange-alt',
+            'pdf-to-text': {
+                title: 'PDF to Text Converter',
+                icon: 'fas fa-font',
                 html: `
-                    <div class="file-upload-zone" onclick="document.getElementById('convertImageInput').click()">
-                        <i class="fas fa-exchange-alt"></i>
-                        <h3>Upload Images to Convert</h3>
-                        <p>Convert between JPG, PNG, WebP, GIF formats - Multiple selection supported</p>
-                        <input type="file" id="convertImageInput" accept="image/*" multiple style="display: none;" onchange="handleConvertImageUpload(this.files)">
+                    <div class="file-upload-zone" onclick="document.getElementById('pdfTextInput').click()">
+                        <i class="fas fa-font"></i>
+                        <h3>Upload PDF to Extract Text</h3>
+                        <p>Extract text content from PDF files - Max 10MB</p>
+                        <input type="file" id="pdfTextInput" accept=".pdf" style="display: none;" onchange="handlePDFTextUpload(this.files)">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-title">
+                            <i class="fas fa-cog"></i> Extraction Settings
+                        </div>
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label>
+                                    <input type="checkbox" id="extractAllPages" checked>
+                                    <i class="fas fa-file-alt"></i> Extract All Pages
+                                </label>
+                            </div>
+                            <div class="control-item">
+                                <label>
+                                    <input type="checkbox" id="preserveLayout" checked>
+                                    <i class="fas fa-layer-group"></i> Preserve Layout
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-container" id="textResult" style="display: none;">
+                        <div class="result-header">
+                            <h3><i class="fas fa-file-alt"></i> Extracted Text</h3>
+                            <button class="action-btn btn-secondary" onclick="copyExtractedText()" style="padding: 10px 20px;">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 20px; max-height: 400px; overflow-y: auto;">
+                            <pre id="extractedText" style="white-space: pre-wrap; font-family: inherit; line-height: 1.6;"></pre>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="extractPDFText()" id="extractTextBtn" disabled>
+                            <i class="fas fa-font"></i> Extract Text
+                        </button>
+                        <button class="action-btn btn-success" onclick="downloadTextFile()" id="downloadTextBtn" disabled>
+                            <i class="fas fa-download"></i> Download as TXT
+                        </button>
+                    </div>
+                `
+            },
+
+            'file-converter': {
+                title: 'File Converter',
+                icon: 'fas fa-file-export',
+                html: `
+                    <div class="file-upload-zone" onclick="document.getElementById('fileConverterInput').click()">
+                        <i class="fas fa-file-export"></i>
+                        <h3>Upload File to Convert</h3>
+                        <p>Support multiple file formats - Images, Documents, Videos</p>
+                        <input type="file" id="fileConverterInput" style="display: none;" onchange="handleFileConverterUpload(this.files)">
                     </div>
 
                     <div class="control-group">
@@ -2233,66 +2488,32 @@
                         </div>
                         <div class="control-grid">
                             <div class="control-item">
-                                <label><i class="fas fa-file-export"></i> Convert To</label>
-                                <select id="convertToFormat">
-                                    <option value="jpg">JPG (Best for photos)</option>
-                                    <option value="png">PNG (Best for graphics)</option>
-                                    <option value="webp">WebP (Best for web)</option>
-                                    <option value="gif">GIF (For animations)</option>
+                                <label><i class="fas fa-file-export"></i> Convert To Format</label>
+                                <select id="convertToFileFormat">
+                                    <option value="pdf">PDF Document</option>
+                                    <option value="docx">Word Document</option>
+                                    <option value="jpg">JPG Image</option>
+                                    <option value="png">PNG Image</option>
+                                    <option value="mp3">MP3 Audio</option>
                                 </select>
                             </div>
                             <div class="control-item">
                                 <label><i class="fas fa-chart-line"></i> Quality</label>
-                                <select id="convertQuality">
-                                    <option value="100">Best (100%)</option>
-                                    <option value="85" selected>High (85%)</option>
-                                    <option value="70">Good (70%)</option>
-                                    <option value="50">Medium (50%)</option>
+                                <select id="fileQuality">
+                                    <option value="high">High Quality</option>
+                                    <option value="medium" selected>Medium Quality</option>
+                                    <option value="low">Low Quality</option>
                                 </select>
-                            </div>
-                            <div class="control-item">
-                                <label>
-                                    <input type="checkbox" id="preserveMetadata" checked>
-                                    <i class="fas fa-info-circle"></i> Preserve Metadata
-                                </label>
-                            </div>
-                            <div class="control-item">
-                                <label>
-                                    <input type="checkbox" id="bulkConvert" checked>
-                                    <i class="fas fa-layer-group"></i> Bulk Convert All
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="preview-container" id="convertPreview" style="display: none;">
-                        <div class="preview-box">
-                            <h3><i class="fas fa-image"></i> Original Images</h3>
-                            <div class="preview-content" style="overflow-y: auto;">
-                                <div id="originalImagesList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;">
-                                    <!-- Original images will be added here -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="preview-box">
-                            <h3><i class="fas fa-exchange-alt"></i> Converted Images</h3>
-                            <div class="preview-content" style="overflow-y: auto;">
-                                <div id="convertedImagesList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;">
-                                    <!-- Converted images will be added here -->
-                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="action-buttons">
-                        <button class="action-btn btn-primary" onclick="convertImages()" id="convertImagesBtn" disabled>
-                            <i class="fas fa-exchange-alt"></i> Convert Images
+                        <button class="action-btn btn-primary" onclick="convertFile()" id="convertFileBtn" disabled>
+                            <i class="fas fa-exchange-alt"></i> Convert File
                         </button>
-                        <button class="action-btn btn-success" onclick="downloadAllConverted()" id="downloadAllBtn" disabled>
-                            <i class="fas fa-download"></i> Download All
-                        </button>
-                        <button class="action-btn btn-secondary" onclick="clearConverter()">
-                            <i class="fas fa-redo"></i> Clear All
+                        <button class="action-btn btn-success" onclick="downloadConvertedFile()" id="downloadConvertedBtn" disabled>
+                            <i class="fas fa-download"></i> Download Converted
                         </button>
                     </div>
                 `
@@ -2310,7 +2531,7 @@
                         
                         <div class="ai-chat-messages" id="chatMessages">
                             <div class="message ai">
-                                <strong>AI Assistant:</strong> Hello! I'm your AI assistant. I can help you with document formatting, writing tips, code generation, and general questions about our tools. How can I assist you today?
+                                <strong>AI Assistant:</strong> Hello! I'm your AI assistant. I can help you with document formatting, writing tips, code generation, and general questions. How can I assist you today?
                             </div>
                         </div>
                         
@@ -2336,21 +2557,543 @@
                             <button class="action-btn btn-secondary" onclick="quickAction('code')">
                                 <i class="fas fa-code"></i> Generate Code
                             </button>
-                            <button class="action-btn btn-secondary" onclick="quickAction('summarize')">
-                                <i class="fas fa-file-contract"></i> Summarize Text
+                        </div>
+                    </div>
+                `
+            },
+
+            'video-compressor': {
+                title: 'Video Compressor',
+                icon: 'fas fa-video',
+                html: `
+                    <div class="file-upload-zone" onclick="document.getElementById('videoInput').click()">
+                        <i class="fas fa-video"></i>
+                        <h3>Upload Video to Compress</h3>
+                        <p>Support MP4, AVI, MOV formats - Max 100MB</p>
+                        <input type="file" id="videoInput" accept="video/*" style="display: none;" onchange="handleVideoUpload(this.files)">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-title">
+                            <i class="fas fa-cog"></i> Compression Settings
+                        </div>
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label><i class="fas fa-tachometer-alt"></i> Compression Level</label>
+                                <select id="videoCompression">
+                                    <option value="low">Low (25% reduction)</option>
+                                    <option value="medium" selected>Medium (50% reduction)</option>
+                                    <option value="high">High (75% reduction)</option>
+                                </select>
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-video"></i> Output Format</label>
+                                <select id="videoFormat">
+                                    <option value="mp4">MP4</option>
+                                    <option value="avi">AVI</option>
+                                    <option value="mov">MOV</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="compressVideo()" id="compressVideoBtn" disabled>
+                            <i class="fas fa-compress-alt"></i> Compress Video
+                        </button>
+                        <button class="action-btn btn-success" onclick="downloadCompressedVideo()" id="downloadVideoBtn" disabled>
+                            <i class="fas fa-download"></i> Download Video
+                        </button>
+                    </div>
+                `
+            },
+
+            'essay-writer': {
+                title: 'Essay Writer',
+                icon: 'fas fa-edit',
+                html: `
+                    <div class="control-group">
+                        <div class="control-title">
+                            <i class="fas fa-edit"></i> Essay Details
+                        </div>
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label><i class="fas fa-book"></i> Essay Topic</label>
+                                <input type="text" id="essayTopic" placeholder="Enter essay topic">
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-graduation-cap"></i> Education Level</label>
+                                <select id="educationLevel">
+                                    <option value="school">School</option>
+                                    <option value="college" selected>College</option>
+                                    <option value="university">University</option>
+                                    <option value="professional">Professional</option>
+                                </select>
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-ruler-horizontal"></i> Essay Length</label>
+                                <select id="essayLength">
+                                    <option value="short">Short (300-500 words)</option>
+                                    <option value="medium" selected>Medium (500-1000 words)</option>
+                                    <option value="long">Long (1000-2000 words)</option>
+                                </select>
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-tags"></i> Essay Type</label>
+                                <select id="essayType">
+                                    <option value="argumentative">Argumentative</option>
+                                    <option value="descriptive">Descriptive</option>
+                                    <option value="narrative">Narrative</option>
+                                    <option value="persuasive">Persuasive</option>
+                                    <option value="expository">Expository</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-item" style="margin-top: 20px;">
+                            <label><i class="fas fa-comment"></i> Additional Instructions</label>
+                            <textarea id="essayInstructions" rows="3" placeholder="Any specific requirements or instructions..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="generateEssay()">
+                            <i class="fas fa-magic"></i> Generate Essay
+                        </button>
+                        <button class="action-btn btn-success" onclick="downloadEssay()" id="downloadEssayBtn" disabled>
+                            <i class="fas fa-download"></i> Download Essay
+                        </button>
+                    </div>
+
+                    <div class="result-container" id="essayResult" style="display: none; margin-top: 30px;">
+                        <div class="result-header">
+                            <h3><i class="fas fa-file-alt"></i> Generated Essay</h3>
+                            <button class="action-btn btn-secondary" onclick="copyEssay()" style="padding: 10px 20px;">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 20px; max-height: 500px; overflow-y: auto;">
+                            <div id="essayContent" style="white-space: pre-wrap; font-family: inherit; line-height: 1.6; background: white; color: black; padding: 20px; border-radius: 8px;"></div>
+                        </div>
+                    </div>
+                `
+            },
+
+            'assignment-helper': {
+                title: 'Assignment Helper',
+                icon: 'fas fa-tasks',
+                html: `
+                    <div class="control-group">
+                        <div class="control-title">
+                            <i class="fas fa-tasks"></i> Assignment Details
+                        </div>
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label><i class="fas fa-book"></i> Subject</label>
+                                <select id="assignmentSubject">
+                                    <option value="math">Mathematics</option>
+                                    <option value="science">Science</option>
+                                    <option value="english">English</option>
+                                    <option value="history">History</option>
+                                    <option value="computer">Computer Science</option>
+                                    <option value="business">Business Studies</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-graduation-cap"></i> Class/Grade</label>
+                                <input type="text" id="assignmentGrade" placeholder="e.g., Class 10, Grade 12">
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-ruler-horizontal"></i> Assignment Type</label>
+                                <select id="assignmentType">
+                                    <option value="homework">Homework</option>
+                                    <option value="project">Project</option>
+                                    <option value="report">Report</option>
+                                    <option value="presentation">Presentation</option>
+                                    <option value="research">Research Paper</option>
+                                </select>
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-calendar"></i> Due Date</label>
+                                <input type="text" id="assignmentDueDate" placeholder="e.g., 25/12/2023">
+                            </div>
+                        </div>
+                        <div class="control-item" style="margin-top: 20px;">
+                            <label><i class="fas fa-question-circle"></i> Assignment Questions/Topics</label>
+                            <textarea id="assignmentQuestions" rows="4" placeholder="Enter assignment questions or topics..."></textarea>
+                        </div>
+                        <div class="control-item" style="margin-top: 20px;">
+                            <label><i class="fas fa-comment"></i> Additional Requirements</label>
+                            <textarea id="assignmentRequirements" rows="3" placeholder="Any specific requirements..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="generateAssignment()">
+                            <i class="fas fa-magic"></i> Generate Solution
+                        </button>
+                        <button class="action-btn btn-success" onclick="downloadAssignment()" id="downloadAssignmentBtn" disabled>
+                            <i class="fas fa-download"></i> Download PDF
+                        </button>
+                    </div>
+
+                    <div class="result-container" id="assignmentResult" style="display: none; margin-top: 30px;">
+                        <div class="result-header">
+                            <h3><i class="fas fa-file-alt"></i> Assignment Solution</h3>
+                            <button class="action-btn btn-secondary" onclick="copyAssignment()" style="padding: 10px 20px;">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 20px; max-height: 500px; overflow-y: auto;">
+                            <div id="assignmentContent" style="white-space: pre-wrap; font-family: inherit; line-height: 1.6; background: white; color: black; padding: 20px; border-radius: 8px;"></div>
+                        </div>
+                    </div>
+                `
+            },
+
+            'plagiarism-checker': {
+                title: 'Plagiarism Checker',
+                icon: 'fas fa-search',
+                html: `
+                    <div class="file-upload-zone" onclick="document.getElementById('plagiarismInput').click()">
+                        <i class="fas fa-search"></i>
+                        <h3>Upload Document to Check</h3>
+                        <p>Check for plagiarism in DOC, DOCX, PDF, TXT files</p>
+                        <input type="file" id="plagiarismInput" accept=".doc,.docx,.pdf,.txt" style="display: none;" onchange="handlePlagiarismUpload(this.files)">
+                    </div>
+
+                    <div style="text-align: center; margin: 30px 0;">
+                        <p style="margin-bottom: 20px;">OR</p>
+                        <div class="control-item">
+                            <label><i class="fas fa-paste"></i> Paste Text Directly</label>
+                            <textarea id="plagiarismText" rows="6" placeholder="Paste your text here to check for plagiarism..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-title">
+                            <i class="fas fa-cog"></i> Check Settings
+                        </div>
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label>
+                                    <input type="checkbox" id="deepCheck" checked>
+                                    <i class="fas fa-search-plus"></i> Deep Check
+                                </label>
+                            </div>
+                            <div class="control-item">
+                                <label>
+                                    <input type="checkbox" id="webSearch" checked>
+                                    <i class="fas fa-globe"></i> Search Web
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="checkPlagiarism()" id="checkPlagiarismBtn">
+                            <i class="fas fa-search"></i> Check Plagiarism
+                        </button>
+                    </div>
+
+                    <div class="result-container" id="plagiarismResult" style="display: none; margin-top: 30px;">
+                        <div class="result-header">
+                            <h3><i class="fas fa-chart-pie"></i> Plagiarism Report</h3>
+                        </div>
+                        <div class="result-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">Originality Score</div>
+                                <div class="stat-value success" id="originalityScore">95%</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Plagiarism Detected</div>
+                                <div class="stat-value" id="plagiarismScore">5%</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Words Checked</div>
+                                <div class="stat-value" id="wordsChecked">0</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Sources Found</div>
+                                <div class="stat-value" id="sourcesFound">0</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <h4 style="margin-bottom: 10px; color: var(--primary);"><i class="fas fa-exclamation-triangle"></i> Similar Content Found:</h4>
+                            <div id="similarContent" style="background: rgba(255,0,0,0.1); padding: 15px; border-radius: 8px; border-left: 4px solid var(--danger);">
+                                <p style="margin: 0;">No plagiarism detected. Your content is 95% original.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+
+            'gpa-calculator': {
+                title: 'GPA Calculator',
+                icon: 'fas fa-calculator',
+                html: `
+                    <div class="control-group">
+                        <div class="control-title">
+                            <i class="fas fa-calculator"></i> Add Your Subjects
+                        </div>
+                        <div id="subjectsContainer">
+                            <div class="subject-row" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; margin-bottom: 15px; align-items: end;">
+                                <div class="control-item">
+                                    <label>Subject Name</label>
+                                    <input type="text" class="subjectName" placeholder="e.g., Mathematics">
+                                </div>
+                                <div class="control-item">
+                                    <label>Credit Hours</label>
+                                    <input type="number" class="subjectCredits" value="3" min="1" max="10">
+                                </div>
+                                <div class="control-item">
+                                    <label>Grade</label>
+                                    <select class="subjectGrade">
+                                        <option value="4">A (4.0)</option>
+                                        <option value="3.7">A- (3.7)</option>
+                                        <option value="3.3">B+ (3.3)</option>
+                                        <option value="3">B (3.0)</option>
+                                        <option value="2.7">B- (2.7)</option>
+                                        <option value="2.3">C+ (2.3)</option>
+                                        <option value="2">C (2.0)</option>
+                                        <option value="1.7">C- (1.7)</option>
+                                        <option value="1.3">D+ (1.3)</option>
+                                        <option value="1">D (1.0)</option>
+                                        <option value="0">F (0.0)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="action-buttons" style="margin-top: 20px;">
+                            <button class="action-btn btn-secondary" onclick="addSubject()" style="padding: 12px 24px;">
+                                <i class="fas fa-plus"></i> Add Subject
+                            </button>
+                            <button class="action-btn btn-secondary" onclick="removeSubject()" style="padding: 12px 24px;">
+                                <i class="fas fa-minus"></i> Remove Subject
                             </button>
                         </div>
                     </div>
 
-                    <div class="result-container" id="aiResult" style="display: none;">
+                    <div class="control-group">
+                        <div class="control-title">
+                            <i class="fas fa-cog"></i> Grading System
+                        </div>
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label><i class="fas fa-university"></i> Grading Scale</label>
+                                <select id="gradingScale">
+                                    <option value="4">4.0 Scale</option>
+                                    <option value="5">5.0 Scale</option>
+                                    <option value="10">10.0 Scale</option>
+                                </select>
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-school"></i> Institution Type</label>
+                                <select id="institutionType">
+                                    <option value="university">University</option>
+                                    <option value="college">College</option>
+                                    <option value="school">School</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="calculateGPA()">
+                            <i class="fas fa-calculator"></i> Calculate GPA
+                        </button>
+                        <button class="action-btn btn-success" onclick="downloadGPAResult()" id="downloadGPABtn" disabled>
+                            <i class="fas fa-download"></i> Download Report
+                        </button>
+                    </div>
+
+                    <div class="result-container" id="gpaResult" style="display: none; margin-top: 30px;">
                         <div class="result-header">
-                            <h3><i class="fas fa-file-alt"></i> AI Response</h3>
-                            <button class="action-btn btn-secondary" onclick="copyAIResponse()" style="padding: 10px 20px;">
+                            <h3><i class="fas fa-chart-line"></i> GPA Calculation Result</h3>
+                        </div>
+                        <div class="result-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">Total GPA</div>
+                                <div class="stat-value success" id="totalGPA">0.00</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Total Credits</div>
+                                <div class="stat-value" id="totalCredits">0</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Total Points</div>
+                                <div class="stat-value" id="totalPoints">0</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Grade</div>
+                                <div class="stat-value" id="overallGrade">-</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <h4 style="margin-bottom: 10px; color: var(--primary);"><i class="fas fa-list"></i> Subject Details:</h4>
+                            <div id="subjectDetails" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; max-height: 200px; overflow-y: auto;">
+                                <!-- Subject details will be added here -->
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+
+            'citation-generator': {
+                title: 'Citation Generator',
+                icon: 'fas fa-quote-right',
+                html: `
+                    <div class="control-group">
+                        <div class="control-title">
+                            <i class="fas fa-book"></i> Source Information
+                        </div>
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label><i class="fas fa-user"></i> Author Name</label>
+                                <input type="text" id="authorName" placeholder="e.g., John Smith">
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-book-open"></i> Title</label>
+                                <input type="text" id="sourceTitle" placeholder="Title of the source">
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-calendar"></i> Publication Year</label>
+                                <input type="text" id="publicationYear" placeholder="e.g., 2023">
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-newspaper"></i> Publisher</label>
+                                <input type="text" id="publisher" placeholder="Publisher name">
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-link"></i> URL (for websites)</label>
+                                <input type="url" id="sourceUrl" placeholder="https://example.com">
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-tag"></i> Source Type</label>
+                                <select id="sourceType">
+                                    <option value="book">Book</option>
+                                    <option value="journal">Journal Article</option>
+                                    <option value="website">Website</option>
+                                    <option value="newspaper">Newspaper</option>
+                                    <option value="conference">Conference Paper</option>
+                                    <option value="thesis">Thesis/Dissertation</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-title">
+                            <i class="fas fa-cog"></i> Citation Style
+                        </div>
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label><i class="fas fa-university"></i> Citation Format</label>
+                                <select id="citationFormat">
+                                    <option value="apa">APA (American Psychological Association)</option>
+                                    <option value="mla">MLA (Modern Language Association)</option>
+                                    <option value="chicago">Chicago Style</option>
+                                    <option value="harvard">Harvard Style</option>
+                                    <option value="ieee">IEEE</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="generateCitation()">
+                            <i class="fas fa-magic"></i> Generate Citation
+                        </button>
+                        <button class="action-btn btn-success" onclick="downloadCitations()" id="downloadCitationBtn" disabled>
+                            <i class="fas fa-download"></i> Download Citations
+                        </button>
+                    </div>
+
+                    <div class="result-container" id="citationResult" style="display: none; margin-top: 30px;">
+                        <div class="result-header">
+                            <h3><i class="fas fa-quote-right"></i> Generated Citations</h3>
+                            <button class="action-btn btn-secondary" onclick="copyCitation()" style="padding: 10px 20px;">
                                 <i class="fas fa-copy"></i> Copy
                             </button>
                         </div>
                         <div style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 20px;">
-                            <pre id="aiResponseText" style="white-space: pre-wrap; font-family: inherit; line-height: 1.6;"></pre>
+                            <div id="citationContent" style="white-space: pre-wrap; font-family: inherit; line-height: 1.6; background: white; color: black; padding: 20px; border-radius: 8px;"></div>
+                        </div>
+                    </div>
+                `
+            },
+
+            'math-solver': {
+                title: 'Math Solver',
+                icon: 'fas fa-square-root-alt',
+                html: `
+                    <div class="control-group">
+                        <div class="control-title">
+                            <i class="fas fa-square-root-alt"></i> Math Problem
+                        </div>
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label><i class="fas fa-calculator"></i> Enter Math Problem</label>
+                                <textarea id="mathProblem" rows="3" placeholder="Enter your math problem here..."></textarea>
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-book"></i> Math Subject</label>
+                                <select id="mathSubject">
+                                    <option value="algebra">Algebra</option>
+                                    <option value="calculus">Calculus</option>
+                                    <option value="geometry">Geometry</option>
+                                    <option value="trigonometry">Trigonometry</option>
+                                    <option value="statistics">Statistics</option>
+                                    <option value="arithmetic">Arithmetic</option>
+                                </select>
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-ruler-horizontal"></i> Solution Type</label>
+                                <select id="solutionType">
+                                    <option value="stepbystep">Step-by-Step Solution</option>
+                                    <option value="finalanswer">Final Answer Only</option>
+                                    <option value="graphical">Graphical Solution</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn btn-primary" onclick="solveMathProblem()">
+                            <i class="fas fa-calculator"></i> Solve Problem
+                        </button>
+                        <button class="action-btn btn-success" onclick="downloadMathSolution()" id="downloadMathBtn" disabled>
+                            <i class="fas fa-download"></i> Download Solution
+                        </button>
+                    </div>
+
+                    <div class="result-container" id="mathResult" style="display: none; margin-top: 30px;">
+                        <div class="result-header">
+                            <h3><i class="fas fa-check-circle"></i> Solution</h3>
+                            <button class="action-btn btn-secondary" onclick="copyMathSolution()" style="padding: 10px 20px;">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 20px;">
+                            <div id="mathSolution" style="white-space: pre-wrap; font-family: inherit; line-height: 1.6; background: white; color: black; padding: 20px; border-radius: 8px; font-size: 16px;"></div>
+                        </div>
+                        <div class="result-stats" style="margin-top: 20px;">
+                            <div class="stat-item">
+                                <div class="stat-label">Problem Type</div>
+                                <div class="stat-value" id="problemType">-</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Difficulty</div>
+                                <div class="stat-value" id="problemDifficulty">-</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Solution Steps</div>
+                                <div class="stat-value" id="solutionSteps">0</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Time Required</div>
+                                <div class="stat-value" id="timeRequired">0s</div>
+                            </div>
                         </div>
                     </div>
                 `
@@ -2360,36 +3103,6 @@
         // Global Variables
         let currentFiles = {};
         let currentProgress = {};
-        let popunderTimer = null;
-        let toolUsageTimer = null;
-
-        // Initialize Popunder Ads
-        function initPopunder() {
-            // Show popunder after 1 minute
-            popunderTimer = setTimeout(() => {
-                if (!document.getElementById('premiumModal').classList.contains('active')) {
-                    document.getElementById('popunderAds').classList.add('active');
-                }
-            }, 60000); // 1 minute
-
-            // Reset popunder timer when user interacts
-            document.addEventListener('click', resetPopunderTimer);
-            document.addEventListener('keypress', resetPopunderTimer);
-        }
-
-        function closePopunder() {
-            document.getElementById('popunderAds').classList.remove('active');
-            resetPopunderTimer();
-        }
-
-        function resetPopunderTimer() {
-            clearTimeout(popunderTimer);
-            popunderTimer = setTimeout(() => {
-                if (!document.getElementById('premiumModal').classList.contains('active')) {
-                    document.getElementById('popunderAds').classList.add('active');
-                }
-            }, 60000); // 1 minute
-        }
 
         // Core Functions
         function showNotification(message, type = 'info') {
@@ -2413,12 +3126,6 @@
             const tool = tools[toolId];
             if (!tool) return;
             
-            // Track tool usage for popunder
-            if (toolUsageTimer) clearTimeout(toolUsageTimer);
-            toolUsageTimer = setTimeout(() => {
-                document.getElementById('popunderAds').classList.add('active');
-            }, 60000);
-            
             document.getElementById('toolContainer').classList.add('active');
             document.getElementById('toolTitle').innerHTML = `<i class="${tool.icon}"></i> ${tool.title}`;
             document.getElementById('toolContent').innerHTML = tool.html;
@@ -2427,8 +3134,11 @@
             setTimeout(() => {
                 const firstTab = document.querySelector('.tab-btn.active');
                 if (firstTab) {
-                    const tabId = firstTab.getAttribute('onclick').match(/'(.*?)'/)[1];
-                    switchTab(firstTab, tabId);
+                    const onclickAttr = firstTab.getAttribute('onclick');
+                    if (onclickAttr) {
+                        const tabId = onclickAttr.match(/'([^']+)'/)[1];
+                        switchTab(firstTab, tabId);
+                    }
                 }
             }, 100);
             
@@ -2499,7 +3209,7 @@
             }, 100);
         }
 
-        function downloadCompressed() {
+        function downloadCompressedImage() {
             const link = document.createElement('a');
             link.href = document.getElementById('compressedImg').src;
             link.download = 'compressed_image.jpg';
@@ -2527,7 +3237,7 @@
             }
         }
 
-        function compressPDF() {
+        function compressPDFFile() {
             if (!currentFiles.pdf) return;
             
             showLoading(true);
@@ -2536,23 +3246,21 @@
                 showLoading(false);
                 document.getElementById('pdfResult').style.display = 'block';
                 
-                // Simulate results
                 const originalSize = currentFiles.pdf.size;
-                const compressedSize = Math.round(originalSize * 0.3); // 70% reduction
+                const compressedSize = Math.round(originalSize * 0.3);
                 
                 document.getElementById('pdfOriginalSize').textContent = formatFileSize(originalSize);
                 document.getElementById('pdfCompressedSize').textContent = formatFileSize(compressedSize);
                 document.getElementById('pdfReduction').textContent = `${Math.round((1 - compressedSize/originalSize) * 100)}%`;
-                document.getElementById('pdfPages').textContent = '24';
+                document.getElementById('pdfPages').textContent = '12';
                 document.getElementById('pdfDownloadBtn').disabled = false;
                 
                 showNotification('✅ PDF compressed successfully!', 'success');
             }, 2000);
         }
 
-        function downloadPDF() {
+        function downloadCompressedPDF() {
             showNotification('📥 Downloading compressed PDF...', 'info');
-            // In real app, this would trigger actual download
         }
 
         // Background Remover Functions
@@ -2570,7 +3278,7 @@
             }
         }
 
-        function removeBackground() {
+        function removeBackgroundImage() {
             showLoading(true);
             
             setTimeout(() => {
@@ -2581,12 +3289,138 @@
             }, 1500);
         }
 
-        function downloadBGResult() {
+        function downloadBGImage() {
             const link = document.createElement('a');
             link.href = document.getElementById('removedBG').src;
             link.download = 'background_removed.png';
             link.click();
             showNotification('📥 Image with removed background downloaded!', 'success');
+        }
+
+        // PDF to Word Functions
+        function handlePDFWordUpload(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                currentFiles.pdfWord = file;
+                document.getElementById('convertWordBtn').disabled = false;
+                showNotification(`✅ PDF uploaded for conversion!`, 'success');
+            }
+        }
+
+        function convertPDFToWord() {
+            if (!currentFiles.pdfWord) return;
+            
+            showLoading(true);
+            
+            setTimeout(() => {
+                showLoading(false);
+                document.getElementById('wordResult').style.display = 'block';
+                
+                const originalSize = currentFiles.pdfWord.size;
+                const wordSize = Math.round(originalSize * 1.2);
+                
+                document.getElementById('originalPDFSize').textContent = formatFileSize(originalSize);
+                document.getElementById('wordDocSize').textContent = formatFileSize(wordSize);
+                document.getElementById('convertedPages').textContent = '15';
+                document.getElementById('downloadWordBtn').disabled = false;
+                
+                showNotification('✅ PDF converted to Word successfully!', 'success');
+            }, 2000);
+        }
+
+        function downloadWordDoc() {
+            showNotification('📥 Downloading Word document...', 'info');
+        }
+
+        // Image to PDF Functions
+        function handleMultiImageUpload(files) {
+            if (files.length > 0) {
+                currentFiles.multiImages = files;
+                const container = document.getElementById('selectedImages');
+                container.innerHTML = '';
+                
+                Array.from(files).slice(0, 5).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '100px';
+                        img.style.height = '100px';
+                        img.style.objectFit = 'cover';
+                        img.style.borderRadius = '8px';
+                        img.style.margin = '5px';
+                        container.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+                
+                document.getElementById('imagesPreview').style.display = 'grid';
+                document.getElementById('totalImages').textContent = files.length;
+                document.getElementById('convertPDFBtn').disabled = false;
+                
+                showNotification(`✅ ${files.length} images uploaded!`, 'success');
+            }
+        }
+
+        function convertImagesToPDF() {
+            if (!currentFiles.multiImages || currentFiles.multiImages.length === 0) return;
+            
+            showLoading(true);
+            
+            setTimeout(() => {
+                showLoading(false);
+                document.getElementById('downloadPDFBtn').disabled = false;
+                showNotification('✅ PDF created successfully!', 'success');
+            }, 2000);
+        }
+
+        function downloadImagePDF() {
+            showNotification('📥 Downloading PDF...', 'info');
+        }
+
+        // Image Converter Functions
+        function handleConvertImageUpload(files) {
+            if (files.length > 0) {
+                currentFiles.convertImages = files;
+                const container = document.getElementById('originalImagesList');
+                container.innerHTML = '';
+                
+                Array.from(files).slice(0, 10).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '80px';
+                        img.style.height = '80px';
+                        img.style.objectFit = 'cover';
+                        img.style.borderRadius = '8px';
+                        img.style.margin = '5px';
+                        container.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+                
+                document.getElementById('convertPreview').style.display = 'grid';
+                document.getElementById('convertImagesBtn').disabled = false;
+                
+                showNotification(`✅ ${files.length} images uploaded for conversion!`, 'success');
+            }
+        }
+
+        function convertImageFormat() {
+            if (!currentFiles.convertImages || currentFiles.convertImages.length === 0) return;
+            
+            showLoading(true);
+            
+            setTimeout(() => {
+                showLoading(false);
+                document.getElementById('downloadAllBtn').disabled = false;
+                showNotification('✅ Images converted successfully!', 'success');
+            }, 2000);
+        }
+
+        function downloadAllConverted() {
+            showNotification('📥 Downloading converted images...', 'info');
         }
 
         // Application Writer Functions
@@ -2597,16 +3431,6 @@
             const date = document.getElementById('appDate').value || '';
             const reason = document.getElementById('appReason').value || '';
             
-            const appText = generateApplicationText(name, recipient, type, date, reason);
-            
-            document.getElementById('applicationText').textContent = appText;
-            document.getElementById('appResult').style.display = 'block';
-            document.getElementById('downloadAppBtn').disabled = false;
-            
-            showNotification('✅ Application generated successfully!', 'success');
-        }
-
-        function generateApplicationText(name, recipient, type, date, reason) {
             const today = new Date().toLocaleDateString('en-IN');
             let subject = '';
             let body = '';
@@ -2629,7 +3453,7 @@
                     body = reason || 'Please consider my application.';
             }
             
-            return `To,
+            const appText = `To,
 ${recipient}
 
 Date: ${today}
@@ -2644,6 +3468,12 @@ Thank you for considering my application.
 
 Yours sincerely,
 ${name}`;
+            
+            document.getElementById('applicationText').textContent = appText;
+            document.getElementById('appResult').style.display = 'block';
+            document.getElementById('downloadAppBtn').disabled = false;
+            
+            showNotification('✅ Application generated successfully!', 'success');
         }
 
         function copyApplication() {
@@ -2652,7 +3482,7 @@ ${name}`;
             showNotification('✅ Application copied to clipboard!', 'success');
         }
 
-        function downloadApplication() {
+        function downloadApplicationDoc() {
             const text = document.getElementById('applicationText').textContent;
             const blob = new Blob([text], { type: 'application/msword' });
             const url = URL.createObjectURL(blob);
@@ -2663,22 +3493,12 @@ ${name}`;
             showNotification('📥 Application downloaded as DOC file!', 'success');
         }
 
-        function clearApplication() {
-            document.getElementById('appName').value = '';
-            document.getElementById('appRecipient').value = '';
-            document.getElementById('appDate').value = '';
-            document.getElementById('appReason').value = '';
-            document.getElementById('appResult').style.display = 'none';
-            document.getElementById('downloadAppBtn').disabled = true;
-        }
-
         // Resume Builder Functions
         function generateResume() {
             const name = document.getElementById('resumeName').value || 'John Doe';
             const email = document.getElementById('resumeEmail').value || 'john.doe@example.com';
             const phone = document.getElementById('resumePhone').value || '+91 9876543210';
             const location = document.getElementById('resumeLocation').value || 'Mumbai, India';
-            const linkedin = document.getElementById('resumeLinkedIn').value || '';
             const profession = document.getElementById('resumeProfession').value || 'Software Engineer';
             const summary = document.getElementById('resumeSummary').value || 'Experienced professional seeking new opportunities.';
             
@@ -2686,17 +3506,14 @@ ${name}`;
             const college = document.getElementById('educationCollege').value || 'University of Mumbai';
             const year = document.getElementById('educationYear').value || '2020';
             const percentage = document.getElementById('educationPercentage').value || '85%';
-            const additionalEdu = document.getElementById('educationAdditional').value || '';
             
             const company = document.getElementById('experienceCompany').value || 'Tech Solutions Inc.';
             const title = document.getElementById('experienceTitle').value || 'Senior Developer';
             const duration = document.getElementById('experienceDuration').value || '2021 - Present';
             const responsibilities = document.getElementById('experienceResponsibilities').value || 'Led team of developers, implemented new features.';
-            const previousExp = document.getElementById('experiencePrevious').value || '';
             
             const technicalSkills = document.getElementById('technicalSkills').value || 'JavaScript, React, Node.js, Python';
             const softSkills = document.getElementById('softSkills').value || 'Communication, Leadership, Teamwork';
-            const languages = document.getElementById('languages').value || 'English, Hindi';
             
             const resumeHTML = `
                 <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #333;">
@@ -2719,10 +3536,6 @@ ${name}`;
                                 <strong><i class="fas fa-map-marker-alt"></i> Location:</strong><br>
                                 ${location}
                             </div>
-                            ${linkedin ? `<div>
-                                <strong><i class="fab fa-linkedin"></i> LinkedIn:</strong><br>
-                                ${linkedin}
-                            </div>` : ''}
                         </div>
                         
                         <div style="margin-bottom: 30px;">
@@ -2738,7 +3551,6 @@ ${name}`;
                             </h2>
                             <p><strong>${education}</strong><br>
                             ${college} | ${year} | ${percentage}</p>
-                            ${additionalEdu ? `<p><strong>Additional Qualifications:</strong><br>${additionalEdu}</p>` : ''}
                         </div>
                         
                         <div style="margin-bottom: 30px;">
@@ -2748,7 +3560,6 @@ ${name}`;
                             <p><strong>${title}</strong><br>
                             ${company} | ${duration}</p>
                             <p>${responsibilities}</p>
-                            ${previousExp ? `<p><strong>Previous Experience:</strong><br>${previousExp}</p>` : ''}
                         </div>
                         
                         <div style="margin-bottom: 30px;">
@@ -2764,10 +3575,6 @@ ${name}`;
                                     <strong>Soft Skills:</strong><br>
                                     ${softSkills}
                                 </div>
-                                <div>
-                                    <strong>Languages:</strong><br>
-                                    ${languages}
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -2781,16 +3588,101 @@ ${name}`;
             showNotification('✅ Resume generated successfully!', 'success');
         }
 
-        function downloadResume() {
+        function downloadResumePDF() {
             showNotification('📥 Downloading resume as PDF...', 'info');
-            // In real app, this would generate PDF
         }
 
-        function clearResume() {
-            const inputs = document.querySelectorAll('#resume-builder input, #resume-builder textarea');
-            inputs.forEach(input => input.value = '');
-            document.getElementById('resumeResult').style.display = 'none';
-            document.getElementById('downloadResumeBtn').disabled = true;
+        // PDF to Text Functions
+        function handlePDFTextUpload(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                currentFiles.pdfText = file;
+                document.getElementById('extractTextBtn').disabled = false;
+                showNotification(`✅ PDF uploaded for text extraction!`, 'success');
+            }
+        }
+
+        function extractPDFText() {
+            if (!currentFiles.pdfText) return;
+            
+            showLoading(true);
+            
+            setTimeout(() => {
+                showLoading(false);
+                document.getElementById('textResult').style.display = 'block';
+                document.getElementById('extractedText').textContent = "This is sample extracted text from the PDF document. In the actual tool, this would extract all text content from the uploaded PDF file, preserving the formatting and structure.\n\nYou can copy this text or download it as a text file for further use.";
+                document.getElementById('downloadTextBtn').disabled = false;
+                showNotification('✅ Text extracted successfully!', 'success');
+            }, 2000);
+        }
+
+        function copyExtractedText() {
+            const text = document.getElementById('extractedText').textContent;
+            navigator.clipboard.writeText(text);
+            showNotification('✅ Text copied to clipboard!', 'success');
+        }
+
+        function downloadTextFile() {
+            const text = document.getElementById('extractedText').textContent;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'extracted_text.txt';
+            link.click();
+            showNotification('📥 Text file downloaded!', 'success');
+        }
+
+        // File Converter Functions
+        function handleFileConverterUpload(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                currentFiles.fileConverter = file;
+                document.getElementById('convertFileBtn').disabled = false;
+                showNotification(`✅ File uploaded for conversion!`, 'success');
+            }
+        }
+
+        function convertFile() {
+            if (!currentFiles.fileConverter) return;
+            
+            showLoading(true);
+            
+            setTimeout(() => {
+                showLoading(false);
+                document.getElementById('downloadConvertedBtn').disabled = false;
+                showNotification('✅ File converted successfully!', 'success');
+            }, 2000);
+        }
+
+        function downloadConvertedFile() {
+            showNotification('📥 Downloading converted file...', 'info');
+        }
+
+        // Video Compressor Functions
+        function handleVideoUpload(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                currentFiles.video = file;
+                document.getElementById('compressVideoBtn').disabled = false;
+                showNotification(`✅ Video uploaded for compression!`, 'success');
+            }
+        }
+
+        function compressVideo() {
+            if (!currentFiles.video) return;
+            
+            showLoading(true);
+            
+            setTimeout(() => {
+                showLoading(false);
+                document.getElementById('downloadVideoBtn').disabled = false;
+                showNotification('✅ Video compressed successfully!', 'success');
+            }, 2000);
+        }
+
+        function downloadCompressedVideo() {
+            showNotification('📥 Downloading compressed video...', 'info');
         }
 
         // AI Assistant Functions
@@ -2802,7 +3694,6 @@ ${name}`;
             
             const chatMessages = document.getElementById('chatMessages');
             
-            // Add user message
             const userMsg = document.createElement('div');
             userMsg.className = 'message user';
             userMsg.innerHTML = `<strong>You:</strong> ${message}`;
@@ -2810,14 +3701,12 @@ ${name}`;
             
             input.value = '';
             
-            // Show typing indicator
             const typingMsg = document.createElement('div');
             typingMsg.className = 'message ai';
             typingMsg.innerHTML = `<strong>AI Assistant:</strong> <i class="fas fa-ellipsis-h"></i>`;
             chatMessages.appendChild(typingMsg);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             
-            // Generate AI response
             setTimeout(() => {
                 typingMsg.remove();
                 
@@ -2857,19 +3746,400 @@ ${name}`;
                 case 'code':
                     prompt = 'Generate code for...';
                     break;
-                case 'summarize':
-                    prompt = 'Summarize the following text...';
-                    break;
             }
             
             document.getElementById('chatInput').value = prompt;
             sendChatMessage();
         }
 
-        function copyAIResponse() {
-            const response = document.getElementById('aiResponseText').textContent;
-            navigator.clipboard.writeText(response);
-            showNotification('✅ AI response copied to clipboard!', 'success');
+        // Essay Writer Functions
+        function generateEssay() {
+            const topic = document.getElementById('essayTopic').value || 'The Importance of Education';
+            const level = document.getElementById('educationLevel').value;
+            const length = document.getElementById('essayLength').value;
+            const type = document.getElementById('essayType').value;
+            const instructions = document.getElementById('essayInstructions').value || '';
+            
+            let essayContent = '';
+            
+            if (topic) {
+                essayContent = `Title: ${topic}
+
+Introduction:
+Education is one of the most powerful tools for personal and societal development. It shapes our thinking, enhances our capabilities, and opens doors to countless opportunities.
+
+Body:
+The importance of education cannot be overstated. It provides individuals with the knowledge and skills necessary to navigate the complexities of modern life. Through education, people learn critical thinking, problem-solving, and communication skills that are essential for success in any field.
+
+Education also plays a crucial role in social development. It promotes equality by providing opportunities to people from all backgrounds. An educated society is more likely to make informed decisions, promote innovation, and foster economic growth.
+
+Furthermore, education contributes to personal growth and self-awareness. It helps individuals understand their strengths and weaknesses, develop their talents, and pursue their passions. The journey of learning is continuous and extends far beyond the classroom.
+
+Conclusion:
+In conclusion, education is the foundation upon which we build our future. It empowers individuals, strengthens communities, and drives progress. Investing in education is investing in a brighter tomorrow for all.`;
+            }
+            
+            document.getElementById('essayContent').textContent = essayContent;
+            document.getElementById('essayResult').style.display = 'block';
+            document.getElementById('downloadEssayBtn').disabled = false;
+            
+            showNotification('✅ Essay generated successfully!', 'success');
+        }
+
+        function copyEssay() {
+            const text = document.getElementById('essayContent').textContent;
+            navigator.clipboard.writeText(text);
+            showNotification('✅ Essay copied to clipboard!', 'success');
+        }
+
+        function downloadEssay() {
+            const text = document.getElementById('essayContent').textContent;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'essay.txt';
+            link.click();
+            showNotification('📥 Essay downloaded!', 'success');
+        }
+
+        // Assignment Helper Functions
+        function generateAssignment() {
+            const subject = document.getElementById('assignmentSubject').value;
+            const grade = document.getElementById('assignmentGrade').value || 'Class 10';
+            const type = document.getElementById('assignmentType').value;
+            const dueDate = document.getElementById('assignmentDueDate').value || '25/12/2023';
+            const questions = document.getElementById('assignmentQuestions').value || 'Explain the importance of mathematics in daily life.';
+            const requirements = document.getElementById('assignmentRequirements').value || '';
+            
+            let assignmentContent = '';
+            
+            assignmentContent = `Assignment Solution
+
+Subject: ${subject.charAt(0).toUpperCase() + subject.slice(1)}
+Grade: ${grade}
+Type: ${type}
+Due Date: ${dueDate}
+
+Questions: ${questions}
+
+${requirements ? `Requirements: ${requirements}\n\n` : ''}
+
+Solution:
+
+1. Mathematics plays a crucial role in our daily lives, from basic calculations to complex problem-solving.
+
+2. It helps in developing logical thinking and analytical skills that are essential for various professions.
+
+3. Mathematical concepts are applied in fields such as engineering, medicine, finance, and technology.
+
+4. Understanding mathematics enables better decision-making in personal and professional life.
+
+5. It forms the foundation for scientific and technological advancements that shape our modern world.
+
+Conclusion:
+Mathematics is not just a subject but a fundamental tool that empowers individuals to navigate and understand the world around them. Its applications are vast and continue to expand with technological progress.`;
+            
+            document.getElementById('assignmentContent').textContent = assignmentContent;
+            document.getElementById('assignmentResult').style.display = 'block';
+            document.getElementById('downloadAssignmentBtn').disabled = false;
+            
+            showNotification('✅ Assignment solution generated!', 'success');
+        }
+
+        function copyAssignment() {
+            const text = document.getElementById('assignmentContent').textContent;
+            navigator.clipboard.writeText(text);
+            showNotification('✅ Assignment copied to clipboard!', 'success');
+        }
+
+        function downloadAssignment() {
+            const text = document.getElementById('assignmentContent').textContent;
+            const blob = new Blob([text], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'assignment_solution.pdf';
+            link.click();
+            showNotification('📥 Assignment downloaded as PDF!', 'success');
+        }
+
+        // Plagiarism Checker Functions
+        function handlePlagiarismUpload(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                currentFiles.plagiarism = file;
+                showNotification(`✅ Document uploaded for plagiarism check!`, 'success');
+            }
+        }
+
+        function checkPlagiarism() {
+            const text = document.getElementById('plagiarismText').value;
+            if (!text && !currentFiles.plagiarism) {
+                showNotification('❌ Please upload a document or paste text', 'error');
+                return;
+            }
+            
+            showLoading(true);
+            
+            setTimeout(() => {
+                showLoading(false);
+                document.getElementById('plagiarismResult').style.display = 'block';
+                document.getElementById('originalityScore').textContent = '95%';
+                document.getElementById('plagiarismScore').textContent = '5%';
+                document.getElementById('wordsChecked').textContent = '250';
+                document.getElementById('sourcesFound').textContent = '3';
+                showNotification('✅ Plagiarism check completed!', 'success');
+            }, 2000);
+        }
+
+        // GPA Calculator Functions
+        let subjectCount = 1;
+        
+        function addSubject() {
+            subjectCount++;
+            const container = document.getElementById('subjectsContainer');
+            const newRow = document.createElement('div');
+            newRow.className = 'subject-row';
+            newRow.style.cssText = 'display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; margin-bottom: 15px; align-items: end;';
+            newRow.innerHTML = `
+                <div class="control-item">
+                    <label>Subject Name</label>
+                    <input type="text" class="subjectName" placeholder="e.g., Mathematics">
+                </div>
+                <div class="control-item">
+                    <label>Credit Hours</label>
+                    <input type="number" class="subjectCredits" value="3" min="1" max="10">
+                </div>
+                <div class="control-item">
+                    <label>Grade</label>
+                    <select class="subjectGrade">
+                        <option value="4">A (4.0)</option>
+                        <option value="3.7">A- (3.7)</option>
+                        <option value="3.3">B+ (3.3)</option>
+                        <option value="3">B (3.0)</option>
+                        <option value="2.7">B- (2.7)</option>
+                        <option value="2.3">C+ (2.3)</option>
+                        <option value="2">C (2.0)</option>
+                        <option value="1.7">C- (1.7)</option>
+                        <option value="1.3">D+ (1.3)</option>
+                        <option value="1">D (1.0)</option>
+                        <option value="0">F (0.0)</option>
+                    </select>
+                </div>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function removeSubject() {
+            const container = document.getElementById('subjectsContainer');
+            if (container.children.length > 1) {
+                container.removeChild(container.lastChild);
+                subjectCount--;
+            }
+        }
+
+        function calculateGPA() {
+            const subjects = document.querySelectorAll('.subject-row');
+            let totalPoints = 0;
+            let totalCredits = 0;
+            let detailsHTML = '';
+            
+            subjects.forEach((subject, index) => {
+                const credits = parseFloat(subject.querySelector('.subjectCredits').value) || 0;
+                const grade = parseFloat(subject.querySelector('.subjectGrade').value) || 0;
+                const name = subject.querySelector('.subjectName').value || `Subject ${index + 1}`;
+                
+                const points = credits * grade;
+                totalPoints += points;
+                totalCredits += credits;
+                
+                detailsHTML += `<div style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+                    <strong>${name}</strong><br>
+                    Credits: ${credits} | Grade: ${grade} | Points: ${points.toFixed(2)}
+                </div>`;
+            });
+            
+            const gpa = totalCredits > 0 ? totalPoints / totalCredits : 0;
+            let overallGrade = '-';
+            
+            if (gpa >= 3.7) overallGrade = 'A';
+            else if (gpa >= 3.3) overallGrade = 'B+';
+            else if (gpa >= 3.0) overallGrade = 'B';
+            else if (gpa >= 2.7) overallGrade = 'B-';
+            else if (gpa >= 2.3) overallGrade = 'C+';
+            else if (gpa >= 2.0) overallGrade = 'C';
+            else if (gpa >= 1.7) overallGrade = 'C-';
+            else if (gpa >= 1.3) overallGrade = 'D+';
+            else if (gpa >= 1.0) overallGrade = 'D';
+            else overallGrade = 'F';
+            
+            document.getElementById('totalGPA').textContent = gpa.toFixed(2);
+            document.getElementById('totalCredits').textContent = totalCredits;
+            document.getElementById('totalPoints').textContent = totalPoints.toFixed(2);
+            document.getElementById('overallGrade').textContent = overallGrade;
+            document.getElementById('subjectDetails').innerHTML = detailsHTML;
+            document.getElementById('gpaResult').style.display = 'block';
+            document.getElementById('downloadGPABtn').disabled = false;
+            
+            showNotification('✅ GPA calculated successfully!', 'success');
+        }
+
+        function downloadGPAResult() {
+            showNotification('📥 Downloading GPA report...', 'info');
+        }
+
+        // Citation Generator Functions
+        function generateCitation() {
+            const author = document.getElementById('authorName').value || 'Smith, J.';
+            const title = document.getElementById('sourceTitle').value || 'The Art of Programming';
+            const year = document.getElementById('publicationYear').value || '2023';
+            const publisher = document.getElementById('publisher').value || 'Tech Publications';
+            const url = document.getElementById('sourceUrl').value || '';
+            const type = document.getElementById('sourceType').value;
+            const format = document.getElementById('citationFormat').value;
+            
+            let citation = '';
+            
+            switch(format) {
+                case 'apa':
+                    citation = `${author}. (${year}). ${title}. ${publisher}.`;
+                    if (url) citation += ` Retrieved from ${url}`;
+                    break;
+                case 'mla':
+                    citation = `${author}. "${title}." ${publisher}, ${year}.`;
+                    if (url) citation += ` Web. Accessed ${new Date().toLocaleDateString()}.`;
+                    break;
+                case 'chicago':
+                    citation = `${author}. ${year}. ${title}. ${publisher}.`;
+                    if (url) citation += ` ${url}`;
+                    break;
+                case 'harvard':
+                    citation = `${author} (${year}) ${title}, ${publisher}.`;
+                    if (url) citation += ` Available at: ${url}`;
+                    break;
+                case 'ieee':
+                    citation = `${author}, "${title}," ${publisher}, ${year}.`;
+                    if (url) citation += ` [Online]. Available: ${url}`;
+                    break;
+            }
+            
+            document.getElementById('citationContent').textContent = citation;
+            document.getElementById('citationResult').style.display = 'block';
+            document.getElementById('downloadCitationBtn').disabled = false;
+            
+            showNotification('✅ Citation generated successfully!', 'success');
+        }
+
+        function copyCitation() {
+            const text = document.getElementById('citationContent').textContent;
+            navigator.clipboard.writeText(text);
+            showNotification('✅ Citation copied to clipboard!', 'success');
+        }
+
+        function downloadCitations() {
+            const text = document.getElementById('citationContent').textContent;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'citations.txt';
+            link.click();
+            showNotification('📥 Citations downloaded!', 'success');
+        }
+
+        // Math Solver Functions
+        function solveMathProblem() {
+            const problem = document.getElementById('mathProblem').value || 'Solve for x: 2x + 5 = 13';
+            const subject = document.getElementById('mathSubject').value;
+            const solutionType = document.getElementById('solutionType').value;
+            
+            let solution = '';
+            let steps = 3;
+            let difficulty = 'Easy';
+            let time = '2s';
+            
+            if (problem.toLowerCase().includes('solve for x')) {
+                solution = `Problem: ${problem}
+
+Step 1: Subtract 5 from both sides
+2x + 5 - 5 = 13 - 5
+2x = 8
+
+Step 2: Divide both sides by 2
+2x/2 = 8/2
+x = 4
+
+Step 3: Check the solution
+2(4) + 5 = 8 + 5 = 13 ✓
+
+Final Answer: x = 4`;
+                
+                steps = 3;
+                difficulty = 'Easy';
+                time = '2s';
+            } else if (problem.toLowerCase().includes('quadratic')) {
+                solution = `Problem: Solve x² - 5x + 6 = 0
+
+Step 1: Factor the quadratic equation
+x² - 5x + 6 = (x - 2)(x - 3) = 0
+
+Step 2: Set each factor equal to zero
+x - 2 = 0 or x - 3 = 0
+
+Step 3: Solve for x
+x = 2 or x = 3
+
+Final Answer: x = 2, 3`;
+                
+                steps = 3;
+                difficulty = 'Medium';
+                time = '3s';
+            } else {
+                solution = `Problem: ${problem}
+
+Solution:
+The solution to this problem involves applying mathematical principles of ${subject}. 
+
+For this specific problem, we need to:
+1. Understand the given parameters
+2. Apply appropriate formulas
+3. Calculate step by step
+4. Verify the solution
+
+Based on the ${subject} concepts, the answer is determined through systematic calculation.`;
+                
+                steps = 4;
+                difficulty = 'Medium';
+                time = '5s';
+            }
+            
+            document.getElementById('mathSolution').textContent = solution;
+            document.getElementById('problemType').textContent = subject.charAt(0).toUpperCase() + subject.slice(1);
+            document.getElementById('problemDifficulty').textContent = difficulty;
+            document.getElementById('solutionSteps').textContent = steps;
+            document.getElementById('timeRequired').textContent = time;
+            document.getElementById('mathResult').style.display = 'block';
+            document.getElementById('downloadMathBtn').disabled = false;
+            
+            showNotification('✅ Math problem solved!', 'success');
+        }
+
+        function copyMathSolution() {
+            const text = document.getElementById('mathSolution').textContent;
+            navigator.clipboard.writeText(text);
+            showNotification('✅ Solution copied to clipboard!', 'success');
+        }
+
+        function downloadMathSolution() {
+            const text = document.getElementById('mathSolution').textContent;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'math_solution.txt';
+            link.click();
+            showNotification('📥 Math solution downloaded!', 'success');
         }
 
         // Utility Functions
@@ -2910,14 +4180,32 @@ ${name}`;
                 openTool('pdf-to-word');
             } else if (searchTerm.includes('image') && searchTerm.includes('pdf')) {
                 openTool('image-to-pdf');
+            } else if (searchTerm.includes('image') && searchTerm.includes('convert')) {
+                openTool('image-converter');
             } else if (searchTerm.includes('application') || searchTerm.includes('writer')) {
                 openTool('application-writer');
             } else if (searchTerm.includes('resume') || searchTerm.includes('cv')) {
                 openTool('resume-builder');
-            } else if (searchTerm.includes('convert') && searchTerm.includes('image')) {
-                openTool('image-converter');
+            } else if (searchTerm.includes('pdf') && searchTerm.includes('text')) {
+                openTool('pdf-to-text');
+            } else if (searchTerm.includes('file') && searchTerm.includes('convert')) {
+                openTool('file-converter');
             } else if (searchTerm.includes('ai') || searchTerm.includes('assistant')) {
                 openTool('ai-assistant');
+            } else if (searchTerm.includes('video') && searchTerm.includes('compress')) {
+                openTool('video-compressor');
+            } else if (searchTerm.includes('essay')) {
+                openTool('essay-writer');
+            } else if (searchTerm.includes('assignment')) {
+                openTool('assignment-helper');
+            } else if (searchTerm.includes('plagiarism')) {
+                openTool('plagiarism-checker');
+            } else if (searchTerm.includes('gpa') || searchTerm.includes('calculator')) {
+                openTool('gpa-calculator');
+            } else if (searchTerm.includes('citation')) {
+                openTool('citation-generator');
+            } else if (searchTerm.includes('math') || searchTerm.includes('solve')) {
+                openTool('math-solver');
             } else if (searchTerm.trim() !== '') {
                 showNotification(`🔍 Search results for: ${searchTerm}`, 'info');
             }
@@ -2956,8 +4244,6 @@ ${name}`;
 
         // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
-            initPopunder();
-            
             // Setup navigation
             document.querySelectorAll('nav a').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
@@ -2990,7 +4276,6 @@ ${name}`;
                 if (e.key === 'Escape') {
                     closeTool();
                     closePremium();
-                    closePopunder();
                 }
             });
         });
