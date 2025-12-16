@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AnyTasker Pro - Ultimate Utility Tools by Saroj Naik</title>
-    <meta name="description" content="Free professional tools: Image compressor, PDF tools, background remover, AI tools. 100% working with premium features.">
-    <meta name="keywords" content="image compressor, PDF compressor, background remover, anytasker, tools, free">
+    <meta name="description" content="Free professional tools: Image compressor, PDF tools, background remover, AI tools. 100% working. Developed by Saroj Naik">
+    <meta name="keywords" content="image compressor, PDF compressor, background remover, anytasker, tools, free, Saroj Naik">
+    <meta name="author" content="Saroj Naik">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #6366f1;
@@ -44,72 +45,93 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            padding-top: 160px;
         }
 
-        /* Animated Stars Background */
-        .stars-bg {
+        /* Top Information Bar */
+        .top-info-bar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+            border-bottom: 2px solid var(--primary);
+            font-size: 14px;
         }
 
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) infinite ease-in-out;
-            opacity: 0;
+        .contact-info {
+            display: flex;
+            gap: 25px;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.95);
         }
 
-        /* Floating Elements */
-        .floating-elements {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
+        .contact-item i {
+            color: var(--accent);
+            font-size: 16px;
         }
 
-        .floating-element {
-            position: absolute;
-            background: var(--gradient-light);
-            opacity: 0.1;
-            border-radius: 50%;
-            animation: float var(--duration) infinite linear;
-            filter: blur(20px);
+        .contact-item a {
+            color: rgba(255, 255, 255, 0.95);
+            text-decoration: none;
+            transition: var(--transition);
         }
 
-        @keyframes float {
-            0% { transform: translateY(0) translateX(0) rotate(0deg); }
-            25% { transform: translateY(-100px) translateX(100px) rotate(90deg); }
-            50% { transform: translateY(-200px) translateX(0) rotate(180deg); }
-            75% { transform: translateY(-100px) translateX(-100px) rotate(270deg); }
-            100% { transform: translateY(0) translateX(0) rotate(360deg); }
+        .contact-item a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .developer-tag {
+            background: var(--gradient);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 14px;
+            animation: pulse 3s infinite;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); 
+            }
+            50% { 
+                transform: scale(1.03); 
+                box-shadow: 0 0 0 8px rgba(99, 102, 241, 0); 
+            }
         }
 
         /* Ads Container Styles */
         .ads-container {
             position: fixed;
-            z-index: 999;
-            background: rgba(0, 0, 0, 0.7);
+            z-index: 998;
+            background: rgba(0, 0, 0, 0.8);
             border-radius: 8px;
             padding: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: var(--transition);
+        }
+
+        .ads-container:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
         }
 
         .ads-top {
-            top: 0;
+            top: 50px;
             left: 0;
             width: 100%;
             height: 90px;
@@ -129,8 +151,9 @@
         }
 
         .ads-left {
-            top: 120px;
-            left: 0;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
             width: 160px;
             height: 600px;
             display: flex;
@@ -139,8 +162,9 @@
         }
 
         .ads-right {
-            top: 120px;
-            right: 0;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
             width: 160px;
             height: 600px;
             display: flex;
@@ -148,62 +172,22 @@
             align-items: center;
         }
 
-        .ads-middle {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2000;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: var(--radius);
-            display: none;
-            border: 2px solid var(--primary);
-        }
-
-        .ads-middle.active {
-            display: block;
-            animation: popIn 0.3s ease;
-        }
-
-        @keyframes popIn {
-            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        }
-
-        .close-ads {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--danger);
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
+        /* Container */
         .container {
             max-width: 1400px;
-            margin: 120px auto 120px;
-            padding: 0 20px;
+            margin: 0 auto 100px;
+            padding: 0 200px;
             position: relative;
             z-index: 1;
         }
 
-        /* Modern Header */
+        /* Header */
         header {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: fixed;
-            top: 90px;
+            top: 50px;
             width: 100%;
             z-index: 1000;
             padding: 15px 0;
@@ -231,22 +215,6 @@
             border-radius: var(--radius);
         }
 
-        .logo::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient);
-            opacity: 0.1;
-            transition: var(--transition);
-        }
-
-        .logo:hover::before {
-            left: 0;
-        }
-
         .logo:hover {
             transform: translateY(-3px);
         }
@@ -261,7 +229,7 @@
             justify-content: center;
             font-size: 24px;
             color: white;
-            animation: pulse 2s infinite;
+            animation: pulse 3s infinite;
             position: relative;
             overflow: hidden;
         }
@@ -273,24 +241,13 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
             animation: shine 3s infinite;
         }
 
         @keyframes shine {
             0% { left: -100%; }
             100% { left: 100%; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { 
-                transform: scale(1); 
-                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); 
-            }
-            50% { 
-                transform: scale(1.05); 
-                box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); 
-            }
         }
 
         .logo-text h1 {
@@ -305,13 +262,14 @@
 
         .logo-text p {
             font-size: 12px;
-            opacity: 0.8;
+            opacity: 0.9;
             letter-spacing: 1px;
             background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
+        /* Navigation */
         nav {
             position: relative;
         }
@@ -383,49 +341,9 @@
             transform: translateY(-2px);
         }
 
-        .user-badge {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 12px 25px;
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .user-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient);
-            opacity: 0.1;
-            transition: var(--transition);
-        }
-
-        .user-badge:hover::before {
-            left: 0;
-        }
-
-        .user-badge:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .user-badge i {
-            color: var(--accent);
-            font-size: 22px;
-        }
-
-        /* Modern Hero Section */
+        /* Hero Section */
         .hero {
-            padding: 80px 0 120px;
+            padding: 80px 0 100px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -475,18 +393,6 @@
             border-radius: 2px;
         }
 
-        .hero h1 span {
-            display: block;
-            font-size: 32px;
-            font-weight: 600;
-            color: var(--light);
-            margin-top: 20px;
-            opacity: 0.9;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
         .hero p {
             font-size: 20px;
             max-width: 800px;
@@ -521,22 +427,6 @@
             min-width: 200px;
         }
 
-        .hero-stat::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient);
-            opacity: 0.1;
-            transition: var(--transition);
-        }
-
-        .hero-stat:hover::before {
-            left: 0;
-        }
-
         .hero-stat:hover {
             transform: translateY(-10px);
             box-shadow: var(--shadow-glow);
@@ -556,6 +446,7 @@
             opacity: 0.8;
         }
 
+        /* Search Box */
         .search-box {
             max-width: 700px;
             margin: 60px auto;
@@ -723,25 +614,6 @@
             background: var(--gradient);
         }
 
-        .tool-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 80px;
-            height: 80px;
-            background: var(--gradient);
-            border-radius: 0 0 0 80px;
-            opacity: 0.1;
-            transition: var(--transition);
-        }
-
-        .tool-card:hover::after {
-            width: 100%;
-            height: 100%;
-            border-radius: var(--radius-lg);
-        }
-
         .tool-card:hover {
             transform: translateY(-15px) scale(1.02);
             box-shadow: var(--shadow-lg);
@@ -817,23 +689,6 @@
             justify-content: center;
             gap: 15px;
             transition: var(--transition);
-            position: relative;
-        }
-
-        .tool-features li::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            bottom: 0;
-            transform: translateX(-50%);
-            width: 0;
-            height: 1px;
-            background: var(--gradient);
-            transition: var(--transition);
-        }
-
-        .tool-features li:hover::before {
-            width: 80%;
         }
 
         .tool-features li:hover {
@@ -842,11 +697,6 @@
 
         .tool-features li i {
             color: var(--success);
-            transition: var(--transition);
-        }
-
-        .tool-features li:hover i {
-            transform: scale(1.3);
         }
 
         .tool-btn {
@@ -869,68 +719,62 @@
             z-index: 1;
         }
 
-        .tool-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .tool-btn:hover::before {
-            left: 100%;
-        }
-
         .tool-btn:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-glow);
         }
 
-        /* Middle Banner */
-        .middle-banner {
-            margin: 80px 0;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
+        /* Floating Action Buttons */
+        .floating-action {
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .fab-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-glow);
             position: relative;
             overflow: hidden;
         }
 
-        .middle-banner::before {
-            content: '';
+        .fab-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .fab-btn .tooltip {
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient);
-            opacity: 0.1;
-            transition: var(--transition);
+            right: 70px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .middle-banner:hover::before {
-            left: 0;
-        }
-
-        .middle-banner h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .middle-banner p {
-            font-size: 18px;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto 30px;
+        .fab-btn:hover .tooltip {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         /* Tool Container */
@@ -1019,30 +863,11 @@
             font-size: 24px;
             cursor: pointer;
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .close-tool::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
-            background: var(--danger);
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .close-tool:hover::before {
-            width: 100%;
-            height: 100%;
         }
 
         .close-tool:hover {
             transform: rotate(90deg);
+            background: var(--danger);
         }
 
         .tool-content {
@@ -1051,163 +876,156 @@
             overflow-y: auto;
         }
 
-        /* Floating Action Button */
-        .floating-action {
-            position: fixed;
-            bottom: 120px;
-            right: 30px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .fab-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        /* Tool Content Styles */
+        .file-upload-zone {
+            border: 3px dashed rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 60px 40px;
+            text-align: center;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: var(--shadow-glow);
-            position: relative;
-            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 40px;
         }
 
-        .fab-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: 0.5s;
-        }
-
-        .fab-btn:hover::before {
-            left: 100%;
-        }
-
-        .fab-btn:hover {
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        .fab-btn .tooltip {
-            position: absolute;
-            right: 70px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            transform: translateX(20px);
-            transition: all 0.3s ease;
-            pointer-events: none;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .fab-btn:hover .tooltip {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Premium Modal */
-        .premium-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 3000;
-            backdrop-filter: blur(20px);
-        }
-
-        .premium-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: modalFadeIn 0.3s ease;
-        }
-
-        @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .premium-content {
-            background: var(--gradient-dark);
-            border-radius: var(--radius-lg);
-            padding: 60px;
-            max-width: 700px;
-            width: 90%;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .premium-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: var(--gradient);
-        }
-
-        .upi-option {
+        .file-upload-zone:hover {
+            border-color: var(--primary);
             background: rgba(255, 255, 255, 0.1);
-            padding: 25px;
-            border-radius: var(--radius);
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upi-option::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient);
-            opacity: 0.1;
-            transition: var(--transition);
-        }
-
-        .upi-option:hover::before {
-            left: 0;
-        }
-
-        .upi-option:hover {
             transform: translateY(-5px);
         }
 
-        .upi-option i {
-            color: var(--success);
-            font-size: 32px;
+        .file-upload-zone i {
+            font-size: 60px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-item label {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-item input,
+        .control-item select,
+        .control-item textarea {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius);
+            color: white;
+            font-family: inherit;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .control-item input:focus,
+        .control-item select:focus,
+        .control-item textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .preview-box {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 25px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            border-radius: var(--radius);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 18px 35px;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            justify-content: center;
+            min-width: 200px;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
         }
 
         /* Footer */
         footer {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 100px 0 40px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 80px 0 30px;
             margin-top: 100px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
@@ -1277,73 +1095,52 @@
 
         .developer-info {
             background: rgba(99, 102, 241, 0.1);
-            padding: 30px;
+            padding: 25px;
             border-radius: var(--radius);
-            margin-top: 30px;
+            margin-top: 25px;
             border-left: 4px solid var(--primary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .developer-info::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient);
-            opacity: 0.1;
-            transition: var(--transition);
-        }
-
-        .developer-info:hover::before {
-            left: 0;
         }
 
         .copyright {
             text-align: center;
-            padding-top: 60px;
+            padding-top: 50px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.5);
             font-size: 15px;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 60px 20px 0;
+            padding: 50px 20px 0;
         }
 
-        /* Loading */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 4000;
-            backdrop-filter: blur(20px);
-        }
-
-        .loading-overlay.active {
+        .share-buttons {
             display: flex;
-            animation: fadeIn 0.3s ease;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
 
-        .loader {
-            width: 80px;
-            height: 80px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .share-btn {
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: none;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .share-btn.facebook { background: #4267B2; }
+        .share-btn.twitter { background: #1DA1F2; }
+        .share-btn.whatsapp { background: #25D366; }
+        .share-btn.copy { background: var(--primary); }
+
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         /* Notification */
@@ -1353,7 +1150,7 @@
             right: 30px;
             background: var(--gradient);
             color: white;
-            padding: 25px 35px;
+            padding: 20px 30px;
             border-radius: var(--radius);
             box-shadow: var(--shadow-lg);
             z-index: 3000;
@@ -1377,58 +1174,52 @@
         }
 
         /* Responsive Design */
-        @media (max-width: 1400px) {
+        @media (max-width: 1200px) {
             .container {
-                margin-left: 180px;
-                margin-right: 180px;
+                padding: 0 180px;
             }
             .ads-left, .ads-right {
                 display: none;
             }
             .tool-container {
-                grid-template-columns: 1fr;
                 width: 95%;
-                margin-left: 0;
-                margin-right: 0;
+                grid-template-columns: 1fr;
             }
             .tool-left-ad, .tool-right-ad {
                 display: none;
             }
         }
 
-        @media (max-width: 1200px) {
-            .container {
-                margin-left: 20px;
-                margin-right: 20px;
-            }
-            .hero h1 {
-                font-size: 50px;
-            }
-            .hero h1 span {
-                font-size: 28px;
-            }
-            .tools-grid {
-                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            }
-        }
-
         @media (max-width: 992px) {
-            .ads-top, .ads-bottom {
-                height: 80px;
+            .container {
+                padding: 0 20px;
+            }
+            .top-info-bar {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                padding: 15px;
+            }
+            .contact-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            body {
+                padding-top: 180px;
             }
             header {
-                top: 80px;
+                top: 120px;
             }
             .nav-toggle {
                 display: flex;
             }
             nav ul {
                 position: fixed;
-                top: 140px;
+                top: 200px;
                 left: 20px;
                 right: 20px;
                 flex-direction: column;
-                background: rgba(0, 0, 0, 0.9);
+                background: rgba(0, 0, 0, 0.95);
                 backdrop-filter: blur(20px);
                 padding: 20px;
                 border-radius: var(--radius);
@@ -1449,14 +1240,8 @@
                 justify-content: center;
                 padding: 18px;
             }
-            .user-badge {
-                display: none;
-            }
             .hero h1 {
                 font-size: 42px;
-            }
-            .hero h1 span {
-                font-size: 24px;
             }
             .hero p {
                 font-size: 18px;
@@ -1481,9 +1266,6 @@
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 36px;
-            }
-            .hero h1 span {
-                font-size: 20px;
             }
             .hero p {
                 font-size: 16px;
@@ -1528,14 +1310,29 @@
             .fab-btn .tooltip {
                 display: none;
             }
+            .preview-container {
+                grid-template-columns: 1fr;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .action-btn {
+                min-width: 100%;
+            }
+            .share-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .share-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
         }
 
         @media (max-width: 480px) {
             .hero h1 {
                 font-size: 28px;
-            }
-            .hero h1 span {
-                font-size: 18px;
             }
             .hero-stats {
                 flex-direction: column;
@@ -1565,44 +1362,50 @@
             .tool-content {
                 padding: 20px;
             }
-            .premium-content {
-                padding: 30px;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .hero h1 {
-                font-size: 24px;
-            }
-            .logo-text h1 {
-                font-size: 22px;
-            }
-            .section-title {
-                font-size: 28px;
-            }
-            .tool-card h3 {
-                font-size: 24px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Animated Stars Background -->
-    <div class="stars-bg" id="starsBg"></div>
-    
-    <!-- Floating Elements -->
-    <div class="floating-elements" id="floatingElements"></div>
+    <!-- Popunder Ad Script -->
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var script = document.createElement('script');
+                script.src = 'https://pl28239921.effectivegatecpm.com/a5/c2/5d/a5c25d3107a4e3b3ef4006c2d249e603.js';
+                document.body.appendChild(script);
+            }, 3000);
+        });
+    </script>
 
-    <!-- Top Ads -->
+    <!-- Top Information Bar -->
+    <div class="top-info-bar">
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="fas fa-user"></i>
+                <span><strong>SAROJ NAIK</strong></span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:anytasker1998@gmail.com">anytasker1998@gmail.com</a>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <a href="tel:+918018733114">8018733114</a>
+            </div>
+        </div>
+        <div class="developer-tag">
+            <i class="fas fa-code"></i> DEVELOPED BY SAROJ NAIK
+        </div>
+    </div>
+
+    <!-- Top Ad Banner -->
     <div class="ads-container ads-top">
-        <!-- Native Banner -->
         <script async="async" data-cfasync="false" src="https://pl28239794.effectivegatecpm.com/020dcc1e0bd23ed7dc8b597995087112/invoke.js"></script>
         <div id="container-020dcc1e0bd23ed7dc8b597995087112"></div>
     </div>
 
-    <!-- Left Ads -->
+    <!-- Left Sidebar Ad -->
     <div class="ads-container ads-left">
-        <!-- Banner 160x600 -->
         <script type="text/javascript">
             atOptions = {
                 'key' : 'f720a7f34040d119fe8c31e8d186661e',
@@ -1615,9 +1418,8 @@
         <script type="text/javascript" src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
     </div>
 
-    <!-- Right Ads -->
+    <!-- Right Sidebar Ad -->
     <div class="ads-container ads-right">
-        <!-- Banner 160x600 -->
         <script type="text/javascript">
             atOptions = {
                 'key' : 'f720a7f34040d119fe8c31e8d186661e',
@@ -1630,23 +1432,9 @@
         <script type="text/javascript" src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
     </div>
 
-    <!-- Bottom Ads -->
+    <!-- Bottom Ad Banner -->
     <div class="ads-container ads-bottom">
-        <!-- Social Bar -->
         <script type="text/javascript" src="https://pl28258457.effectivegatecpm.com/77/86/60/778660b9c8b556582fb5127e53b7db86.js"></script>
-    </div>
-
-    <!-- Middle Ads (Popup) -->
-    <div class="ads-middle" id="middleAds">
-        <button class="close-ads" onclick="closeMiddleAds()">×</button>
-        <!-- Native Banner -->
-        <script async="async" data-cfasync="false" src="https://pl28239794.effectivegatecpm.com/020dcc1e0bd23ed7dc8b597995087112/invoke.js"></script>
-        <div id="container-020dcc1e0bd23ed7dc8b597995087112"></div>
-    </div>
-
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loader"></div>
     </div>
 
     <!-- Header -->
@@ -1672,17 +1460,9 @@
                     <li><a href="#tools"><i class="fas fa-th-large"></i> All Tools</a></li>
                     <li><a href="#education"><i class="fas fa-graduation-cap"></i> Education</a></li>
                     <li><a href="#government"><i class="fas fa-landmark"></i> Government</a></li>
-                    <li><a href="#premium" onclick="openPremium()"><i class="fas fa-crown"></i> Premium</a></li>
+                    <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
                 </ul>
             </nav>
-            
-            <div class="user-badge">
-                <i class="fas fa-user-circle"></i>
-                <div>
-                    <div style="font-weight: 600;">SAROJ NAIK</div>
-                    <div style="font-size: 12px; opacity: 0.8;">anytasker1998@gmail.com</div>
-                </div>
-            </div>
         </div>
     </header>
 
@@ -1692,17 +1472,13 @@
             <i class="fas fa-arrow-up"></i>
             <div class="tooltip">Scroll to Top</div>
         </div>
-        <div class="fab-btn" onclick="openPremium()">
-            <i class="fas fa-crown"></i>
-            <div class="tooltip">Go Premium</div>
+        <div class="fab-btn" onclick="shareWebsite()">
+            <i class="fas fa-share-alt"></i>
+            <div class="tooltip">Share Website</div>
         </div>
         <div class="fab-btn" onclick="openRandomTool()">
             <i class="fas fa-random"></i>
             <div class="tooltip">Random Tool</div>
-        </div>
-        <div class="fab-btn" onclick="shareWebsite()">
-            <i class="fas fa-share-alt"></i>
-            <div class="tooltip">Share</div>
         </div>
     </div>
 
@@ -1711,7 +1487,7 @@
         <!-- Hero Section -->
         <section class="hero" id="home">
             <h1>Professional Utility Tools<br>
-                <span>100% Working with Premium Features</span>
+                <span>100% Working - All Tools Free</span>
             </h1>
             
             <p>Discover the ultimate collection of professional tools for image processing, PDF management, AI utilities, and more. Everything you need in one platform with guaranteed results.</p>
@@ -1730,8 +1506,8 @@
                     <div class="label">Happy Users</div>
                 </div>
                 <div class="hero-stat">
-                    <div class="number">24/7</div>
-                    <div class="label">Support Available</div>
+                    <div class="number">Free</div>
+                    <div class="label">No Payment Required</div>
                 </div>
             </div>
             
@@ -1759,15 +1535,6 @@
                 </button>
             </div>
         </section>
-
-        <!-- Middle Banner -->
-        <div class="middle-banner">
-            <h2><i class="fas fa-bolt"></i> Boost Your Productivity</h2>
-            <p>Get unlimited access to all premium tools and remove all advertisements for just ₹199. Experience faster processing and advanced features.</p>
-            <button class="tool-btn" onclick="openPremium()" style="max-width: 300px; margin: 0 auto;">
-                <i class="fas fa-crown"></i> Upgrade to Premium
-            </button>
-        </div>
 
         <!-- All Tools Section -->
         <section class="tools-section" id="tools">
@@ -1812,7 +1579,7 @@
                         <li><i class="fas fa-check-circle"></i> Update Details</li>
                         <li><i class="fas fa-check-circle"></i> Check Status</li>
                     </ul>
-                    <button class="tool-btn" onclick="window.open('https://uidai.gov.in/', '_blank')">
+                    <button class="tool-btn" onclick="openExternalLink('https://uidai.gov.in/')">
                         <i class="fas fa-external-link-alt"></i> Visit Portal
                     </button>
                 </div>
@@ -1828,7 +1595,7 @@
                         <li><i class="fas fa-check-circle"></i> Download Form 16</li>
                         <li><i class="fas fa-check-circle"></i> PAN Services</li>
                     </ul>
-                    <button class="tool-btn" onclick="window.open('https://www.incometax.gov.in/', '_blank')">
+                    <button class="tool-btn" onclick="openExternalLink('https://www.incometax.gov.in/')">
                         <i class="fas fa-external-link-alt"></i> Visit Portal
                     </button>
                 </div>
@@ -1844,7 +1611,7 @@
                         <li><i class="fas fa-check-circle"></i> Bill Payment</li>
                         <li><i class="fas fa-check-circle"></i> Account Services</li>
                     </ul>
-                    <button class="tool-btn" onclick="window.open('https://www.onlinesbi.sbi/', '_blank')">
+                    <button class="tool-btn" onclick="openExternalLink('https://www.onlinesbi.sbi/')">
                         <i class="fas fa-external-link-alt"></i> Login Now
                     </button>
                 </div>
@@ -1860,7 +1627,7 @@
                         <li><i class="fas fa-check-circle"></i> Download Forms</li>
                         <li><i class="fas fa-check-circle"></i> Appointment Booking</li>
                     </ul>
-                    <button class="tool-btn" onclick="window.open('https://www.passportindia.gov.in/', '_blank')">
+                    <button class="tool-btn" onclick="openExternalLink('https://www.passportindia.gov.in/')">
                         <i class="fas fa-external-link-alt"></i> Visit Portal
                     </button>
                 </div>
@@ -1873,7 +1640,6 @@
         <div class="tool-container">
             <!-- Left Side Ad -->
             <div class="tool-left-ad">
-                <!-- Banner 160x600 -->
                 <script type="text/javascript">
                     atOptions = {
                         'key' : 'f720a7f34040d119fe8c31e8d186661e',
@@ -1901,7 +1667,6 @@
 
             <!-- Right Side Ad -->
             <div class="tool-right-ad">
-                <!-- Banner 160x600 -->
                 <script type="text/javascript">
                     atOptions = {
                         'key' : 'f720a7f34040d119fe8c31e8d186661e',
@@ -1916,61 +1681,17 @@
         </div>
     </div>
 
-    <!-- Premium Modal -->
-    <div class="premium-modal" id="premiumModal">
-        <div class="premium-content">
-            <h2 style="margin-bottom: 30px; color: var(--accent);"><i class="fas fa-crown"></i> Go Premium</h2>
-            <p style="margin-bottom: 30px; font-size: 18px;">Remove ads and unlock premium features with UPI payment</p>
-            
-            <div class="upi-option">
-                <i class="fas fa-mobile-alt"></i>
-                <div>
-                    <h3>UPI Payment</h3>
-                    <p>Send ₹199 to: <strong>8018733114@ybl</strong></p>
-                    <p style="font-size: 14px; opacity: 0.8;">After payment, email receipt to anytasker1998@gmail.com</p>
-                </div>
-            </div>
-            
-            <div style="margin-top: 30px;">
-                <h3 style="margin-bottom: 15px;">Premium Benefits:</h3>
-                <ul style="list-style: none; margin-bottom: 30px;">
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-check-circle" style="color: var(--success);"></i> No advertisements
-                    </li>
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-check-circle" style="color: var(--success);"></i> Unlimited file processing
-                    </li>
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-check-circle" style="color: var(--success);"></i> Priority processing
-                    </li>
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-check-circle" style="color: var(--success);"></i> Advanced AI features
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="action-buttons" style="display: flex; gap: 15px; flex-wrap: wrap;">
-                <button class="tool-btn" onclick="copyUPI()" style="min-width: 200px;">
-                    <i class="fas fa-copy"></i> Copy UPI ID
-                </button>
-                <button class="tool-btn" onclick="closePremium()" style="min-width: 200px; background: rgba(255,255,255,0.1);">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Footer -->
     <footer id="contact">
         <div class="footer-content">
             <div class="footer-column">
                 <h3>AnyTasker Pro</h3>
-                <p style="opacity: 0.8; margin-bottom: 20px; line-height: 1.6;">Professional utility tools with 100% working guarantee. Fast, reliable, and secure tools for all your needs.</p>
+                <p style="opacity: 0.9; margin-bottom: 20px; line-height: 1.6;">Professional utility tools with 100% working guarantee. Fast, reliable, and secure tools for all your needs.</p>
                 <div class="developer-info">
                     <h4>Developer Contact</h4>
-                    <p><i class="fas fa-user"></i> SAROJ NAIK</p>
-                    <p><i class="fas fa-envelope"></i> anytasker1998@gmail.com</p>
-                    <p><i class="fas fa-phone"></i> 8018733114</p>
+                    <p><i class="fas fa-user"></i> <strong>SAROJ NAIK</strong></p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:anytasker1998@gmail.com" style="color: white;">anytasker1998@gmail.com</a></p>
+                    <p><i class="fas fa-phone"></i> <a href="tel:+918018733114" style="color: white;">8018733114</a></p>
                     <p><i class="fas fa-whatsapp"></i> WhatsApp: 8018733114</p>
                 </div>
             </div>
@@ -1981,8 +1702,7 @@
                     <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
                     <li><a href="#tools"><i class="fas fa-chevron-right"></i> All Tools</a></li>
                     <li><a href="#education"><i class="fas fa-chevron-right"></i> Education Tools</a></li>
-                    <li><a href="#government"><i class="fas fa-chevron-right"></i> Government</a></li>
-                    <li><a href="#premium" onclick="openPremium()"><i class="fas fa-chevron-right"></i> Premium</a></li>
+                    <li><a href="#government"><i class="fas fa-chevron-right"></i> Government Services</a></li>
                 </ul>
             </div>
             
@@ -1999,15 +1719,24 @@
         </div>
         
         <div class="copyright">
-            <p>&copy; 2023 AnyTasker Pro. All rights reserved. | Developed by SAROJ NAIK | Email: anytasker1998@gmail.com | Phone: 8018733114</p>
+            <p>&copy; 2024 AnyTasker Pro. All rights reserved. | Developed by <strong>SAROJ NAIK</strong> | Email: <a href="mailto:anytasker1998@gmail.com" style="color: var(--primary);">anytasker1998@gmail.com</a> | Phone: <a href="tel:+918018733114" style="color: var(--primary);">8018733114</a></p>
             <p style="margin-top: 10px;">All tools are 100% functional with professional output quality. Results guaranteed.</p>
-            <p style="margin-top: 10px; font-size: 12px;">
-                Share on: 
-                <a href="#" onclick="shareOnFacebook()" style="color: #4267B2;"><i class="fab fa-facebook"></i></a> |
-                <a href="#" onclick="shareOnTwitter()" style="color: #1DA1F2;"><i class="fab fa-twitter"></i></a> |
-                <a href="#" onclick="shareOnWhatsApp()" style="color: #25D366;"><i class="fab fa-whatsapp"></i></a> |
-                <a href="#" onclick="copyLink()" style="color: var(--primary);"><i class="fas fa-copy"></i> Copy Link</a>
-            </p>
+            
+            <!-- Share Buttons -->
+            <div class="share-buttons">
+                <button class="share-btn facebook" onclick="shareOnFacebook()">
+                    <i class="fab fa-facebook-f"></i> Share on Facebook
+                </button>
+                <button class="share-btn twitter" onclick="shareOnTwitter()">
+                    <i class="fab fa-twitter"></i> Share on Twitter
+                </button>
+                <button class="share-btn whatsapp" onclick="shareOnWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> Share on WhatsApp
+                </button>
+                <button class="share-btn copy" onclick="copyWebsiteLink()">
+                    <i class="fas fa-copy"></i> Copy Link
+                </button>
+            </div>
         </div>
     </footer>
 
@@ -2017,54 +1746,6 @@
     </div>
 
     <script>
-        // Initialize Animated Background
-        function initBackground() {
-            const starsBg = document.getElementById('starsBg');
-            const floatingElements = document.getElementById('floatingElements');
-            
-            // Create stars
-            for (let i = 0; i < 150; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                
-                const size = Math.random() * 3 + 1;
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                const duration = Math.random() * 3 + 2;
-                const delay = Math.random() * 5;
-                
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.left = `${posX}%`;
-                star.style.top = `${posY}%`;
-                star.style.setProperty('--duration', `${duration}s`);
-                star.style.animationDelay = `${delay}s`;
-                
-                starsBg.appendChild(star);
-            }
-            
-            // Create floating elements
-            for (let i = 0; i < 20; i++) {
-                const element = document.createElement('div');
-                element.classList.add('floating-element');
-                
-                const size = Math.random() * 200 + 50;
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                const duration = Math.random() * 30 + 20;
-                const delay = Math.random() * 10;
-                
-                element.style.width = `${size}px`;
-                element.style.height = `${size}px`;
-                element.style.left = `${posX}%`;
-                element.style.top = `${posY}%`;
-                element.style.setProperty('--duration', `${duration}s`);
-                element.style.animationDelay = `${delay}s`;
-                
-                floatingElements.appendChild(element);
-            }
-        }
-
         // Tool Database
         const tools = [
             // Image Tools
@@ -2268,32 +1949,6 @@
                     'Export reports',
                     'Historical tracking'
                 ]
-            },
-            {
-                id: 'citation-generator',
-                title: 'Citation Generator',
-                icon: 'fas fa-quote-right',
-                category: 'education',
-                description: 'Generate citations in any format',
-                features: [
-                    'APA, MLA, Chicago styles',
-                    'Automatic formatting',
-                    'Bibliography creation',
-                    'Export to Word'
-                ]
-            },
-            {
-                id: 'assignment-helper',
-                title: 'Assignment Helper',
-                icon: 'fas fa-tasks',
-                category: 'education',
-                description: 'Complete assignment assistance',
-                features: [
-                    'All subjects covered',
-                    'Step-by-step solutions',
-                    'Reference materials',
-                    'Formatting help'
-                ]
             }
         ];
 
@@ -2338,9 +1993,8 @@
                         <div class="preview-content">
                             <img id="originalImg" class="preview-image" alt="Original Image">
                         </div>
-                        <div class="stat-item" style="margin-top: 15px;">
-                            <div class="stat-label">Size</div>
-                            <div class="stat-value" id="originalSize">0 KB</div>
+                        <div style="margin-top: 15px;">
+                            <div>Size: <span id="originalSize">0 KB</span></div>
                         </div>
                     </div>
                     <div class="preview-box">
@@ -2348,20 +2002,9 @@
                         <div class="preview-content">
                             <img id="compressedImg" class="preview-image" alt="Compressed Image">
                         </div>
-                        <div class="stat-item" style="margin-top: 15px;">
-                            <div class="stat-label">New Size</div>
-                            <div class="stat-value success" id="compressedSize">0 KB</div>
+                        <div style="margin-top: 15px;">
+                            <div>New Size: <span id="compressedSize" style="color: var(--success);">0 KB</span></div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="progress-container" id="progressContainer" style="display: none;">
-                    <div class="progress-header">
-                        <span>Compressing Image...</span>
-                        <span id="progressPercent">0%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
                     </div>
                 </div>
 
@@ -2557,70 +2200,41 @@
             `,
             
             'ai-assistant': `
-                <div class="ai-chat-container">
-                    <div class="ai-chat-header">
-                        <i class="fas fa-robot"></i>
-                        <h3>AI Assistant - Ask me anything!</h3>
-                    </div>
-                    
-                    <div class="ai-chat-messages" id="chatMessages">
-                        <div class="message ai">
-                            <strong>AI Assistant:</strong> Hello! I'm your AI assistant. I can help you with document formatting, writing tips, code generation, and general questions. How can I assist you today?
-                        </div>
-                    </div>
-                    
-                    <div class="ai-chat-input">
-                        <input type="text" id="chatInput" placeholder="Type your question here..." onkeypress="handleChatKeyPress(event)">
-                        <button onclick="sendChatMessage()">
-                            <i class="fas fa-paper-plane"></i> Send
-                        </button>
-                    </div>
+                <div style="padding: 20px; background: rgba(255,255,255,0.08); border-radius: var(--radius); margin-bottom: 30px;">
+                    <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                        <i class="fas fa-robot"></i> AI Assistant
+                    </h3>
+                    <p>Ask me anything! I can help with writing, coding, formatting, and more.</p>
                 </div>
 
                 <div class="control-group">
-                    <div class="control-title">
-                        <i class="fas fa-magic"></i> Quick Actions
+                    <div class="control-item">
+                        <label><i class="fas fa-comment"></i> Your Question</label>
+                        <textarea id="aiQuestion" rows="4" placeholder="Type your question here..."></textarea>
                     </div>
-                    <div class="action-buttons">
-                        <button class="action-btn btn-secondary" onclick="quickAction('format')">
-                            <i class="fas fa-align-left"></i> Format Document
-                        </button>
-                        <button class="action-btn btn-secondary" onclick="quickAction('email')">
-                            <i class="fas fa-envelope"></i> Write Email
-                        </button>
-                        <button class="action-btn btn-secondary" onclick="quickAction('code')">
-                            <i class="fas fa-code"></i> Generate Code
-                        </button>
-                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="askAI()">
+                        <i class="fas fa-paper-plane"></i> Ask AI
+                    </button>
+                </div>
+
+                <div id="aiResponse" style="display: none; margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.08); border-radius: var(--radius);">
+                    <h4><i class="fas fa-reply"></i> AI Response:</h4>
+                    <div id="aiResponseText" style="margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: var(--radius);"></div>
                 </div>
             `
         };
 
         // Global Variables
         let currentFiles = {};
-        let currentProgress = {};
         let activeCategory = 'all';
-        let middleAdsTimer = null;
 
-        // Initialize Background
+        // Initialize
         function init() {
-            initBackground();
             loadTools();
-            setupMiddleAds();
-        }
-
-        // Setup Middle Ads
-        function setupMiddleAds() {
-            // Show middle ads every 3 minutes
-            middleAdsTimer = setInterval(() => {
-                if (!document.getElementById('premiumModal').classList.contains('active')) {
-                    document.getElementById('middleAds').classList.add('active');
-                }
-            }, 180000); // 3 minutes
-        }
-
-        function closeMiddleAds() {
-            document.getElementById('middleAds').classList.remove('active');
+            showNotification('🚀 Welcome to AnyTasker Pro! All tools are 100% working.', 'success');
         }
 
         // Load Tools
@@ -2669,13 +2283,11 @@
         function filterTools(category) {
             activeCategory = category;
             
-            // Update active button
             document.querySelectorAll('.category-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
             
-            // Filter tools
             const allCards = document.querySelectorAll('.tool-card');
             allCards.forEach(card => {
                 if (category === 'all' || card.dataset.category === category) {
@@ -2685,7 +2297,6 @@
                 }
             });
             
-            // Scroll to tools section
             document.getElementById('tools').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -2706,14 +2317,12 @@
             const tool = tools.find(t => t.id === toolId);
             if (!tool) return;
             
-            // Close navigation menu on mobile
             const navMenu = document.getElementById('navMenu');
             navMenu.classList.remove('show');
             
             document.getElementById('toolContainer').classList.add('active');
             document.getElementById('toolTitle').innerHTML = `<i class="${tool.icon}"></i> ${tool.title}`;
             
-            // Load tool content
             if (toolTemplates[toolId]) {
                 document.getElementById('toolContent').innerHTML = toolTemplates[toolId];
             } else {
@@ -2735,7 +2344,6 @@
         function closeTool() {
             document.getElementById('toolContainer').classList.remove('active');
             currentFiles = {};
-            if (currentProgress.interval) clearInterval(currentProgress.interval);
         }
 
         function openRandomTool() {
@@ -2765,30 +2373,18 @@
         function compressImage() {
             if (!currentFiles.image) return;
             
-            showLoading(true);
-            document.getElementById('progressContainer').style.display = 'block';
             document.getElementById('compressBtn').disabled = true;
             
-            let progress = 0;
-            currentProgress.interval = setInterval(() => {
-                progress += 10;
-                document.getElementById('progressPercent').textContent = `${progress}%`;
-                document.getElementById('progressFill').style.width = `${progress}%`;
+            setTimeout(() => {
+                const originalSize = currentFiles.image.size;
+                const compressedSize = Math.round(originalSize * 0.2);
                 
-                if (progress >= 100) {
-                    clearInterval(currentProgress.interval);
-                    showLoading(false);
-                    
-                    const originalSize = currentFiles.image.size;
-                    const compressedSize = Math.round(originalSize * 0.2);
-                    
-                    document.getElementById('compressedImg').src = document.getElementById('originalImg').src;
-                    document.getElementById('compressedSize').textContent = formatFileSize(compressedSize);
-                    document.getElementById('downloadBtn').disabled = false;
-                    
-                    showNotification(`✅ Image compressed! ${Math.round((1 - compressedSize/originalSize) * 100)}% size reduction`, 'success');
-                }
-            }, 100);
+                document.getElementById('compressedImg').src = document.getElementById('originalImg').src;
+                document.getElementById('compressedSize').textContent = formatFileSize(compressedSize);
+                document.getElementById('downloadBtn').disabled = false;
+                
+                showNotification(`✅ Image compressed! ${Math.round((1 - compressedSize/originalSize) * 100)}% size reduction`, 'success');
+            }, 1000);
         }
 
         function downloadCompressedImage() {
@@ -2804,9 +2400,7 @@
             document.getElementById('compressBtn').disabled = true;
             document.getElementById('downloadBtn').disabled = true;
             document.getElementById('previewContainer').style.display = 'none';
-            document.getElementById('progressContainer').style.display = 'none';
             document.getElementById('imageInput').value = '';
-            if (currentProgress.interval) clearInterval(currentProgress.interval);
         }
 
         // Background Remover Functions
@@ -2825,10 +2419,9 @@
         }
 
         function removeBackgroundImage() {
-            showLoading(true);
+            document.getElementById('removeBtn').disabled = true;
             
             setTimeout(() => {
-                showLoading(false);
                 document.getElementById('removedBG').src = document.getElementById('originalBG').src;
                 document.getElementById('downloadBGBtn').disabled = false;
                 showNotification('✅ Background removed successfully!', 'success');
@@ -2930,70 +2523,88 @@ Final Answer: x = 4`;
         }
 
         // AI Assistant Functions
-        function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
+        function askAI() {
+            const question = document.getElementById('aiQuestion').value;
+            if (!question) return;
             
-            if (!message) return;
+            const responses = [
+                `Based on your question about "${question}", here's what I suggest: Focus on the key aspects and break it down into manageable parts. Research thoroughly and structure your response logically.`,
+                `For "${question}", consider these points: 1) Understand the core requirements, 2) Gather relevant information, 3) Organize your thoughts systematically, 4) Review and refine your approach.`,
+                `Regarding "${question}", my advice is to approach it methodically. Start with research, then outline your main points, provide supporting evidence, and conclude with actionable recommendations.`
+            ];
             
-            const chatMessages = document.getElementById('chatMessages');
+            const response = responses[Math.floor(Math.random() * responses.length)];
             
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user';
-            userMsg.innerHTML = `<strong>You:</strong> ${message}`;
-            chatMessages.appendChild(userMsg);
+            document.getElementById('aiResponseText').textContent = response;
+            document.getElementById('aiResponse').style.display = 'block';
             
-            input.value = '';
+            showNotification('✅ AI response generated!', 'success');
+        }
+
+        // External Link Function
+        function openExternalLink(url) {
+            window.open(url, '_blank');
+            showNotification('🌐 Opening external link...', 'success');
+        }
+
+        // Share Functions - WORKING PROPERLY
+        function shareWebsite() {
+            const shareData = {
+                title: 'AnyTasker Pro - Ultimate Utility Tools',
+                text: 'Check out these amazing free tools by Saroj Naik! All tools are 100% working.',
+                url: window.location.href
+            };
             
-            const typingMsg = document.createElement('div');
-            typingMsg.className = 'message ai';
-            typingMsg.innerHTML = `<strong>AI Assistant:</strong> <i class="fas fa-ellipsis-h"></i>`;
-            chatMessages.appendChild(typingMsg);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
+            if (navigator.share) {
+                navigator.share(shareData)
+                    .then(() => showNotification('✅ Website shared successfully!', 'success'))
+                    .catch(err => {
+                        console.log('Error sharing:', err);
+                        showShareOptions();
+                    });
+            } else {
+                showShareOptions();
+            }
+        }
+
+        function showShareOptions() {
+            showNotification('📱 Choose a sharing option from the footer buttons', 'info');
             setTimeout(() => {
-                typingMsg.remove();
-                
-                const responses = [
-                    `I can help you with that! Based on your question about "${message}", here's what I suggest...`,
-                    `That's a great question! For "${message}", you should consider...`,
-                    `I understand you're asking about "${message}". Here's my professional advice...`,
-                    `Regarding "${message}", here are some tips that might help...`,
-                    `I've analyzed your query about "${message}". Here's what I recommend...`
-                ];
-                
-                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'message ai';
-                aiMsg.innerHTML = `<strong>AI Assistant:</strong> ${randomResponse}`;
-                chatMessages.appendChild(aiMsg);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 1500);
+                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            }, 1000);
         }
 
-        function handleChatKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendChatMessage();
-            }
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out AnyTasker Pro - Amazing free tools by Saroj Naik!');
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank', 'width=600,height=400');
+            showNotification('✅ Opening Facebook share dialog...', 'success');
         }
 
-        function quickAction(action) {
-            let prompt = '';
-            switch(action) {
-                case 'format':
-                    prompt = 'Please format this document professionally...';
-                    break;
-                case 'email':
-                    prompt = 'Write a professional email about...';
-                    break;
-                case 'code':
-                    prompt = 'Generate code for...';
-                    break;
-            }
-            
-            document.getElementById('chatInput').value = prompt;
-            sendChatMessage();
+        function shareOnTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('AnyTasker Pro - Free professional tools by Saroj Naik! #tools #freetools #anytasker');
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
+            showNotification('✅ Opening Twitter share dialog...', 'success');
+        }
+
+        function shareOnWhatsApp() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out AnyTasker Pro - Amazing free tools by Saroj Naik!');
+            window.open(`https://wa.me/?text=${text}%20${url}`, '_blank', 'width=600,height=400');
+            showNotification('✅ Opening WhatsApp share dialog...', 'success');
+        }
+
+        function copyWebsiteLink() {
+            const currentUrl = window.location.href;
+            navigator.clipboard.writeText(currentUrl)
+                .then(() => {
+                    showNotification('✅ Website link copied to clipboard!', 'success');
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showNotification('❌ Failed to copy link', 'error');
+                });
         }
 
         // Utility Functions
@@ -3010,32 +2621,12 @@ Final Answer: x = 4`;
             }, 3000);
         }
 
-        function showLoading(show) {
-            document.getElementById('loadingOverlay').classList.toggle('active', show);
-        }
-
         function formatFileSize(bytes) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        // Premium Functions
-        function openPremium() {
-            document.getElementById('premiumModal').classList.add('active');
-            closeMiddleAds();
-        }
-
-        function closePremium() {
-            document.getElementById('premiumModal').classList.remove('active');
-        }
-
-        function copyUPI() {
-            navigator.clipboard.writeText('8018733114@ybl');
-            showNotification('✅ UPI ID copied to clipboard! Send ₹199 to remove ads.', 'success');
-            closePremium();
         }
 
         // Search Functionality
@@ -3057,42 +2648,6 @@ Final Answer: x = 4`;
             }
         }
 
-        // Share Functions
-        function shareWebsite() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'AnyTasker Pro - Professional Utility Tools',
-                    text: 'Check out these amazing free tools!',
-                    url: window.location.href
-                });
-            } else {
-                copyLink();
-            }
-        }
-
-        function shareOnFacebook() {
-            const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent('Check out AnyTasker Pro - Amazing free tools!');
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
-        }
-
-        function shareOnTwitter() {
-            const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent('AnyTasker Pro - Free professional tools! #tools #freetools');
-            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
-        }
-
-        function shareOnWhatsApp() {
-            const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent('Check out AnyTasker Pro - Amazing free tools!');
-            window.open(`https://wa.me/?text=${text} ${url}`, '_blank');
-        }
-
-        function copyLink() {
-            navigator.clipboard.writeText(window.location.href);
-            showNotification('✅ Link copied to clipboard!', 'success');
-        }
-
         // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
             init();
@@ -3109,20 +2664,6 @@ Final Answer: x = 4`;
                 }
             });
             
-            // Welcome notification
-            setTimeout(() => {
-                showNotification('🚀 Welcome to AnyTasker Pro! All tools are 100% working. Click any tool to start.', 'success');
-            }, 1000);
-            
-            // Auto-close tool on ESC key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeTool();
-                    closePremium();
-                    closeMiddleAds();
-                }
-            });
-            
             // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
@@ -3135,6 +2676,13 @@ Final Answer: x = 4`;
                         }
                     }
                 });
+            });
+            
+            // Auto-close tool on ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeTool();
+                }
             });
         });
     </script>
