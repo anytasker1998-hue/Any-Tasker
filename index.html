@@ -2,471 +2,379 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>AnyTasker Pro – Ultimate Utility Tools</title>
+<title>Anytasker Pro</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="description" content="Free professional tools – image, PDF, AI, education. 100% working. Developed by Saroj Naik">
-<meta name="author" content="Saroj Naik">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <style>
-:root{
---primary:#6366f1;
---secondary:#8b5cf6;
---accent:#ec4899;
---dark:#0f172a;
---card:#020617;
---text:#e5e7eb;
---radius:16px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-font-family:Poppins,Arial;
-background:linear-gradient(135deg,#0f172a,#1e1b4b,#0f172a);
-color:var(--text);
-padding-top:150px;
-}
-header{
-position:fixed;top:0;left:0;width:100%;
-background:#020617;
-border-bottom:2px solid var(--primary);
-z-index:999;
-}
-.header-content{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:16px 24px;
-}
-.logo{
-display:flex;
-gap:12px;
-cursor:pointer;
-}
-.logo-icon{
-background:var(--primary);
-padding:12px;
-border-radius:12px;
-}
-.logo-text h1{font-size:20px}
-.logo-text p{font-size:12px;opacity:.7}
-nav ul{
-display:flex;
-gap:20px;
-list-style:none;
-}
-nav a{
-color:#fff;
-text-decoration:none;
-font-size:14px;
-opacity:.8;
-}
-nav a:hover{opacity:1}
-
-.container{padding:40px 20px}
-
-.hero{text-align:center;margin-bottom:40px}
-.hero h1{font-size:36px}
-.hero h1 span{color:var(--primary)}
-.hero p{opacity:.8;margin:12px 0}
-
-.search-box{
-display:flex;
-max-width:500px;
-margin:20px auto;
-}
-.search-box input{
-flex:1;
-padding:12px;
-border-radius:12px 0 0 12px;
-border:none;
-}
-.search-box button{
-padding:12px 16px;
-border:none;
-background:var(--primary);
-color:#fff;
-border-radius:0 12px 12px 0;
-cursor:pointer;
-}
-
-.tools-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-gap:20px;
-}
-.tool-card{
-background:var(--card);
-padding:22px;
-border-radius:20px;
-text-align:center;
-box-shadow:0 10px 40px rgba(0,0,0,.4);
-}
-.tool-card i{
-font-size:32px;
-color:var(--primary);
-margin-bottom:10px;
-}
-.tool-card h3{font-size:18px;margin-bottom:10px}
-.tool-card button{
-width:100%;
-padding:10px;
-border:none;
-border-radius:12px;
-background:linear-gradient(135deg,var(--primary),var(--accent));
-color:#fff;
-cursor:pointer;
-}
-
-.popup{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.85);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:2000;
-}
+body{margin:0;font-family:Arial;background:#0f172a;color:#fff}
+header{padding:15px;background:#020617;display:flex;justify-content:space-between;align-items:center}
+header input{padding:8px;border-radius:6px;border:none}
+.grid{padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.card{background:#020617;padding:20px;border-radius:14px;text-align:center}
+.card i{font-size:30px;color:#3b82f6}
+.card button{margin-top:12px;padding:8px;border:none;border-radius:8px;background:#2563eb;color:#fff;cursor:pointer}
+.popup{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center}
 .popup.active{display:flex}
-.box{
-background:#020617;
-width:95%;
-max-width:620px;
-padding:22px;
-border-radius:20px;
-}
-.close{
-float:right;
-cursor:pointer;
-font-size:20px;
-}
-input,textarea,select{
-width:100%;
-margin:8px 0;
-padding:10px;
-border-radius:10px;
-border:none;
-}
-button{background:var(--primary);color:#fff}
-pre{white-space:pre-wrap}
-footer{
-text-align:center;
-padding:30px;
-opacity:.6;
-font-size:14px;
-}
+.box{background:#020617;width:95%;max-width:550px;padding:20px;border-radius:14px}
+.close{float:right;cursor:pointer}
+input,textarea,select,button{width:100%;margin:6px 0;padding:8px;border-radius:6px;border:none}
+button{background:#2563eb;color:#fff}
+a{color:#3b82f6;display:inline-block;margin-top:8px}
+small{opacity:.7}
 </style>
 </head>
 
 <body>
 
 <header>
-<div class="header-content">
-<div class="logo" onclick="scrollTo(0,0)">
-<div class="logo-icon"><i class="fas fa-tools"></i></div>
-<div class="logo-text">
-<h1>AnyTasker Pro</h1>
-<p>ULTIMATE UTILITY TOOLS</p>
-</div>
-</div>
-<nav>
-<ul>
-<li><a href="#">Home</a></li>
-<li><a href="#">Tools</a></li>
-<li><a href="#">About</a></li>
-<li><a href="#">Contact</a></li>
-</ul>
-</nav>
-</div>
+<h2>Online Tools</h2>
+<input id="search" placeholder="Search tool...">
 </header>
 
-<div class="container">
+<div class="grid" id="toolGrid"></div>
 
-<section class="hero">
-<h1>Professional Utility Tools<br><span>100% Working – Free</span></h1>
-<p>Image, PDF, AI & Education tools in one place</p>
-
-<div class="search-box">
-<input id="searchInput" placeholder="Search tools...">
-<button onclick="searchTools()"><i class="fas fa-search"></i></button>
-</div>
-</section>
-
-<section>
-<div class="tools-grid" id="toolsGrid"></div>
-</section>
-
-</div>
-
-<!-- POPUP -->
 <div class="popup" id="popup">
-<div class="box">
-<span class="close" onclick="closeTool()">✖</span>
-<div id="toolArea"></div>
+ <div class="box">
+  <span class="close" onclick="closeTool()">✖</span>
+  <div id="toolArea"></div>
+ </div>
 </div>
-</div>
-
-<footer>
-© 2025 AnyTasker Pro · Developed by Saroj Naik
-</footer>
 
 <script>
+/* ---------- TOOL LIST ---------- */
 const tools=[
-{id:"img-compress",name:"Image Compressor",icon:"fa-compress",ui:compressUI},
-{id:"img-resize",name:"Image Resizer",icon:"fa-expand",ui:resizeUI},
-{id:"img-convert",name:"Image Converter",icon:"fa-image",ui:convertUI},
-{id:"img-pdf",name:"Image to PDF",icon:"fa-file-pdf",ui:imgPdfUI},
-{id:"pdf-merge",name:"PDF Merger",icon:"fa-file-pdf",ui:pdfMergeUI},
-{id:"pdf-split",name:"PDF Splitter",icon:"fa-cut",ui:pdfSplitUI},
-{id:"pdf-text",name:"PDF to Text",icon:"fa-file-lines",ui:pdfTextUI},
-{id:"pdf-word",name:"PDF to Word",icon:"fa-file-word",ui:pdfWordUI},
-{id:"summarizer",name:"Text Summarizer",icon:"fa-align-left",ui:sumUI},
-{id:"math",name:"Math Solver",icon:"fa-calculator",ui:mathUI},
-{id:"gpa",name:"GPA Calculator",icon:"fa-graduation-cap",ui:gpaUI},
-{id:"word",name:"Word Counter",icon:"fa-keyboard",ui:wordUI},
+["img-compress","Image Compressor","fa-compress"],
+["img-resize","Image Resizer","fa-expand"],
+["img-convert","Image Converter","fa-image"],
+["bg-remove","Background Remover","fa-scissors"],
+["img-pdf","Image to PDF","fa-file-pdf"],
+["pdf-merge","PDF Merger","fa-file-pdf"],
+["pdf-split","PDF Splitter","fa-cut"],
+["pdf-text","PDF to Text","fa-file-lines"],
+["pdf-word","PDF to Word","fa-file-word"],
+["summarizer","Text Summarizer","fa-align-left"],
+["math","Math Solver","fa-calculator"],
+["gpa","GPA Calculator","fa-graduation-cap"],
+["word","Word Counter","fa-keyboard"]
 ];
 
-const grid=document.getElementById("toolsGrid");
+const toolGrid=document.getElementById("toolGrid");
 const popup=document.getElementById("popup");
 const toolArea=document.getElementById("toolArea");
+const search=document.getElementById("search");
 
-function renderTools(list){
-grid.innerHTML="";
-list.forEach(t=>{
-grid.innerHTML+=`
-<div class="tool-card">
-<i class="fas ${t.icon}"></i>
-<h3>${t.name}</h3>
-<button onclick="openTool('${t.id}')">Use Tool</button>
-</div>`;
-});
+/* ---------- LOAD TOOLS ---------- */
+function loadTools(list=tools){
+ toolGrid.innerHTML="";
+ list.forEach(t=>{
+  toolGrid.innerHTML+=`
+  <div class="card">
+   <i class="fas ${t[2]}"></i>
+   <h3>${t[1]}</h3>
+   <button onclick="openTool('${t[0]}')">Use</button>
+  </div>`;
+ });
 }
-renderTools(tools);
+loadTools();
 
-function searchTools(){
-const q=document.getElementById("searchInput").value.toLowerCase();
-renderTools(tools.filter(t=>t.name.toLowerCase().includes(q)));
-}
+search.onkeyup=()=>{
+ const q=search.value.toLowerCase();
+ loadTools(tools.filter(t=>t[1].toLowerCase().includes(q)));
+};
 
+/* ---------- TOOL OPEN ---------- */
 function openTool(id){
-popup.classList.add("active");
-toolArea.innerHTML=tools.find(t=>t.id===id).ui();
+ popup.classList.add("active");
+ const map={
+  "img-compress":compressUI,
+  "img-resize":resizeUI,
+  "img-convert":convertUI,
+  "bg-remove":bgUI,
+  "img-pdf":imgPdfUI,
+  "pdf-merge":pdfMergeUI,
+  "pdf-split":pdfSplitUI,
+  "pdf-text":pdfTextUI,
+  "pdf-word":pdfWordUI,
+  "summarizer":sumUI,
+  "math":mathUI,
+  "gpa":gpaUI,
+  "word":wordUI
+ };
+ toolArea.innerHTML=map[id]();
 }
 function closeTool(){popup.classList.remove("active")}
 
-/* === WORKING TOOLS LOGIC (from reviewed code) === */
-
-/* IMAGE COMPRESS */
+/* ---------- IMAGE COMPRESS ---------- */
 function compressUI(){
 return `<h3>Image Compressor</h3>
-<input type=file id=ci>
+<input type="file" id="ci">
+<input type="number" id="target" placeholder="Target size KB">
 <button onclick="compressImg()">Compress</button>
-<div id=co></div>`;
+<div id="co"></div>`;
 }
 function compressImg(){
-const f=ci.files[0]; if(!f)return;
-const img=new Image();
-img.onload=()=>{
-const c=document.createElement("canvas");
-c.width=img.width;c.height=img.height;
-c.getContext("2d").drawImage(img,0,0);
-c.toBlob(b=>{
-co.innerHTML=`<a download="compressed.jpg" href="${URL.createObjectURL(b)}">Download</a>`;
-},"image/jpeg",0.6);
-};
-img.src=URL.createObjectURL(f);
+ const f=ci.files[0];
+ if(!f||!target.value)return;
+ const img=new Image();
+ const r=new FileReader();
+ r.onload=e=>{
+  img.onload=()=>{
+   const c=document.createElement("canvas");
+   c.width=img.width;c.height=img.height;
+   c.getContext("2d").drawImage(img,0,0);
+   let q=0.9;
+   (function loop(){
+    c.toBlob(b=>{
+     if(b.size/1024>target.value && q>0.1){q-=0.05;loop();}
+     else co.innerHTML=`<a download href="${URL.createObjectURL(b)}">Download (${(b.size/1024).toFixed(1)} KB)</a>`;
+    },"image/jpeg",q);
+   })();
+  };
+  img.src=e.target.result;
+ };
+ r.readAsDataURL(f);
 }
 
-/* IMAGE RESIZE */
+/* ---------- IMAGE RESIZE ---------- */
 function resizeUI(){
 return `<h3>Image Resizer</h3>
 <input type=file id=ri>
-<input id=rw placeholder="Width">
-<input id=rh placeholder="Height">
-<button onclick="resizeImg()">Resize</button>
+<input id=rw placeholder=Width>
+<input id=rh placeholder=Height>
+<button onclick=resize()>Resize</button>
 <div id=ro></div>`;
 }
-function resizeImg(){
-const f=ri.files[0]; const w=+rw.value,h=+rh.value;
-if(!f||!w||!h)return;
-const img=new Image();
-img.onload=()=>{
-const c=document.createElement("canvas");
-c.width=w;c.height=h;
-c.getContext("2d").drawImage(img,0,0,w,h);
-c.toBlob(b=>{
-ro.innerHTML=`<a download="resized.png" href="${URL.createObjectURL(b)}">Download</a>`;
-});
-};
-img.src=URL.createObjectURL(f);
+function resize(){
+ const f=ri.files[0];
+ if(!f||!rw.value||!rh.value)return;
+ const r=new FileReader();
+ r.onload=e=>{
+  const i=new Image();
+  i.onload=()=>{
+   const c=document.createElement("canvas");
+   c.width=rw.value;c.height=rh.value;
+   c.getContext("2d").drawImage(i,0,0,c.width,c.height);
+   c.toBlob(b=>ro.innerHTML=`<a download href="${URL.createObjectURL(b)}">Download</a>`);
+  };
+  i.src=e.target.result;
+ };
+ r.readAsDataURL(f);
 }
 
-/* IMAGE CONVERT */
+/* ---------- IMAGE CONVERT ---------- */
 function convertUI(){
 return `<h3>Image Converter</h3>
-<input type=file id=ii>
-<select id=fmt><option value="image/png">PNG</option><option value="image/jpeg">JPG</option></select>
-<button onclick="convertImg()">Convert</button>
-<div id=io></div>`;
+<input type=file id=vi>
+<select id=fmt>
+<option value="image/jpeg">JPG</option>
+<option value="image/png">PNG</option>
+</select>
+<button onclick=convert()>Convert</button>
+<div id=vo></div>`;
 }
-function convertImg(){
-const f=ii.files[0]; if(!f)return;
-const img=new Image();
-img.onload=()=>{
-const c=document.createElement("canvas");
-c.width=img.width;c.height=img.height;
-c.getContext("2d").drawImage(img,0,0);
-c.toBlob(b=>{
-io.innerHTML=`<a download="converted" href="${URL.createObjectURL(b)}">Download</a>`;
-},fmt.value);
-};
-img.src=URL.createObjectURL(f);
+function convert(){
+ const f=vi.files[0];
+ if(!f)return;
+ const r=new FileReader();
+ r.onload=e=>{
+  const i=new Image();
+  i.onload=()=>{
+   const c=document.createElement("canvas");
+   c.width=i.width;c.height=i.height;
+   c.getContext("2d").drawImage(i,0,0);
+   c.toBlob(b=>vo.innerHTML=`<a download href="${URL.createObjectURL(b)}">Download</a>`,fmt.value);
+  };
+  i.src=e.target.result;
+ };
+ r.readAsDataURL(f);
 }
 
-/* IMAGE TO PDF */
+/* ---------- BACKGROUND REMOVE ---------- */
+function bgUI(){
+return `<h3>Background Remover</h3>
+<small>Works best with white background</small>
+<input type=file id=bi>
+<button onclick=bgRemove()>Remove</button>
+<div id=bo></div>`;
+}
+function bgRemove(){
+ const f=bi.files[0];
+ if(!f)return;
+ const r=new FileReader();
+ r.onload=e=>{
+  const i=new Image();
+  i.onload=()=>{
+   const c=document.createElement("canvas");
+   c.width=i.width;c.height=i.height;
+   const x=c.getContext("2d");
+   x.drawImage(i,0,0);
+   const d=x.getImageData(0,0,c.width,c.height);
+   for(let j=0;j<d.data.length;j+=4){
+    if(d.data[j]>240&&d.data[j+1]>240&&d.data[j+2]>240)d.data[j+3]=0;
+   }
+   x.putImageData(d,0,0);
+   c.toBlob(b=>bo.innerHTML=`<a download="bg.png" href="${URL.createObjectURL(b)}">Download</a>`);
+  };
+  i.src=e.target.result;
+ };
+ r.readAsDataURL(f);
+}
+
+/* ---------- IMAGE TO PDF ---------- */
 function imgPdfUI(){
 return `<h3>Image to PDF</h3>
-<input type=file id=ip>
-<button onclick="imgToPdf()">Convert</button>
+<input type=file multiple id=ipi>
+<button onclick=imgPdf()>Convert</button>
 <div id=ipo></div>`;
 }
-async function imgToPdf(){
-const f=ip.files[0]; if(!f)return;
-const {PDFDocument}=PDFLib;
-const pdf=await PDFDocument.create();
-const img=await pdf.embedJpg(await f.arrayBuffer());
-const p=pdf.addPage([img.width,img.height]);
-p.drawImage(img,{x:0,y:0,width:img.width,height:img.height});
-ipo.innerHTML=`<a download="image.pdf" href="${URL.createObjectURL(new Blob([await pdf.save()]))}">Download PDF</a>`;
+async function imgPdf(){
+ const {PDFDocument}=PDFLib;
+ const pdf=await PDFDocument.create();
+ for(const f of ipi.files){
+  const buf=await f.arrayBuffer();
+  const img=f.type.includes("png")?await pdf.embedPng(buf):await pdf.embedJpg(buf);
+  const p=pdf.addPage([img.width,img.height]);
+  p.drawImage(img,{x:0,y:0,width:img.width,height:img.height});
+ }
+ const b=new Blob([await pdf.save()],{type:"application/pdf"});
+ ipo.innerHTML=`<a download="images.pdf" href="${URL.createObjectURL(b)}">Download PDF</a>`;
 }
 
-/* PDF MERGE */
+/* ---------- PDF MERGE ---------- */
 function pdfMergeUI(){
 return `<h3>PDF Merger</h3>
 <input type=file multiple id=pm>
-<button onclick="mergePDF()">Merge</button>
+<button onclick=mergePDF()>Merge</button>
 <div id=pmo></div>`;
 }
 async function mergePDF(){
-const {PDFDocument}=PDFLib;
-const m=await PDFDocument.create();
-for(const f of pm.files){
-const p=await PDFDocument.load(await f.arrayBuffer());
-const pages=await m.copyPages(p,p.getPageIndices());
-pages.forEach(pg=>m.addPage(pg));
-}
-pmo.innerHTML=`<a download="merged.pdf" href="${URL.createObjectURL(new Blob([await m.save()]))}">Download</a>`;
+ const {PDFDocument}=PDFLib;
+ const m=await PDFDocument.create();
+ for(const f of pm.files){
+  const p=await PDFDocument.load(await f.arrayBuffer());
+  const pages=await m.copyPages(p,p.getPageIndices());
+  pages.forEach(pg=>m.addPage(pg));
+ }
+ const b=new Blob([await m.save()],{type:"application/pdf"});
+ pmo.innerHTML=`<a download="merged.pdf" href="${URL.createObjectURL(b)}">Download</a>`;
 }
 
-/* PDF SPLIT */
+/* ---------- PDF SPLIT ---------- */
 function pdfSplitUI(){
 return `<h3>PDF Splitter</h3>
 <input type=file id=ps>
 <input id=pn placeholder="Split after page">
-<button onclick="splitPDF()">Split</button>
+<button onclick=splitPDF()>Split</button>
 <div id=pso></div>`;
 }
 async function splitPDF(){
-const {PDFDocument}=PDFLib;
-const p=await PDFDocument.load(await ps.files[0].arrayBuffer());
-const n=+pn.value;
-if(!n||n>=p.getPageCount())return alert("Invalid page");
-const a=await PDFDocument.create();
-const b=await PDFDocument.create();
-(await a.copyPages(p,[...Array(n).keys()])).forEach(pg=>a.addPage(pg));
-(await b.copyPages(p,[...Array(p.getPageCount()-n).keys()].map(i=>i+n))).forEach(pg=>b.addPage(pg));
-pso.innerHTML=`<a download="part1.pdf" href="${URL.createObjectURL(new Blob([await a.save()]))}">Part 1</a><br>
-<a download="part2.pdf" href="${URL.createObjectURL(new Blob([await b.save()]))}">Part 2</a>`;
+ const {PDFDocument}=PDFLib;
+ const p=await PDFDocument.load(await ps.files[0].arrayBuffer());
+ const n=parseInt(pn.value);
+ if(!n||n>=p.getPageCount())return alert("Invalid page number");
+ const a=await PDFDocument.create();
+ const b=await PDFDocument.create();
+ (await a.copyPages(p,[...Array(n).keys()])).forEach(pg=>a.addPage(pg));
+ (await b.copyPages(p,[...Array(p.getPageCount()-n).keys()].map(i=>i+n))).forEach(pg=>b.addPage(pg));
+ pso.innerHTML=`
+ <a download="part1.pdf" href="${URL.createObjectURL(new Blob([await a.save()]))}">Part 1</a><br>
+ <a download="part2.pdf" href="${URL.createObjectURL(new Blob([await b.save()]))}">Part 2</a>`;
 }
 
-/* PDF TEXT */
+/* ---------- PDF TO TEXT ---------- */
 function pdfTextUI(){
 return `<h3>PDF to Text</h3>
 <input type=file id=pt>
-<button onclick="pdfText()">Extract</button>
+<button onclick=pdfText()>Extract</button>
 <pre id=pto></pre>`;
 }
 async function pdfText(){
-const pdf=await pdfjsLib.getDocument(URL.createObjectURL(pt.files[0])).promise;
-let t="";
-for(let i=1;i<=pdf.numPages;i++){
-const p=await pdf.getPage(i);
-const c=await p.getTextContent();
-t+=c.items.map(i=>i.str).join(" ")+"\n\n";
-}
-pto.textContent=t;
+ const pdf=await pdfjsLib.getDocument(URL.createObjectURL(pt.files[0])).promise;
+ let t="";
+ for(let i=1;i<=pdf.numPages;i++){
+  const p=await pdf.getPage(i);
+  const c=await p.getTextContent();
+  t+=c.items.map(i=>i.str).join(" ")+"\n\n";
+ }
+ pto.textContent=t;
 }
 
-/* PDF WORD */
+/* ---------- PDF TO WORD ---------- */
 function pdfWordUI(){
 return `<h3>PDF to Word</h3>
 <input type=file id=pw>
-<button onclick="pdfWord()">Convert</button>
+<button onclick=pdfWord()>Convert</button>
 <div id=pwo></div>`;
 }
 async function pdfWord(){
-const pdf=await pdfjsLib.getDocument(URL.createObjectURL(pw.files[0])).promise;
-let t="";
-for(let i=1;i<=pdf.numPages;i++){
-const p=await pdf.getPage(i);
-const c=await p.getTextContent();
-t+=c.items.map(i=>i.str).join(" ")+"\n\n";
-}
-pwo.innerHTML=`<a download="output.doc" href="${URL.createObjectURL(new Blob([t],{type:"application/msword"}))}">Download</a>`;
+ const pdf=await pdfjsLib.getDocument(URL.createObjectURL(pw.files[0])).promise;
+ let t="";
+ for(let i=1;i<=pdf.numPages;i++){
+  const p=await pdf.getPage(i);
+  const c=await p.getTextContent();
+  t+=c.items.map(i=>i.str).join(" ")+"\n\n";
+ }
+ const blob=new Blob([t],{type:"application/msword"});
+ pwo.innerHTML=`<a download="output.doc" href="${URL.createObjectURL(blob)}">Download Word</a>`;
 }
 
-/* TEXT SUMMARIZER */
+/* ---------- TEXT SUMMARIZER ---------- */
 function sumUI(){
 return `<h3>Text Summarizer</h3>
-<textarea id=st rows=6></textarea>
-<button onclick="summarize()">Summarize</button>
-<pre id=so></pre>`;
+<textarea id=st></textarea>
+<button onclick=sum()>Summarize</button>
+<div id=so></div>`;
 }
-function summarize(){
-so.textContent=st.value.split(" ").slice(0,40).join(" ")+"...";
+function sum(){
+ const s=st.value.split(".");
+ so.textContent=s.slice(0,Math.ceil(s.length/3)).join(".");
 }
 
-/* MATH */
+/* ---------- SAFE MATH ---------- */
 function mathUI(){
 return `<h3>Math Solver</h3>
-<input id=me placeholder="5*10+2">
-<button onclick="solveMath()">Solve</button>
+<input id=me placeholder="2*(3+4)">
+<button onclick=solveMath()>Solve</button>
 <div id=mo></div>`;
 }
 function solveMath(){
-try{mo.textContent=eval(me.value)}catch{mo.textContent="Invalid"}
+ const exp=me.value;
+ if(!/^[0-9+\-*/().\s]+$/.test(exp))return mo.textContent="Invalid expression";
+ mo.textContent="Result: "+Function(`return (${exp})`)();
 }
 
-/* GPA */
+/* ---------- GPA ---------- */
 function gpaUI(){
 return `<h3>GPA Calculator</h3>
-<input id=g1 placeholder="Grade 1">
-<input id=g2 placeholder="Grade 2">
-<input id=g3 placeholder="Grade 3">
-<button onclick="calcGPA()">Calculate</button>
+<input id=g1 placeholder="Grades (comma)">
+<input id=g2 placeholder="Credits (comma)">
+<button onclick=gpa()>Calculate</button>
 <div id=go></div>`;
 }
-function calcGPA(){
-const a=[+g1.value||0,+g2.value||0,+g3.value||0];
-go.textContent=(a.reduce((s,v)=>s+v,0)/a.length).toFixed(2);
+function gpa(){
+ const g=g1.value.split(",").map(Number);
+ const c=g2.value.split(",").map(Number);
+ if(g.length!==c.length||g.some(isNaN)||c.some(isNaN))return go.textContent="Invalid input";
+ let s=0,t=0;
+ g.forEach((v,i)=>{s+=v*c[i];t+=c[i]});
+ go.textContent="GPA: "+(s/t).toFixed(2);
 }
 
-/* WORD COUNT */
+/* ---------- WORD COUNT ---------- */
 function wordUI(){
 return `<h3>Word Counter</h3>
-<textarea id=wt rows=6></textarea>
-<button onclick="countWords()">Count</button>
+<textarea id=wt></textarea>
+<button onclick=countWords()>Count</button>
 <div id=wo></div>`;
 }
 function countWords(){
-wo.textContent=wt.value.trim().split(/\s+/).filter(Boolean).length+" words";
+ const v=wt.value.trim();
+ wo.textContent="Words: "+(v? v.split(/\s+/).length:0);
 }
 </script>
-
 </body>
 </html>
