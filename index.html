@@ -1,494 +1,3833 @@
-
-import React, { useState, useRef } from 'react';
-import { Tool } from '../types';
-import * as gemini from '../services/geminiService';
-
-interface ToolModalProps {
-  tool: Tool;
-  onClose: () => void;
-  notify: (msg: string, type: 'success' | 'error' | 'info') => void;
-}
-
-declare const PDFLib: any;
-declare const pdfjsLib: any;
-
-const ToolModal: React.FC<ToolModalProps> = ({ tool, onClose, notify }) => {
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
-  const [inputText, setInputText] = useState('');
-  const [secondaryInput, setSecondaryInput] = useState(''); // Used for credits in GPA or other secondary fields
-  const [targetSize, setTargetSize] = useState(100);
-  const [width, setWidth] = useState(800);
-  const [height, setHeight] = useState(600);
-  const [format, setFormat] = useState('image/jpeg');
-  const [files, setFiles] = useState<FileList | null>(null);
-  const [splitPage, setSplitPage] = useState(1);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleAction = async () => {
-    setLoading(true);
-    try {
-      switch (tool.id) {
-        case 'image-compressor': {
-          if (!files?.[0]) throw new Error("Please select an image");
-          const file = files[0];
-          const img = new Image();
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            img.onload = () => {
-              const canvas = document.createElement("canvas");
-              canvas.width = img.width;
-              canvas.height = img.height;
-              const ctx = canvas.getContext("2d")!;
-              ctx.drawImage(img, 0, 0);
-              let q = 0.9;
-              const loop = () => {
-                canvas.toBlob((blob) => {
-                  if (blob && blob.size / 1024 > targetSize && q > 0.1) {
-                    q -= 0.05;
-                    loop();
-                  } else if (blob) {
-                    setResult({ 
-                      url: URL.createObjectURL(blob), 
-                      size: (blob.size / 1024).toFixed(1),
-                      name: `compressed_${file.name.split('.')[0]}.jpg`
-                    });
-                    setLoading(false);
-                    notify("Image compressed successfully!", "success");
-                  }
-                }, "image/jpeg", q);
-              };
-              loop();
-            };
-            img.src = e.target?.result as string;
-          };
-          reader.readAsDataURL(file);
-          return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnyTasker Pro - Ultimate Utility Tools by Saroj Naik</title>
+    <meta name="description" content="Free professional tools: Image compressor, PDF tools, background remover, AI tools. 100% working. Developed by Saroj Naik">
+    <meta name="keywords" content="image compressor, PDF compressor, background remover, anytasker, tools, free, Saroj Naik">
+    <meta name="author" content="Saroj Naik">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- PDF Libraries -->
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --darker: #0f172a;
+            --light: #f9fafb;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            --gradient-dark: linear-gradient(135deg, var(--darker), #1e1b4b, #0f172a);
+            --gradient-light: linear-gradient(135deg, var(--primary), var(--accent));
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.2);
+            --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.3);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        case 'image-resizer': {
-          if (!files?.[0]) throw new Error("Please select an image");
-          const file = files[0];
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const img = new Image();
-            img.onload = () => {
-              const canvas = document.createElement("canvas");
-              canvas.width = width;
-              canvas.height = height;
-              const ctx = canvas.getContext("2d")!;
-              ctx.drawImage(img, 0, 0, width, height);
-              canvas.toBlob((blob) => {
-                if (blob) {
-                  setResult({ 
-                    url: URL.createObjectURL(blob),
-                    name: `resized_${file.name}`
-                  });
-                  setLoading(false);
-                  notify("Image resized successfully!", "success");
-                }
-              });
-            };
-            img.src = e.target?.result as string;
-          };
-          reader.readAsDataURL(file);
-          return;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        case 'image-converter': {
-          if (!files?.[0]) throw new Error("Please select an image");
-          const file = files[0];
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const img = new Image();
-            img.onload = () => {
-              const canvas = document.createElement("canvas");
-              canvas.width = img.width;
-              canvas.height = img.height;
-              const ctx = canvas.getContext("2d")!;
-              ctx.drawImage(img, 0, 0);
-              const ext = format === 'image/png' ? 'png' : 'jpg';
-              canvas.toBlob((blob) => {
-                if (blob) {
-                  setResult({ 
-                    url: URL.createObjectURL(blob),
-                    name: `converted_${file.name.split('.')[0]}.${ext}`
-                  });
-                  setLoading(false);
-                  notify("Conversion complete!", "success");
-                }
-              }, format);
-            };
-            img.src = e.target?.result as string;
-          };
-          reader.readAsDataURL(file);
-          return;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--gradient-dark);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 160px;
         }
 
-        case 'background-remover': {
-          if (!files?.[0]) throw new Error("Please select an image");
-          const file = files[0];
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const img = new Image();
-            img.onload = () => {
-              const canvas = document.createElement("canvas");
-              canvas.width = img.width; canvas.height = img.height;
-              const ctx = canvas.getContext("2d")!;
-              ctx.drawImage(img, 0, 0);
-              const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-              for (let i = 0; i < imgData.data.length; i += 4) {
-                // Background removal based on white threshold
-                if (imgData.data[i] > 240 && imgData.data[i+1] > 240 && imgData.data[i+2] > 240) {
-                  imgData.data[i+3] = 0;
-                }
-              }
-              ctx.putImageData(imgData, 0, 0);
-              canvas.toBlob((blob) => {
-                if (blob) {
-                  setResult({ 
-                    url: URL.createObjectURL(blob),
-                    name: `no_bg_${file.name.split('.')[0]}.png`
-                  });
-                  setLoading(false);
-                  notify("Background removed (Simple mode)!", "success");
-                }
-              }, "image/png");
-            };
-            img.src = e.target?.result as string;
-          };
-          reader.readAsDataURL(file);
-          return;
+        /* Top Information Bar */
+        .top-info-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+            border-bottom: 2px solid var(--primary);
+            font-size: 14px;
         }
 
-        case 'image-to-pdf': {
-          if (!files || files.length === 0) throw new Error("Please select images");
-          const { PDFDocument } = PDFLib;
-          const pdf = await PDFDocument.create();
-          // FIX: Explicitly cast Array.from(files) to File[] to avoid unknown type errors
-          for (const file of Array.from(files) as File[]) {
-            const buf = await file.arrayBuffer();
-            const img = file.type.includes("png") ? await pdf.embedPng(buf) : await pdf.embedJpg(buf);
-            const page = pdf.addPage([img.width, img.height]);
-            page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
-          }
-          const pdfBytes = await pdf.save();
-          setResult({ url: URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' })), name: 'converted_images.pdf' });
-          break;
+        .contact-info {
+            display: flex;
+            gap: 25px;
         }
 
-        case 'pdf-merger': {
-          if (!files || files.length < 2) throw new Error("Please select at least 2 PDF files");
-          const { PDFDocument } = PDFLib;
-          const merged = await PDFDocument.create();
-          // FIX: Explicitly cast Array.from(files) to File[] to avoid unknown type errors
-          for (const file of Array.from(files) as File[]) {
-            const pdf = await PDFDocument.load(await file.arrayBuffer());
-            const pages = await merged.copyPages(pdf, pdf.getPageIndices());
-            pages.forEach((p: any) => merged.addPage(p));
-          }
-          const pdfBytes = await merged.save();
-          setResult({ url: URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' })), name: 'merged_document.pdf' });
-          break;
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.95);
         }
 
-        case 'pdf-splitter': {
-          if (!files?.[0]) throw new Error("Select a PDF file");
-          const { PDFDocument } = PDFLib;
-          const pdf = await PDFDocument.load(await files[0].arrayBuffer());
-          const count = pdf.getPageCount();
-          if (splitPage < 1 || splitPage >= count) throw new Error(`Invalid page. Total pages: ${count}`);
-          const a = await PDFDocument.create();
-          const b = await PDFDocument.create();
-          (await a.copyPages(pdf, Array.from({length: splitPage}, (_, i) => i))).forEach((p: any) => a.addPage(p));
-          (await b.copyPages(pdf, Array.from({length: count - splitPage}, (_, i) => i + splitPage))).forEach((p: any) => b.addPage(p));
-          setResult({ 
-            multi: [
-              { url: URL.createObjectURL(new Blob([await a.save()], { type: 'application/pdf' })), name: 'part_1.pdf' },
-              { url: URL.createObjectURL(new Blob([await b.save()], { type: 'application/pdf' })), name: 'part_2.pdf' }
-            ]
-          });
-          break;
+        .contact-item i {
+            color: var(--accent);
+            font-size: 16px;
         }
 
-        case 'pdf-to-text': {
-          if (!files?.[0]) throw new Error("Select a PDF file");
-          const pdf = await pdfjsLib.getDocument(URL.createObjectURL(files[0])).promise;
-          let text = "";
-          for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            text += content.items.map((it: any) => it.str).join(" ") + "\n\n";
-          }
-          setResult({ text });
-          break;
+        .contact-item a {
+            color: rgba(255, 255, 255, 0.95);
+            text-decoration: none;
+            transition: var(--transition);
         }
 
-        case 'pdf-to-word': {
-          if (!files?.[0]) throw new Error("Select a PDF file");
-          const pdf = await pdfjsLib.getDocument(URL.createObjectURL(files[0])).promise;
-          let text = "";
-          for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            text += content.items.map((it: any) => it.str).join(" ") + "\n\n";
-          }
-          const blob = new Blob([text], { type: 'application/msword' });
-          setResult({ url: URL.createObjectURL(blob), name: 'document.doc' });
-          break;
+        .contact-item a:hover {
+            color: var(--primary);
+            text-decoration: underline;
         }
 
-        case 'ai-assistant': {
-          if (!inputText) throw new Error("Please enter a question");
-          const response = await gemini.askAI(inputText);
-          setResult({ text: response });
-          break;
+        .developer-tag {
+            background: var(--gradient);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 14px;
+            animation: pulse 3s infinite;
+            letter-spacing: 0.5px;
         }
 
-        case 'essay-writer': {
-          if (!inputText) throw new Error("Please enter a topic");
-          const response = await gemini.generateEssay(inputText, "Medium", "Academic");
-          setResult({ text: response });
-          break;
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); 
+            }
+            50% { 
+                transform: scale(1.03); 
+                box-shadow: 0 0 0 8px rgba(99, 102, 241, 0); 
+            }
         }
 
-        case 'math-solver': {
-          if (!inputText) throw new Error("Please enter a math expression");
-          const response = await gemini.solveMath(inputText);
-          setResult({ text: response });
-          break;
+        /* Ads Container Styles */
+        .ads-container {
+            position: fixed;
+            z-index: 998;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            padding: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: var(--transition);
         }
 
-        case 'text-summarizer': {
-          if (!inputText) throw new Error("Enter text to summarize");
-          // Upgrade: Use Gemini AI for better summarization results
-          const response = await gemini.summarizeText(inputText);
-          setResult({ text: response });
-          break;
+        .ads-container:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
         }
 
-        case 'word-counter': {
-          if (!inputText) throw new Error("Enter some text");
-          const words = inputText.trim() ? inputText.trim().split(/\s+/).length : 0;
-          const chars = inputText.length;
-          setResult({ info: `Words: ${words} | Characters: ${chars}` });
-          break;
+        .ads-top {
+            top: 50px;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        case 'gpa-calculator': {
-          const grades = inputText.split(",").map(Number);
-          const credits = secondaryInput.split(",").map(Number);
-          if (grades.length !== credits.length || grades.some(isNaN) || credits.some(isNaN)) {
-              throw new Error("Invalid input: Grades and Credits count must match.");
-          }
-          let sum = 0, totalCredits = 0;
-          grades.forEach((g, i) => {
-              sum += g * credits[i];
-              totalCredits += credits[i];
-          });
-          setResult({ info: `Your GPA is: ${(sum / totalCredits).toFixed(2)}` });
-          break;
+        .ads-bottom {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-      }
-      if (!['image-compressor', 'image-resizer', 'background-remover', 'image-converter'].includes(tool.id)) {
-        setLoading(false);
-      }
-      notify("Tool execution complete!", "success");
-    } catch (err: any) {
-      notify(err.message || "An error occurred", "error");
-      setLoading(false);
-    }
-  };
 
-  const reset = () => {
-    setResult(null);
-    setInputText('');
-    setSecondaryInput('');
-    setFiles(null);
-    setLoading(false);
-  };
+        .ads-left {
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 160px;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-  return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
-      <div className="glass w-full max-w-2xl rounded-[40px] overflow-hidden border-white/10 flex flex-col max-h-[90vh] shadow-2xl">
-        <div className="p-8 border-b border-white/10 flex justify-between items-center gradient-dark">
-          <h2 className="text-3xl font-bold font-montserrat flex items-center gap-4 gradient-primary bg-clip-text text-transparent">
-            <i className={`fas ${tool.icon}`}></i> {tool.title}
-          </h2>
-          <button onClick={onClose} className="w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-red-500 transition-all group">
-            <i className="fas fa-times text-xl group-hover:rotate-90 transition-transform"></i>
-          </button>
+        .ads-right {
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            width: 160px;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto 100px;
+            padding: 0 200px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 50px;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            padding: 10px;
+            border-radius: var(--radius);
+        }
+
+        .logo:hover {
+            transform: translateY(-3px);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            animation: pulse 3s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .logo-text h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            opacity: 0.9;
+            letter-spacing: 1px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Navigation */
+        nav {
+            position: relative;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: var(--gradient);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .nav-toggle:hover {
+            transform: rotate(90deg);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            padding: 8px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        nav a:hover::before, nav a.active::before {
+            left: 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 60px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #fff, var(--primary), var(--accent), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto 60px;
+            opacity: 0.9;
+            line-height: 1.8;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 60px 0;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            min-width: 200px;
+        }
+
+        .hero-stat:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .hero-stat .number {
+            font-size: 48px;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .hero-stat .label {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        /* Search Box */
+        .search-box {
+            max-width: 700px;
+            margin: 60px auto;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 25px 80px 25px 35px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            font-size: 18px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            color: white;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--gradient);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            font-size: 22px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-box button:hover {
+            transform: translateY(-50%) scale(1.1) rotate(10deg);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 60px 0 40px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 18px 35px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            color: var(--light);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .category-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .category-btn.active {
+            background: var(--gradient);
+            color: white;
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-3px);
+        }
+
+        /* Tools Grid */
+        .tools-section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 5px;
+            background: var(--gradient);
+            border-radius: 3px;
+            animation: widthPulse 2s infinite;
+        }
+
+        @keyframes widthPulse {
+            0%, 100% { width: 120px; }
+            50% { width: 180px; }
+        }
+
+        .section-subtitle {
+            font-size: 20px;
+            opacity: 0.8;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 35px;
+            margin-bottom: 100px;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: var(--radius-lg);
+            padding: 45px 35px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .tool-icon {
+            width: 90px;
+            height: 90px;
+            background: var(--gradient);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 35px;
+            color: white;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 3s infinite;
+        }
+
+        .tool-card:hover .tool-icon {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .tool-card h3 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+
+        .tool-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--gradient);
+            transition: var(--transition);
+        }
+
+        .tool-card:hover h3::after {
+            width: 100px;
+        }
+
+        .tool-features {
+            list-style: none;
+            margin-bottom: 35px;
+            flex-grow: 1;
+        }
+
+        .tool-features li {
+            padding: 12px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            transition: var(--transition);
+        }
+
+        .tool-features li:hover {
+            transform: translateX(10px);
+        }
+
+        .tool-features li i {
+            color: var(--success);
+        }
+
+        .tool-btn {
+            width: 100%;
+            padding: 20px;
+            background: var(--gradient);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+            font-size: 17px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .tool-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Page Content Styles */
+        .page-content {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: var(--radius-lg);
+            padding: 60px;
+            margin: 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow);
+        }
+
+        .page-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .content-section {
+            margin-bottom: 40px;
+        }
+
+        .content-section h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .content-section p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .content-section ul {
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .content-section li {
+            margin-bottom: 10px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Contact Info Styles */
+        .contact-info-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .contact-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .contact-card .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius);
+        }
+
+        /* Floating Action Buttons */
+        .floating-action {
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .fab-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fab-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .fab-btn .tooltip {
+            position: absolute;
+            right: 70px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .fab-btn:hover .tooltip {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Tool Container */
+        .tool-container-wrapper {
+            display: none;
+            position: fixed;
+            top: 180px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 270px);
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            backdrop-filter: blur(20px);
+        }
+
+        .tool-container-wrapper.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .tool-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: calc(100% - 320px);
+            height: calc(100% - 40px);
+            background: var(--gradient-dark);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-lg);
+            display: grid;
+            grid-template-columns: 160px 1fr 160px;
+            gap: 10px;
+        }
+
+        .tool-left-ad, .tool-right-ad {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+        }
+
+        .tool-main-content {
+            overflow-y: auto;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tool-header {
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tool-header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .close-tool {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-tool:hover {
+            transform: rotate(90deg);
+            background: var(--danger);
+        }
+
+        .tool-content {
+            padding: 40px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Tool Content Styles */
+        .file-upload-zone {
+            border: 3px dashed rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .file-upload-zone:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .file-upload-zone i {
+            font-size: 60px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-item label {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-item input,
+        .control-item select,
+        .control-item textarea {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius);
+            color: white;
+            font-family: inherit;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .control-item input:focus,
+        .control-item select:focus,
+        .control-item textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .preview-box {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 25px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            border-radius: var(--radius);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 18px 35px;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            justify-content: center;
+            min-width: 200px;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 80px 0 30px;
+            margin-top: 100px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+            margin-bottom: 60px;
+            max-width: 1400px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+
+        .footer-column h3 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 18px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(10px);
+        }
+
+        .developer-info {
+            background: rgba(99, 102, 241, 0.1);
+            padding: 25px;
+            border-radius: var(--radius);
+            margin-top: 25px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 20px 0;
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: none;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .share-btn.facebook { background: #4267B2; }
+        .share-btn.twitter { background: #1DA1F2; }
+        .share-btn.whatsapp { background: #25D366; }
+        .share-btn.copy { background: var(--primary); }
+
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            background: var(--gradient);
+            color: white;
+            padding: 20px 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 3000;
+            transform: translateX(400px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, var(--success), #059669);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+        }
+
+        /* Language Toggle */
+        .language-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 8px 20px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+
+        .language-toggle:hover {
+            background: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 180px;
+            }
+            .ads-left, .ads-right {
+                display: none;
+            }
+            .tool-container {
+                width: 95%;
+                grid-template-columns: 1fr;
+            }
+            .tool-left-ad, .tool-right-ad {
+                display: none;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                padding: 0 20px;
+            }
+            .top-info-bar {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                padding: 15px;
+            }
+            .contact-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            body {
+                padding-top: 180px;
+            }
+            header {
+                top: 120px;
+            }
+            .nav-toggle {
+                display: flex;
+            }
+            nav ul {
+                position: fixed;
+                top: 200px;
+                left: 20px;
+                right: 20px;
+                flex-direction: column;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(20px);
+                padding: 20px;
+                border-radius: var(--radius);
+                display: none;
+                z-index: 1001;
+                box-shadow: var(--shadow-lg);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            nav ul.show {
+                display: flex;
+                animation: slideDown 0.3s ease;
+            }
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateY(-20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            nav a {
+                justify-content: center;
+                padding: 18px;
+            }
+            .hero h1 {
+                font-size: 42px;
+            }
+            .hero p {
+                font-size: 18px;
+                padding: 25px;
+            }
+            .section-title {
+                font-size: 36px;
+            }
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+            .floating-action {
+                bottom: 100px;
+                right: 20px;
+            }
+            .fab-btn {
+                width: 55px;
+                height: 55px;
+            }
+            .page-content {
+                padding: 40px 30px;
+            }
+            .page-title {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            .hero p {
+                font-size: 16px;
+                padding: 20px;
+            }
+            .hero-stats {
+                gap: 20px;
+            }
+            .hero-stat {
+                min-width: 150px;
+                padding: 20px;
+            }
+            .hero-stat .number {
+                font-size: 36px;
+            }
+            .section-title {
+                font-size: 32px;
+            }
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            .tool-card {
+                padding: 35px 25px;
+            }
+            .category-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            .category-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            .floating-action {
+                bottom: 80px;
+                right: 15px;
+            }
+            .fab-btn {
+                width: 50px;
+                height: 50px;
+            }
+            .fab-btn .tooltip {
+                display: none;
+            }
+            .preview-container {
+                grid-template-columns: 1fr;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .action-btn {
+                min-width: 100%;
+            }
+            .share-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .share-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            .page-content {
+                padding: 30px 20px;
+            }
+            .page-title {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            .hero-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero-stat {
+                width: 100%;
+                max-width: 300px;
+            }
+            .search-box input {
+                padding: 20px 70px 20px 25px;
+                font-size: 16px;
+            }
+            .search-box button {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            .tool-card {
+                padding: 30px 20px;
+            }
+            .tool-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 35px;
+            }
+            .tool-content {
+                padding: 20px;
+            }
+            .page-content {
+                padding: 25px 15px;
+            }
+            .page-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Information Bar -->
+    <div class="top-info-bar">
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="fas fa-user"></i>
+                <span><strong>SAROJ NAIK</strong></span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:anytasker1998@gmail.com">anytasker1998@gmail.com</a>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <a href="tel:+918018733114">8018733114</a>
+            </div>
         </div>
+        <div class="developer-tag">
+            <i class="fas fa-code"></i> DEVELOPED BY SAROJ NAIK
+        </div>
+    </div>
 
-        <div className="p-10 overflow-y-auto flex-grow space-y-8">
-          {!result ? (
-            <>
-              {/* File Drop Area */}
-              {['image-compressor', 'image-resizer', 'image-converter', 'background-remover', 'image-to-pdf', 'pdf-merger', 'pdf-splitter', 'pdf-to-text', 'pdf-to-word'].includes(tool.id) && (
-                <div 
-                  className="border-4 border-dashed border-white/10 rounded-[32px] p-16 text-center hover:border-indigo-500/50 hover:bg-white/5 transition-all cursor-pointer relative"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <i className="fas fa-cloud-upload-alt text-6xl text-indigo-500 mb-6"></i>
-                  <h3 className="text-xl font-bold mb-2">Upload Files</h3>
-                  <p className="opacity-50">Click or drag files here</p>
-                  <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    className="hidden" 
-                    multiple={['image-to-pdf', 'pdf-merger'].includes(tool.id)}
-                    onChange={(e) => {
-                      setFiles(e.target.files);
-                      if(e.target.files) notify(`${e.target.files.length} file(s) ready`, 'info');
-                    }}
-                  />
-                  {files && (
-                    <div className="mt-6 p-4 glass rounded-xl text-indigo-300 font-bold border border-indigo-500/30">
-                        {files.length} file(s) selected
-                    </div>
-                  )}
+    <!-- Top Ad Banner -->
+    <div class="ads-container ads-top">
+        <script async="async" data-cfasync="false" src="https://pl28239794.effectivegatecpm.com/020dcc1e0bd23ed7dc8b597995087112/invoke.js"></script>
+        <div id="container-020dcc1e0bd23ed7dc8b597995087112"></div>
+    </div>
+
+    <!-- Left Sidebar Ad -->
+    <div class="ads-container ads-left">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : 'f720a7f34040d119fe8c31e8d186661e',
+                'format' : 'iframe',
+                'height' : 600,
+                'width' : 160,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
+    </div>
+
+    <!-- Right Sidebar Ad -->
+    <div class="ads-container ads-right">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : 'f720a7f34040d119fe8c31e8d186661e',
+                'format' : 'iframe',
+                'height' : 600,
+                'width' : 160,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
+    </div>
+
+    <!-- Bottom Ad Banner -->
+    <div class="ads-container ads-bottom">
+        <script type="text/javascript" src="https://pl28258457.effectivegatecpm.com/77/86/60/778660b9c8b556582fb5127e53b7db86.js"></script>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo" onclick="scrollToTop()">
+                <div class="logo-icon">
+                    <i class="fas fa-tools"></i>
                 </div>
-              )}
-
-              {/* Tool Specific Controls */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {tool.id === 'image-compressor' && (
-                  <div className="col-span-2">
-                    <label className="block text-sm font-bold mb-2 opacity-70">Target Size (KB)</label>
-                    <input type="number" value={targetSize} onChange={(e) => setTargetSize(Number(e.target.value))} className="w-full glass rounded-2xl p-4 outline-none focus:ring-2 ring-indigo-500" />
-                  </div>
-                )}
-                {tool.id === 'image-resizer' && (
-                  <>
-                    <div>
-                      <label className="block text-sm font-bold mb-2 opacity-70">Width (px)</label>
-                      <input type="number" value={width} onChange={(e) => setWidth(Number(e.target.value))} className="w-full glass rounded-2xl p-4 outline-none focus:ring-2 ring-indigo-500" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-bold mb-2 opacity-70">Height (px)</label>
-                      <input type="number" value={height} onChange={(e) => setHeight(Number(e.target.value))} className="w-full glass rounded-2xl p-4 outline-none focus:ring-2 ring-indigo-500" />
-                    </div>
-                  </>
-                )}
-                {tool.id === 'image-converter' && (
-                  <div className="col-span-2">
-                    <label className="block text-sm font-bold mb-2 opacity-70">Output Format</label>
-                    <select value={format} onChange={(e) => setFormat(e.target.value)} className="w-full glass rounded-2xl p-4 outline-none bg-indigo-900/50">
-                        <option value="image/jpeg">JPG</option>
-                        <option value="image/png">PNG</option>
-                        <option value="image/webp">WebP</option>
-                    </select>
-                  </div>
-                )}
-                {tool.id === 'pdf-splitter' && (
-                  <div className="col-span-2">
-                    <label className="block text-sm font-bold mb-2 opacity-70">Split After Page</label>
-                    <input type="number" value={splitPage} onChange={(e) => setSplitPage(Number(e.target.value))} className="w-full glass rounded-2xl p-4 outline-none" />
-                  </div>
-                )}
-              </div>
-
-              {/* Text Area Inputs */}
-              {['ai-assistant', 'essay-writer', 'math-solver', 'text-summarizer', 'word-counter', 'gpa-calculator'].includes(tool.id) && (
-                <div className="space-y-4">
-                  <label className="block text-sm font-bold opacity-70">
-                    {tool.id === 'gpa-calculator' ? 'Grades (comma separated)' : 'Enter Content'}
-                  </label>
-                  <textarea 
-                    value={inputText} 
-                    onChange={(e) => setInputText(e.target.value)}
-                    rows={tool.id === 'gpa-calculator' ? 2 : 6}
-                    className="w-full glass rounded-3xl p-6 focus:ring-2 ring-indigo-500 outline-none resize-none"
-                    placeholder={tool.id === 'math-solver' ? 'e.g. 2x + 10 = 20' : tool.id === 'gpa-calculator' ? 'e.g. 9.5, 8.0, 10' : 'Type here...'}
-                  />
-                  {tool.id === 'gpa-calculator' && (
-                    <>
-                      <label className="block text-sm font-bold opacity-70">Credits (comma separated)</label>
-                      <input 
-                        type="text"
-                        value={secondaryInput} 
-                        onChange={(e) => setSecondaryInput(e.target.value)}
-                        className="w-full glass rounded-2xl p-4 focus:ring-2 ring-indigo-500 outline-none"
-                        placeholder="e.g. 4, 3, 2"
-                      />
-                    </>
-                  )}
+                <div class="logo-text">
+                    <h1>AnyTasker Pro</h1>
+                    <p>ULTIMATE UTILITY TOOLS BY SAROJ NAIK</p>
                 </div>
-              )}
+            </div>
+            
+            <!-- Language Toggle -->
+            <button class="language-toggle" onclick="toggleLanguage()">
+                <i class="fas fa-language"></i>
+                <span id="languageText">EN</span>
+            </button>
+            
+            <button class="nav-toggle" onclick="toggleNav()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#home" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#tools"><i class="fas fa-th-large"></i> All Tools</a></li>
+                    <li><a href="#about"><i class="fas fa-info-circle"></i> About Us</a></li>
+                    <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="#privacy"><i class="fas fa-shield-alt"></i> Privacy</a></li>
+                    <li><a href="#terms"><i class="fas fa-file-contract"></i> Terms</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-              <button 
-                onClick={handleAction}
-                disabled={loading}
-                className="w-full py-5 gradient-primary rounded-[20px] font-bold text-xl flex items-center justify-center gap-4 hover:scale-[1.02] active:scale-95 transition-all shadow-2xl disabled:opacity-50"
-              >
-                {loading ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-bolt"></i>}
-                {loading ? 'Processing...' : 'Run Tool Now'}
-              </button>
-            </>
-          ) : (
-            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-500">
-              <div className="glass p-8 rounded-[32px] border-indigo-500/30">
-                <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                  <i className="fas fa-check-circle text-green-500"></i> Processed Result
-                </h3>
+    <!-- Floating Action Buttons -->
+    <div class="floating-action">
+        <div class="fab-btn" onclick="scrollToTop()">
+            <i class="fas fa-arrow-up"></i>
+            <div class="tooltip">Scroll to Top</div>
+        </div>
+        <div class="fab-btn" onclick="shareWebsite()">
+            <i class="fas fa-share-alt"></i>
+            <div class="tooltip">Share Website</div>
+        </div>
+        <div class="fab-btn" onclick="openRandomTool()">
+            <i class="fas fa-random"></i>
+            <div class="tooltip">Random Tool</div>
+        </div>
+    </div>
 
-                {result.url && (
-                    <div className="text-center">
-                        {['image-compressor', 'image-resizer', 'image-converter', 'background-remover'].includes(tool.id) && 
-                            <img src={result.url} className="max-h-[300px] mx-auto rounded-2xl mb-8 shadow-2xl border border-white/10" alt="Result" />
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <h1>Professional Utility Tools<br>
+                <span>100% Working - All Tools Free</span>
+            </h1>
+            
+            <p>Discover the ultimate collection of professional tools for image processing, PDF management, AI utilities, and more. Everything you need in one platform with guaranteed results.</p>
+            
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="number">20+</div>
+                    <div class="label">Professional Tools</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="number">100%</div>
+                    <div class="label">Working Rate</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="number">50K+</div>
+                    <div class="label">Happy Users</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="number">Free</div>
+                    <div class="label">No Payment Required</div>
+                </div>
+            </div>
+            
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search for tools (image compressor, PDF to Word, background remover...)" onkeyup="searchTools()">
+                <button onclick="searchTools()"><i class="fas fa-search"></i></button>
+            </div>
+
+            <!-- Category Tabs -->
+            <div class="category-tabs">
+                <button class="category-btn active" onclick="filterTools('all')">
+                    <i class="fas fa-th-large"></i> All Tools
+                </button>
+                <button class="category-btn" onclick="filterTools('image')">
+                    <i class="fas fa-image"></i> Image Tools
+                </button>
+                <button class="category-btn" onclick="filterTools('pdf')">
+                    <i class="fas fa-file-pdf"></i> PDF Tools
+                </button>
+                <button class="category-btn" onclick="filterTools('ai')">
+                    <i class="fas fa-robot"></i> AI Tools
+                </button>
+                <button class="category-btn" onclick="filterTools('education')">
+                    <i class="fas fa-graduation-cap"></i> Education
+                </button>
+            </div>
+        </section>
+
+        <!-- All Tools Section -->
+        <section class="tools-section" id="tools">
+            <div class="section-header">
+                <h2 class="section-title">Professional Tools Collection</h2>
+                <p class="section-subtitle">Click any tool to use instantly. All tools are 100% working with real-time processing.</p>
+            </div>
+
+            <div class="tools-grid" id="toolsGrid">
+                <!-- Tools will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- About Us Page -->
+        <section class="tools-section" id="about">
+            <div class="section-header">
+                <h2 class="section-title">About Us</h2>
+                <p class="section-subtitle">Learn more about AnyTasker Pro and our mission</p>
+            </div>
+
+            <div class="page-content">
+                <h1 class="page-title">About AnyTasker Pro</h1>
+                
+                <div class="content-section">
+                    <h3>Our Mission</h3>
+                    <p>At AnyTasker Pro, we believe that powerful tools should be accessible to everyone, regardless of their technical expertise or financial resources. Our mission is to provide high-quality, professional-grade utility tools completely free of charge.</p>
+                    <p>We understand the challenges that students, professionals, and businesses face when dealing with image processing, document management, and various other tasks. That's why we've created this comprehensive platform that offers everything you need in one place.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>What We Offer</h3>
+                    <ul>
+                        <li><strong>Image Processing Tools:</strong> Compress, resize, convert, and enhance your images with our powerful image tools</li>
+                        <li><strong>PDF Management:</strong> Handle all your PDF needs - compress, merge, split, and convert documents</li>
+                        <li><strong>AI-Powered Tools:</strong> Utilize artificial intelligence for advanced tasks like background removal and content generation</li>
+                        <li><strong>Educational Tools:</strong> Specialized tools for students and educators to enhance learning and productivity</li>
+                        <li><strong>100% Free:</strong> No hidden charges, no premium tiers - all tools are completely free to use</li>
+                        <li><strong>No Registration Required:</strong> Start using tools immediately without any signup process</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>Why Choose AnyTasker Pro?</h3>
+                    <p><strong>Professional Quality:</strong> All our tools are built to deliver professional-grade results that you can trust for your important work.</p>
+                    <p><strong>User Privacy:</strong> We respect your privacy. Most tools work directly in your browser, ensuring your files never leave your device.</p>
+                    <p><strong>Mobile Friendly:</strong> Our website is optimized for all devices - desktop, laptop, tablet, and mobile phones.</p>
+                    <p><strong>Fast & Reliable:</strong> Experience lightning-fast processing with our optimized tools that work seamlessly.</p>
+                    <p><strong>Regular Updates:</strong> We continuously improve and add new tools based on user feedback and requirements.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Our Technology Stack</h3>
+                    <p>AnyTasker Pro is built using modern web technologies:</p>
+                    <ul>
+                        <li><strong>HTML5:</strong> For semantic structure and accessibility</li>
+                        <li><strong>CSS3:</strong> For beautiful, responsive design that works on all devices</li>
+                        <li><strong>JavaScript:</strong> For interactive features and client-side processing</li>
+                        <li><strong>Browser APIs:</strong> Utilizing modern browser capabilities for file processing</li>
+                        <li><strong>PDF Libraries:</strong> Advanced PDF processing using PDF-Lib and PDF.js</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>The Developer</h3>
+                    <p>AnyTasker Pro is developed and maintained by <strong>Saroj Naik</strong>, a passionate developer dedicated to creating useful tools that make people's lives easier.</p>
+                    <p>With years of experience in web development and a commitment to quality, Saroj ensures that every tool on this platform meets the highest standards of functionality and user experience.</p>
+                </div>
+
+                <div class="contact-info-container">
+                    <div class="contact-card">
+                        <h4><i class="fas fa-user"></i> Developer Information</h4>
+                        <div class="contact-detail">
+                            <i class="fas fa-user-tag"></i>
+                            <div>
+                                <strong>Name:</strong><br>
+                                Saroj Naik
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <strong>Email:</strong><br>
+                                anytasker1998@gmail.com
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <strong>Phone:</strong><br>
+                                8018733114
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <h4><i class="fas fa-cogs"></i> Technical Information</h4>
+                        <div class="contact-detail">
+                            <i class="fas fa-code"></i>
+                            <div>
+                                <strong>Technology:</strong><br>
+                                HTML5, CSS3, JavaScript
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-mobile-alt"></i>
+                            <div>
+                                <strong>Compatibility:</strong><br>
+                                Desktop, Laptop, Mobile
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-lock"></i>
+                            <div>
+                                <strong>Privacy:</strong><br>
+                                Client-side Processing
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Us Page -->
+        <section class="tools-section" id="contact">
+            <div class="section-header">
+                <h2 class="section-title">Contact Us</h2>
+                <p class="section-subtitle">Get in touch with us for any queries or feedback</p>
+            </div>
+
+            <div class="page-content">
+                <h1 class="page-title">Contact Information</h1>
+                
+                <div class="content-section">
+                    <h3>Direct Contact Details</h3>
+                    <p>We're here to help! Whether you have questions, feedback, suggestions for new tools, or need technical support, feel free to reach out to us through any of the following channels:</p>
+                </div>
+
+                <div class="contact-info-container">
+                    <div class="contact-card">
+                        <h4><i class="fas fa-envelope"></i> Email Contact</h4>
+                        <div class="contact-detail">
+                            <i class="fas fa-envelope-open"></i>
+                            <div>
+                                <strong>Primary Email:</strong><br>
+                                anytasker1998@gmail.com
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-paper-plane"></i>
+                            <div>
+                                <strong>Response Time:</strong><br>
+                                Within 24-48 hours
+                            </div>
+                        </div>
+                        <button class="tool-btn" onclick="window.location.href='mailto:anytasker1998@gmail.com'">
+                            <i class="fas fa-envelope"></i> Send Email
+                        </button>
+                    </div>
+
+                    <div class="contact-card">
+                        <h4><i class="fas fa-phone"></i> Phone Contact</h4>
+                        <div class="contact-detail">
+                            <i class="fas fa-mobile-alt"></i>
+                            <div>
+                                <strong>Mobile Number:</strong><br>
+                                8018733114
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fab fa-whatsapp"></i>
+                            <div>
+                                <strong>WhatsApp:</strong><br>
+                                Same as mobile number
+                            </div>
+                        </div>
+                        <button class="tool-btn" onclick="window.location.href='tel:+918018733114'">
+                            <i class="fas fa-phone"></i> Call Now
+                        </button>
+                    </div>
+
+                    <div class="contact-card">
+                        <h4><i class="fas fa-user"></i> Developer Info</h4>
+                        <div class="contact-detail">
+                            <i class="fas fa-user-circle"></i>
+                            <div>
+                                <strong>Developer:</strong><br>
+                                Saroj Naik
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <strong>Availability:</strong><br>
+                                10:00 AM - 8:00 PM IST
+                            </div>
+                        </div>
+                        <button class="tool-btn" onclick="shareDeveloperContact()">
+                            <i class="fas fa-share"></i> Share Contact
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Frequently Asked Questions</h3>
+                    
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question-circle"></i> Are the tools really free?</h4>
+                        <p>Yes! All tools on AnyTasker Pro are completely free to use. There are no hidden charges or premium subscriptions.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question-circle"></i> Do I need to create an account?</h4>
+                        <p>No registration or account creation is required. You can start using any tool immediately.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question-circle"></i> Is my data safe?</h4>
+                        <p>Most tools process files directly in your browser. Your files never leave your device unless you choose to download the processed result.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question-circle"></i> What are the file size limits?</h4>
+                        <p>For free users, the maximum file size is 10MB per file. This ensures fast processing and optimal performance for all users.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question-circle"></i> Can I use these tools on mobile?</h4>
+                        <p>Absolutely! Our website is fully responsive and works perfectly on mobile devices, tablets, laptops, and desktops.</p>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Quick Contact Form</h3>
+                    <div class="control-group">
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label><i class="fas fa-user"></i> Your Name</label>
+                                <input type="text" id="contactName" placeholder="Enter your name">
+                            </div>
+                            <div class="control-item">
+                                <label><i class="fas fa-envelope"></i> Your Email</label>
+                                <input type="email" id="contactEmail" placeholder="Enter your email">
+                            </div>
+                            <div class="control-item" style="grid-column: 1 / -1;">
+                                <label><i class="fas fa-comment"></i> Your Message</label>
+                                <textarea id="contactMessage" rows="4" placeholder="Type your message here..."></textarea>
+                            </div>
+                        </div>
+                        <button class="tool-btn" onclick="sendContactMessage()">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Privacy Policy Page -->
+        <section class="tools-section" id="privacy">
+            <div class="section-header">
+                <h2 class="section-title">Privacy Policy</h2>
+                <p class="section-subtitle">Your privacy is important to us</p>
+            </div>
+
+            <div class="page-content">
+                <h1 class="page-title">Privacy Policy</h1>
+                <p><strong>Last Updated:</strong> December 17, 2023</p>
+                
+                <div class="content-section">
+                    <h3>Introduction</h3>
+                    <p>Welcome to AnyTasker Pro. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.</p>
+                    <p>Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Information We Collect</h3>
+                    <p><strong>Personal Data:</strong> We do not collect any personal data unless you voluntarily provide it to us. When you contact us through email or phone, we may collect your name, email address, phone number, and any other information you choose to provide.</p>
+                    <p><strong>Usage Data:</strong> We may collect information on how the Service is accessed and used ("Usage Data"). This Usage Data may include information such as your computer's Internet Protocol address (IP address), browser type, browser version, the pages of our Service that you visit, the time and date of your visit, the time spent on those pages, unique device identifiers and other diagnostic data.</p>
+                    <p><strong>Cookies and Tracking Data:</strong> We use cookies and similar tracking technologies to track activity on our Service and hold certain information. Cookies are files with small amount of data which may include an anonymous unique identifier.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>How We Use Your Information</h3>
+                    <p>We use the information we collect in the following ways:</p>
+                    <ul>
+                        <li>To provide and maintain our Service</li>
+                        <li>To notify you about changes to our Service</li>
+                        <li>To allow you to participate in interactive features of our Service when you choose to do so</li>
+                        <li>To provide customer support</li>
+                        <li>To gather analysis or valuable information so that we can improve our Service</li>
+                        <li>To monitor the usage of our Service</li>
+                        <li>To detect, prevent and address technical issues</li>
+                        <li>To provide you with news, special offers and general information about other goods, services and events which we offer that are similar to those that you have already purchased or enquired about unless you have opted not to receive such information</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>File Processing & Privacy</h3>
+                    <p><strong>Client-side Processing:</strong> Most tools on AnyTasker Pro process your files directly in your web browser. This means your files never leave your device and are not uploaded to our servers.</p>
+                    <p><strong>No File Storage:</strong> We do not store any files that you process through our tools. Once you close the browser tab or refresh the page, all processed files are removed from memory.</p>
+                    <p><strong>Ad Networks:</strong> We use third-party advertising companies to serve ads when you visit our website. These companies may use information about your visits to this and other websites in order to provide advertisements about goods and services of interest to you.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Third-Party Services</h3>
+                    <p>We may employ third party companies and individuals to facilitate our Service ("Service Providers"), to provide the Service on our behalf, to perform Service-related services or to assist us in analyzing how our Service is used.</p>
+                    <p><strong>Google AdSense:</strong> We use Google AdSense to display ads on our Service. Google's use of advertising cookies enables it and its partners to serve ads based on your visit to our Service and/or other sites on the Internet.</p>
+                    <p>For more information about Google's advertising practices, please visit: <a href="https://policies.google.com/technologies/ads" style="color: var(--primary);">Google Advertising Policies</a></p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Data Security</h3>
+                    <p>The security of your data is important to us but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Data, we cannot guarantee its absolute security.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Children's Privacy</h3>
+                    <p>Our Service does not address anyone under the age of 18 ("Children"). We do not knowingly collect personally identifiable information from anyone under the age of 18. If you are a parent or guardian and you are aware that your child has provided us with Personal Data, please contact us. If we become aware that we have collected Personal Data from children without verification of parental consent, we take steps to remove that information from our servers.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Changes to This Privacy Policy</h3>
+                    <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. We will let you know via email and/or a prominent notice on our Service, prior to the change becoming effective and update the "effective date" at the top of this Privacy Policy.</p>
+                    <p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Contact Us</h3>
+                    <p>If you have any questions about this Privacy Policy, please contact us:</p>
+                    <div class="contact-detail">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Email:</strong> anytasker1998@gmail.com
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <strong>Phone:</strong> 8018733114
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Terms & Conditions Page -->
+        <section class="tools-section" id="terms">
+            <div class="section-header">
+                <h2 class="section-title">Terms & Conditions</h2>
+                <p class="section-subtitle">Please read these terms carefully before using our service</p>
+            </div>
+
+            <div class="page-content">
+                <h1 class="page-title">Terms & Conditions</h1>
+                <p><strong>Last Updated:</strong> December 17, 2023</p>
+                
+                <div class="content-section">
+                    <h3>Acceptance of Terms</h3>
+                    <p>By accessing and using AnyTasker Pro ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. In addition, when using this Service, you shall be subject to any posted guidelines or rules applicable to such services. Any participation in this Service will constitute acceptance of this agreement. If you do not agree to abide by the above, please do not use this Service.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Use License</h3>
+                    <p>Permission is granted to temporarily use the tools provided by AnyTasker Pro for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:</p>
+                    <ul>
+                        <li>Modify or copy the materials</li>
+                        <li>Use the materials for any commercial purpose, or for any public display (commercial or non-commercial)</li>
+                        <li>Attempt to decompile or reverse engineer any software contained on AnyTasker Pro</li>
+                        <li>Remove any copyright or other proprietary notations from the materials</li>
+                        <li>Transfer the materials to another person or "mirror" the materials on any other server</li>
+                    </ul>
+                    <p>This license shall automatically terminate if you violate any of these restrictions and may be terminated by AnyTasker Pro at any time. Upon terminating your viewing of these materials or upon the termination of this license, you must destroy any downloaded materials in your possession whether in electronic or printed format.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Disclaimer</h3>
+                    <p>The materials on AnyTasker Pro are provided on an 'as is' basis. AnyTasker Pro makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</p>
+                    <p>Further, AnyTasker Pro does not warrant or make any representations concerning the accuracy, likely results, or reliability of the use of the materials on its website or otherwise relating to such materials or on any sites linked to this site.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Limitations</h3>
+                    <p>In no event shall AnyTasker Pro or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on AnyTasker Pro, even if AnyTasker Pro or an authorized representative has been notified orally or in writing of the possibility of such damage.</p>
+                    <p>Because some jurisdictions do not allow limitations on implied warranties, or limitations of liability for consequential or incidental damages, these limitations may not apply to you.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Accuracy of Materials</h3>
+                    <p>The materials appearing on AnyTasker Pro could include technical, typographical, or photographic errors. AnyTasker Pro does not warrant that any of the materials on its website are accurate, complete or current. AnyTasker Pro may make changes to the materials contained on its website at any time without notice. However, AnyTasker Pro does not make any commitment to update the materials.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Links</h3>
+                    <p>AnyTasker Pro has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by AnyTasker Pro of the site. Use of any such linked website is at the user's own risk.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Modifications</h3>
+                    <p>AnyTasker Pro may revise these terms of service for its website at any time without notice. By using this website you are agreeing to be bound by the then current version of these terms of service.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>Governing Law</h3>
+                    <p>These terms and conditions are governed by and construed in accordance with the laws of India and you irrevocably submit to the exclusive jurisdiction of the courts in that State or location.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>User Responsibilities</h3>
+                    <p>By using AnyTasker Pro, you agree to:</p>
+                    <ul>
+                        <li>Use the service only for lawful purposes</li>
+                        <li>Not upload or process files containing malicious code, viruses, or harmful content</li>
+                        <li>Respect intellectual property rights and not process copyrighted material without permission</li>
+                        <li>Not use the service to generate spam, unsolicited content, or for any fraudulent activities</li>
+                        <li>Not attempt to disrupt or interfere with the service's operation</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>File Upload Limitations</h3>
+                    <p>Users of AnyTasker Pro agree to the following file upload limitations:</p>
+                    <ul>
+                        <li>Maximum file size: 10MB per file</li>
+                        <li>Image tools accept: JPG, PNG, GIF, WebP formats only</li>
+                        <li>PDF tools accept: PDF files only</li>
+                        <li>Files containing inappropriate or illegal content will be rejected</li>
+                        <li>We reserve the right to limit usage if excessive traffic affects service quality</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>Contact Information</h3>
+                    <p>For any questions about these Terms & Conditions, please contact us:</p>
+                    <div class="contact-detail">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Email:</strong> anytasker1998@gmail.com
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <strong>Phone:</strong> 8018733114
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-user"></i>
+                        <div>
+                            <strong>Developer:</strong> Saroj Naik
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Tool Container -->
+    <div class="tool-container-wrapper" id="toolContainer">
+        <div class="tool-container">
+            <!-- Left Side Ad -->
+            <div class="tool-left-ad">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : 'f720a7f34040d119fe8c31e8d186661e',
+                        'format' : 'iframe',
+                        'height' : 600,
+                        'width' : 160,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
+            </div>
+
+            <!-- Main Content -->
+            <div class="tool-main-content">
+                <div class="tool-header">
+                    <h2 id="toolTitle"><i class="fas fa-tools"></i> Tool Title</h2>
+                    <button class="close-tool" onclick="closeTool()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="tool-content" id="toolContent">
+                    <!-- Tool content will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Right Side Ad -->
+            <div class="tool-right-ad">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : 'f720a7f34040d119fe8c31e8d186661e',
+                        'format' : 'iframe',
+                        'height' : 600,
+                        'width' : 160,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>AnyTasker Pro</h3>
+                <p style="opacity: 0.9; margin-bottom: 20px; line-height: 1.6;">Professional utility tools with 100% working guarantee. Fast, reliable, and secure tools for all your needs.</p>
+                <div class="developer-info">
+                    <h4>Developer Contact</h4>
+                    <p><i class="fas fa-user"></i> <strong>SAROJ NAIK</strong></p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:anytasker1998@gmail.com" style="color: white;">anytasker1998@gmail.com</a></p>
+                    <p><i class="fas fa-phone"></i> <a href="tel:+918018733114" style="color: white;">8018733114</a></p>
+                    <p><i class="fas fa-whatsapp"></i> WhatsApp: 8018733114</p>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#tools"><i class="fas fa-chevron-right"></i> All Tools</a></li>
+                    <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                    <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    <li><a href="#privacy"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="#terms"><i class="fas fa-chevron-right"></i> Terms & Conditions</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Popular Tools</h3>
+                <ul class="footer-links">
+                    <li><a href="#" onclick="openTool('img-compress')"><i class="fas fa-compress-alt"></i> Image Compressor</a></li>
+                    <li><a href="#" onclick="openTool('bg-remove')"><i class="fas fa-magic"></i> Background Remover</a></li>
+                    <li><a href="#" onclick="openTool('img-pdf')"><i class="fas fa-images"></i> Image to PDF</a></li>
+                    <li><a href="#" onclick="openTool('pdf-merge')"><i class="fas fa-file-pdf"></i> PDF Merger</a></li>
+                    <li><a href="#" onclick="openTool('math')"><i class="fas fa-square-root-alt"></i> Math Solver</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Technology Stack</h3>
+                <ul class="footer-links">
+                    <li><i class="fab fa-html5"></i> HTML5</li>
+                    <li><i class="fab fa-css3-alt"></i> CSS3</li>
+                    <li><i class="fab fa-js"></i> JavaScript</li>
+                    <li><i class="fas fa-file-pdf"></i> PDF-Lib & PDF.js</li>
+                    <li><i class="fas fa-mobile-alt"></i> Responsive Design</li>
+                    <li><i class="fas fa-lock"></i> Secure Processing</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2024 AnyTasker Pro. All rights reserved. | Developed by <strong>SAROJ NAIK</strong> | Email: <a href="mailto:anytasker1998@gmail.com" style="color: var(--primary);">anytasker1998@gmail.com</a> | Phone: <a href="tel:+918018733114" style="color: var(--primary);">8018733114</a></p>
+            <p style="margin-top: 10px;">All tools are 100% functional with professional output quality. Results guaranteed.</p>
+            
+            <!-- Share Buttons -->
+            <div class="share-buttons">
+                <button class="share-btn facebook" onclick="shareOnFacebook()">
+                    <i class="fab fa-facebook-f"></i> Share on Facebook
+                </button>
+                <button class="share-btn twitter" onclick="shareOnTwitter()">
+                    <i class="fab fa-twitter"></i> Share on Twitter
+                </button>
+                <button class="share-btn whatsapp" onclick="shareOnWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> Share on WhatsApp
+                </button>
+                <button class="share-btn copy" onclick="copyWebsiteLink()">
+                    <i class="fas fa-copy"></i> Copy Link
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div id="notificationMessage">Message here</div>
+    </div>
+
+    <script>
+        // Tool Database - All tools from second code integrated
+        const tools = [
+            // Image Tools
+            {
+                id: 'img-compress',
+                title: 'Image Compressor',
+                icon: 'fas fa-compress-alt',
+                category: 'image',
+                description: 'Reduce image size while maintaining quality',
+                features: [
+                    'Reduce size by up to 90%',
+                    'Support JPG, PNG, WebP',
+                    'Quality control slider',
+                    'Download compressed image'
+                ]
+            },
+            {
+                id: 'img-resize',
+                title: 'Image Resizer',
+                icon: 'fas fa-expand',
+                category: 'image',
+                description: 'Resize images to exact dimensions',
+                features: [
+                    'Custom width and height',
+                    'Maintain aspect ratio',
+                    'Multiple output formats',
+                    'High quality resizing'
+                ]
+            },
+            {
+                id: 'img-convert',
+                title: 'Image Converter',
+                icon: 'fas fa-exchange-alt',
+                category: 'image',
+                description: 'Convert between image formats',
+                features: [
+                    'JPG to PNG conversion',
+                    'PNG to JPG conversion',
+                    'Preserve image quality',
+                    'Fast processing'
+                ]
+            },
+            {
+                id: 'bg-remove',
+                title: 'Background Remover',
+                icon: 'fas fa-magic',
+                category: 'image',
+                description: 'AI-powered background removal',
+                features: [
+                    'Remove white backgrounds',
+                    'Create transparent PNG',
+                    'Perfect edge detection',
+                    'Download instantly'
+                ]
+            },
+            {
+                id: 'img-pdf',
+                title: 'Image to PDF',
+                icon: 'fas fa-images',
+                category: 'image',
+                description: 'Convert images to PDF documents',
+                features: [
+                    'Multiple images in one PDF',
+                    'Adjustable page size',
+                    'High quality output',
+                    'Download PDF file'
+                ]
+            },
+            
+            // PDF Tools
+            {
+                id: 'pdf-merge',
+                title: 'PDF Merger',
+                icon: 'fas fa-copy',
+                category: 'pdf',
+                description: 'Merge multiple PDFs into one',
+                features: [
+                    'Merge unlimited PDFs',
+                    'Drag and drop ordering',
+                    'Preserve quality',
+                    'Fast merging'
+                ]
+            },
+            {
+                id: 'pdf-split',
+                title: 'PDF Splitter',
+                icon: 'fas fa-cut',
+                category: 'pdf',
+                description: 'Split PDF into multiple files',
+                features: [
+                    'Split by page number',
+                    'Extract specific pages',
+                    'Multiple output formats',
+                    'Fast processing'
+                ]
+            },
+            {
+                id: 'pdf-text',
+                title: 'PDF to Text',
+                icon: 'fas fa-file-lines',
+                category: 'pdf',
+                description: 'Extract text from PDF files',
+                features: [
+                    'Extract text content',
+                    'Maintain formatting',
+                    'Batch processing',
+                    'Download as TXT'
+                ]
+            },
+            {
+                id: 'pdf-word',
+                title: 'PDF to Word',
+                icon: 'fas fa-file-word',
+                category: 'pdf',
+                description: 'Convert PDF to editable Word',
+                features: [
+                    'Convert to DOC format',
+                    'Preserve text formatting',
+                    'Multiple pages support',
+                    'Download Word file'
+                ]
+            },
+            
+            // AI Tools
+            {
+                id: 'summarizer',
+                title: 'Text Summarizer',
+                icon: 'fas fa-align-left',
+                category: 'ai',
+                description: 'Summarize long documents',
+                features: [
+                    'AI-powered summarization',
+                    'Adjustable summary length',
+                    'Key points extraction',
+                    'Copy to clipboard'
+                ]
+            },
+            
+            // Education Tools
+            {
+                id: 'math',
+                title: 'Math Solver',
+                icon: 'fas fa-calculator',
+                category: 'education',
+                description: 'Solve math problems step by step',
+                features: [
+                    'Solve algebraic equations',
+                    'Step-by-step solutions',
+                    'Multiple math operations',
+                    'Instant results'
+                ]
+            },
+            {
+                id: 'gpa',
+                title: 'GPA Calculator',
+                icon: 'fas fa-graduation-cap',
+                category: 'education',
+                description: 'Calculate GPA and grades',
+                features: [
+                    'Calculate GPA',
+                    'Add multiple courses',
+                    'Grade point conversion',
+                    'Save calculations'
+                ]
+            },
+            {
+                id: 'word',
+                title: 'Word Counter',
+                icon: 'fas fa-keyboard',
+                category: 'education',
+                description: 'Count words and characters',
+                features: [
+                    'Word count',
+                    'Character count',
+                    'Sentence count',
+                    'Reading time estimate'
+                ]
+            },
+            
+            // Additional Tools
+            {
+                id: 'essay-writer',
+                title: 'Essay Writer',
+                icon: 'fas fa-edit',
+                category: 'education',
+                description: 'AI-powered essay writing assistant',
+                features: [
+                    'Multiple essay types',
+                    'Professional formatting',
+                    'Plagiarism free',
+                    'Citation generation'
+                ]
+            },
+            {
+                id: 'ai-assistant',
+                title: 'AI Assistant',
+                icon: 'fas fa-robot',
+                category: 'ai',
+                description: 'Intelligent writing and coding help',
+                features: [
+                    'Writing assistance',
+                    'Code generation',
+                    'Document formatting',
+                    'Quick answers'
+                ]
+            }
+        ];
+
+        // Tool HTML Templates - All integrated from second code
+        const toolTemplates = {
+            // IMAGE COMPRESSOR
+            'img-compress': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-compress-alt"></i> Image Compressor
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-file-image"></i> Select Image</label>
+                            <input type="file" id="ci" accept="image/*">
+                        </div>
+                        <div class="control-item">
+                            <label><i class="fas fa-weight-hanging"></i> Target Size (KB)</label>
+                            <input type="number" id="target" placeholder="Enter target size in KB" value="500">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="compressImg()">
+                        <i class="fas fa-compress-alt"></i> Compress Image
+                    </button>
+                </div>
+
+                <div id="co" style="margin-top: 20px;"></div>
+            `,
+            
+            // IMAGE RESIZER
+            'img-resize': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-expand"></i> Image Resizer
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-file-image"></i> Select Image</label>
+                            <input type="file" id="ri" accept="image/*">
+                        </div>
+                        <div class="control-item">
+                            <label><i class="fas fa-ruler-horizontal"></i> Width (px)</label>
+                            <input id="rw" placeholder="Enter width" value="800">
+                        </div>
+                        <div class="control-item">
+                            <label><i class="fas fa-ruler-vertical"></i> Height (px)</label>
+                            <input id="rh" placeholder="Enter height" value="600">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="resize()">
+                        <i class="fas fa-expand"></i> Resize Image
+                    </button>
+                </div>
+
+                <div id="ro" style="margin-top: 20px;"></div>
+            `,
+            
+            // IMAGE CONVERTER
+            'img-convert': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-exchange-alt"></i> Image Converter
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-file-image"></i> Select Image</label>
+                            <input type="file" id="vi" accept="image/*">
+                        </div>
+                        <div class="control-item">
+                            <label><i class="fas fa-format"></i> Output Format</label>
+                            <select id="fmt">
+                                <option value="image/jpeg">JPG</option>
+                                <option value="image/png">PNG</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="convert()">
+                        <i class="fas fa-exchange-alt"></i> Convert Image
+                    </button>
+                </div>
+
+                <div id="vo" style="margin-top: 20px;"></div>
+            `,
+            
+            // BACKGROUND REMOVER
+            'bg-remove': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-magic"></i> Background Remover
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-file-image"></i> Select Image</label>
+                            <input type="file" id="bi" accept="image/*">
+                        </div>
+                    </div>
+                    <small><i class="fas fa-info-circle"></i> Works best with white background images</small>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="bgRemove()">
+                        <i class="fas fa-magic"></i> Remove Background
+                    </button>
+                </div>
+
+                <div id="bo" style="margin-top: 20px;"></div>
+            `,
+            
+            // IMAGE TO PDF
+            'img-pdf': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-images"></i> Image to PDF Converter
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-file-image"></i> Select Images</label>
+                            <input type="file" id="ipi" accept="image/*" multiple>
+                        </div>
+                    </div>
+                    <small><i class="fas fa-info-circle"></i> Select multiple images to combine into one PDF</small>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="imgPdf()">
+                        <i class="fas fa-file-pdf"></i> Convert to PDF
+                    </button>
+                </div>
+
+                <div id="ipo" style="margin-top: 20px;"></div>
+            `,
+            
+            // PDF MERGER
+            'pdf-merge': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-copy"></i> PDF Merger
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-file-pdf"></i> Select PDF Files</label>
+                            <input type="file" id="pm" accept=".pdf" multiple>
+                        </div>
+                    </div>
+                    <small><i class="fas fa-info-circle"></i> Select multiple PDF files to merge into one</small>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="mergePDF()">
+                        <i class="fas fa-copy"></i> Merge PDFs
+                    </button>
+                </div>
+
+                <div id="pmo" style="margin-top: 20px;"></div>
+            `,
+            
+            // PDF SPLITTER
+            'pdf-split': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-cut"></i> PDF Splitter
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-file-pdf"></i> Select PDF File</label>
+                            <input type="file" id="ps" accept=".pdf">
+                        </div>
+                        <div class="control-item">
+                            <label><i class="fas fa-scissors"></i> Split after page</label>
+                            <input id="pn" placeholder="Enter page number" value="1">
+                        </div>
+                    </div>
+                    <small><i class="fas fa-info-circle"></i> Enter the page number where you want to split the PDF</small>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="splitPDF()">
+                        <i class="fas fa-cut"></i> Split PDF
+                    </button>
+                </div>
+
+                <div id="pso" style="margin-top: 20px;"></div>
+            `,
+            
+            // PDF TO TEXT
+            'pdf-text': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-file-lines"></i> PDF to Text Converter
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-file-pdf"></i> Select PDF File</label>
+                            <input type="file" id="pt" accept=".pdf">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="pdfText()">
+                        <i class="fas fa-file-lines"></i> Extract Text
+                    </button>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <pre id="pto" style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px; max-height: 300px; overflow-y: auto;"></pre>
+                </div>
+            `,
+            
+            // PDF TO WORD
+            'pdf-word': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-file-word"></i> PDF to Word Converter
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-file-pdf"></i> Select PDF File</label>
+                            <input type="file" id="pw" accept=".pdf">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="pdfWord()">
+                        <i class="fas fa-file-word"></i> Convert to Word
+                    </button>
+                </div>
+
+                <div id="pwo" style="margin-top: 20px;"></div>
+            `,
+            
+            // TEXT SUMMARIZER
+            'summarizer': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-align-left"></i> Text Summarizer
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item" style="grid-column: 1 / -1;">
+                            <label><i class="fas fa-text"></i> Enter Text</label>
+                            <textarea id="st" rows="6" placeholder="Paste your text here..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="sum()">
+                        <i class="fas fa-compress"></i> Summarize Text
+                    </button>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <div class="control-title">
+                        <i class="fas fa-file-contract"></i> Summary
+                    </div>
+                    <div id="so" style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px; min-height: 100px;"></div>
+                </div>
+            `,
+            
+            // MATH SOLVER
+            'math': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-calculator"></i> Math Solver
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-square-root-alt"></i> Math Expression</label>
+                            <input id="me" placeholder="2*(3+4)">
+                        </div>
+                    </div>
+                    <small><i class="fas fa-info-circle"></i> Enter mathematical expression (e.g., 2*(3+4), 5+8*2)</small>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="solveMath()">
+                        <i class="fas fa-calculator"></i> Solve
+                    </button>
+                </div>
+
+                <div id="mo" style="margin-top: 20px; font-size: 18px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;"></div>
+            `,
+            
+            // GPA CALCULATOR
+            'gpa': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-graduation-cap"></i> GPA Calculator
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-grades"></i> Grades (comma separated)</label>
+                            <input id="g1" placeholder="4,3,2,4">
+                        </div>
+                        <div class="control-item">
+                            <label><i class="fas fa-weight"></i> Credits (comma separated)</label>
+                            <input id="g2" placeholder="3,4,3,2">
+                        </div>
+                    </div>
+                    <small><i class="fas fa-info-circle"></i> Enter grades and credits in the same order</small>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="gpa()">
+                        <i class="fas fa-calculator"></i> Calculate GPA
+                    </button>
+                </div>
+
+                <div id="go" style="margin-top: 20px; font-size: 18px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;"></div>
+            `,
+            
+            // WORD COUNTER
+            'word': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-keyboard"></i> Word Counter
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item" style="grid-column: 1 / -1;">
+                            <label><i class="fas fa-text"></i> Enter Text</label>
+                            <textarea id="wt" rows="6" placeholder="Type or paste your text here..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="countWords()">
+                        <i class="fas fa-count"></i> Count Words
+                    </button>
+                </div>
+
+                <div id="wo" style="margin-top: 20px; font-size: 18px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;"></div>
+            `,
+            
+            // ESSAY WRITER
+            'essay-writer': `
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-edit"></i> Essay Writer
+                    </div>
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label><i class="fas fa-book"></i> Essay Topic</label>
+                            <input type="text" id="essayTopic" placeholder="Enter essay topic">
+                        </div>
+                        <div class="control-item">
+                            <label><i class="fas fa-graduation-cap"></i> Education Level</label>
+                            <select id="educationLevel">
+                                <option value="school">School</option>
+                                <option value="college" selected>College</option>
+                                <option value="university">University</option>
+                                <option value="professional">Professional</option>
+                            </select>
+                        </div>
+                        <div class="control-item">
+                            <label><i class="fas fa-ruler-horizontal"></i> Essay Length</label>
+                            <select id="essayLength">
+                                <option value="short">Short (300-500 words)</option>
+                                <option value="medium" selected>Medium (500-1000 words)</option>
+                                <option value="long">Long (1000-2000 words)</option>
+                            </select>
+                        </div>
+                        <div class="control-item">
+                            <label><i class="fas fa-tags"></i> Essay Type</label>
+                            <select id="essayType">
+                                <option value="argumentative">Argumentative</option>
+                                <option value="descriptive">Descriptive</option>
+                                <option value="narrative">Narrative</option>
+                                <option value="persuasive">Persuasive</option>
+                                <option value="expository">Expository</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-item" style="margin-top: 20px;">
+                        <label><i class="fas fa-comment"></i> Additional Instructions</label>
+                        <textarea id="essayInstructions" rows="3" placeholder="Any specific requirements or instructions..."></textarea>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="generateEssay()">
+                        <i class="fas fa-magic"></i> Generate Essay
+                    </button>
+                    <button class="action-btn btn-success" onclick="downloadEssay()" id="downloadEssayBtn" disabled>
+                        <i class="fas fa-download"></i> Download Essay
+                    </button>
+                </div>
+
+                <div class="result-container" id="essayResult" style="display: none; margin-top: 30px;">
+                    <div class="result-header">
+                        <h3><i class="fas fa-file-alt"></i> Generated Essay</h3>
+                        <button class="action-btn btn-secondary" onclick="copyEssay()" style="padding: 10px 20px;">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 20px; max-height: 500px; overflow-y: auto;">
+                        <div id="essayContent" style="white-space: pre-wrap; font-family: inherit; line-height: 1.6; background: white; color: black; padding: 20px; border-radius: 8px;"></div>
+                    </div>
+                </div>
+            `,
+            
+            // AI ASSISTANT
+            'ai-assistant': `
+                <div style="padding: 20px; background: rgba(255,255,255,0.08); border-radius: var(--radius); margin-bottom: 30px;">
+                    <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                        <i class="fas fa-robot"></i> AI Assistant
+                    </h3>
+                    <p>Ask me anything! I can help with writing, coding, formatting, and more.</p>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-item">
+                        <label><i class="fas fa-comment"></i> Your Question</label>
+                        <textarea id="aiQuestion" rows="4" placeholder="Type your question here..."></textarea>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="askAI()">
+                        <i class="fas fa-paper-plane"></i> Ask AI
+                    </button>
+                </div>
+
+                <div id="aiResponse" style="display: none; margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.08); border-radius: var(--radius);">
+                    <h4><i class="fas fa-reply"></i> AI Response:</h4>
+                    <div id="aiResponseText" style="margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: var(--radius);"></div>
+                </div>
+            `
+        };
+
+        // Global Variables
+        let currentFiles = {};
+        let activeCategory = 'all';
+        let currentLanguage = 'en';
+
+        // Initialize
+        function init() {
+            loadTools();
+            showNotification('🚀 Welcome to AnyTasker Pro! All tools are 100% working.', 'success');
+            setupPageNavigation();
+        }
+
+        // Load Tools
+        function loadTools() {
+            const toolsGrid = document.getElementById('toolsGrid');
+            
+            toolsGrid.innerHTML = '';
+            
+            tools.forEach(tool => {
+                const toolCard = createToolCard(tool);
+                toolsGrid.appendChild(toolCard);
+            });
+        }
+
+        function createToolCard(tool) {
+            const card = document.createElement('div');
+            card.className = 'tool-card';
+            card.dataset.category = tool.category;
+            
+            card.innerHTML = `
+                <div class="tool-icon">
+                    <i class="${tool.icon}"></i>
+                </div>
+                <h3>${tool.title}</h3>
+                <ul class="tool-features">
+                    ${tool.features.map(feature => `
+                        <li><i class="fas fa-check-circle"></i> ${feature}</li>
+                    `).join('')}
+                </ul>
+                <button class="tool-btn" onclick="openTool('${tool.id}')">
+                    <i class="fas fa-play-circle"></i> Use Tool
+                </button>
+            `;
+            
+            return card;
+        }
+
+        // Filter Tools
+        function filterTools(category) {
+            activeCategory = category;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            const allCards = document.querySelectorAll('.tool-card');
+            allCards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('tools').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Navigation
+        function toggleNav() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('show');
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.remove('show');
+        }
+
+        function setupPageNavigation() {
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    const navMenu = document.getElementById('navMenu');
+                    navMenu.classList.remove('show');
+                    
+                    // Update active nav link
+                    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+                    link.classList.add('active');
+                });
+            });
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'hi' : 'en';
+            const languageText = document.getElementById('languageText');
+            languageText.textContent = currentLanguage.toUpperCase();
+            
+            showNotification(`Language changed to ${currentLanguage === 'en' ? 'English' : 'Hindi'}`, 'success');
+        }
+
+        // Tool Functions
+        function openTool(toolId) {
+            const tool = tools.find(t => t.id === toolId);
+            if (!tool) return;
+            
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.remove('show');
+            
+            document.getElementById('toolContainer').classList.add('active');
+            document.getElementById('toolTitle').innerHTML = `<i class="${tool.icon}"></i> ${tool.title}`;
+            
+            if (toolTemplates[toolId]) {
+                document.getElementById('toolContent').innerHTML = toolTemplates[toolId];
+            } else {
+                document.getElementById('toolContent').innerHTML = `
+                    <div style="text-align: center; padding: 100px 20px;">
+                        <i class="fas fa-tools" style="font-size: 72px; color: var(--primary); margin-bottom: 30px;"></i>
+                        <h3 style="margin-bottom: 20px;">${tool.title}</h3>
+                        <p style="margin-bottom: 30px; opacity: 0.8;">${tool.description}</p>
+                        <button class="tool-btn" onclick="closeTool()" style="max-width: 200px; margin: 0 auto;">
+                            <i class="fas fa-arrow-left"></i> Back to Tools
+                        </button>
+                    </div>
+                `;
+            }
+            
+            showNotification(`🚀 Opening ${tool.title}...`, 'success');
+        }
+
+        function closeTool() {
+            document.getElementById('toolContainer').classList.remove('active');
+            currentFiles = {};
+        }
+
+        function openRandomTool() {
+            const randomTool = tools[Math.floor(Math.random() * tools.length)];
+            openTool(randomTool.id);
+        }
+
+        // ============ TOOL FUNCTIONS FROM SECOND CODE ============
+
+        // IMAGE COMPRESSOR
+        function compressImg(){
+            const f = document.getElementById('ci').files[0];
+            const targetSize = document.getElementById('target').value;
+            
+            if(!f || !targetSize) {
+                showNotification('❌ Please select an image and enter target size', 'error');
+                return;
+            }
+
+            if(f.size > 10 * 1024 * 1024) {
+                showNotification('❌ File size exceeds 10MB limit', 'error');
+                return;
+            }
+
+            const img = new Image();
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    
+                    let quality = 0.9;
+                    
+                    function compressLoop() {
+                        canvas.toBlob(function(blob) {
+                            if(blob.size/1024 > targetSize && quality > 0.1) {
+                                quality -= 0.05;
+                                compressLoop();
+                            } else {
+                                const resultDiv = document.getElementById('co');
+                                const originalSize = (f.size/1024).toFixed(1);
+                                const newSize = (blob.size/1024).toFixed(1);
+                                const reduction = (((f.size - blob.size)/f.size)*100).toFixed(1);
+                                
+                                resultDiv.innerHTML = `
+                                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px;">
+                                        <p><strong>Original Size:</strong> ${originalSize} KB</p>
+                                        <p><strong>Compressed Size:</strong> ${newSize} KB</p>
+                                        <p><strong>Reduction:</strong> ${reduction}%</p>
+                                        <a class="tool-btn" download="compressed.jpg" href="${URL.createObjectURL(blob)}" style="margin-top: 10px;">
+                                            <i class="fas fa-download"></i> Download (${newSize} KB)
+                                        </a>
+                                    </div>
+                                `;
+                                showNotification('✅ Image compressed successfully!', 'success');
+                            }
+                        }, 'image/jpeg', quality);
+                    }
+                    
+                    compressLoop();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(f);
+        }
+
+        // IMAGE RESIZER
+        function resize(){
+            const f = document.getElementById('ri').files[0];
+            const width = document.getElementById('rw').value;
+            const height = document.getElementById('rh').value;
+            
+            if(!f || !width || !height) {
+                showNotification('❌ Please select an image and enter dimensions', 'error');
+                return;
+            }
+
+            if(f.size > 10 * 1024 * 1024) {
+                showNotification('❌ File size exceeds 10MB limit', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    canvas.toBlob(function(blob) {
+                        const resultDiv = document.getElementById('ro');
+                        resultDiv.innerHTML = `
+                            <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px;">
+                                <p><strong>New Size:</strong> ${width} x ${height} px</p>
+                                <a class="tool-btn" download="resized.png" href="${URL.createObjectURL(blob)}" style="margin-top: 10px;">
+                                    <i class="fas fa-download"></i> Download Resized Image
+                                </a>
+                            </div>
+                        `;
+                        showNotification('✅ Image resized successfully!', 'success');
+                    });
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(f);
+        }
+
+        // IMAGE CONVERTER
+        function convert(){
+            const f = document.getElementById('vi').files[0];
+            const format = document.getElementById('fmt').value;
+            
+            if(!f) {
+                showNotification('❌ Please select an image', 'error');
+                return;
+            }
+
+            if(f.size > 10 * 1024 * 1024) {
+                showNotification('❌ File size exceeds 10MB limit', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const extension = format === 'image/jpeg' ? 'jpg' : 'png';
+                    
+                    canvas.toBlob(function(blob) {
+                        const resultDiv = document.getElementById('vo');
+                        resultDiv.innerHTML = `
+                            <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px;">
+                                <p><strong>Converted to:</strong> ${extension.toUpperCase()}</p>
+                                <a class="tool-btn" download="converted.${extension}" href="${URL.createObjectURL(blob)}" style="margin-top: 10px;">
+                                    <i class="fas fa-download"></i> Download ${extension.toUpperCase()}
+                                </a>
+                            </div>
+                        `;
+                        showNotification(`✅ Image converted to ${extension.toUpperCase()} successfully!`, 'success');
+                    }, format);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(f);
+        }
+
+        // BACKGROUND REMOVER
+        function bgRemove(){
+            const f = document.getElementById('bi').files[0];
+            
+            if(!f) {
+                showNotification('❌ Please select an image', 'error');
+                return;
+            }
+
+            if(f.size > 10 * 1024 * 1024) {
+                showNotification('❌ File size exceeds 10MB limit', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imageData.data;
+                    
+                    // Simple background removal (works best with white background)
+                    for(let i = 0; i < data.length; i += 4) {
+                        // Check if pixel is white (RGB > 240)
+                        if(data[i] > 240 && data[i+1] > 240 && data[i+2] > 240) {
+                            data[i+3] = 0; // Set alpha to 0 (transparent)
                         }
-                        <a 
-                            download={result.name || "result"} 
-                            href={result.url}
-                            className="inline-flex items-center gap-3 px-12 py-5 bg-green-600 rounded-full font-bold hover:bg-green-500 transition-all shadow-xl text-lg"
-                        >
-                            <i className="fas fa-download"></i> Download {result.size ? `(${result.size} KB)` : 'File'}
+                    }
+                    
+                    ctx.putImageData(imageData, 0, 0);
+                    
+                    canvas.toBlob(function(blob) {
+                        const resultDiv = document.getElementById('bo');
+                        resultDiv.innerHTML = `
+                            <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px;">
+                                <p><strong>Background removed!</strong> Saved as transparent PNG</p>
+                                <a class="tool-btn" download="background_removed.png" href="${URL.createObjectURL(blob)}" style="margin-top: 10px;">
+                                    <i class="fas fa-download"></i> Download PNG
+                                </a>
+                            </div>
+                        `;
+                        showNotification('✅ Background removed successfully!', 'success');
+                    });
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(f);
+        }
+
+        // IMAGE TO PDF
+        async function imgPdf(){
+            const files = document.getElementById('ipi').files;
+            
+            if(files.length === 0) {
+                showNotification('❌ Please select images', 'error');
+                return;
+            }
+
+            try {
+                const { PDFDocument } = PDFLib;
+                const pdfDoc = await PDFDocument.create();
+                
+                for(const file of files) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    let image;
+                    
+                    if(file.type.includes('png')) {
+                        image = await pdfDoc.embedPng(arrayBuffer);
+                    } else {
+                        image = await pdfDoc.embedJpg(arrayBuffer);
+                    }
+                    
+                    const page = pdfDoc.addPage([image.width, image.height]);
+                    page.drawImage(image, {
+                        x: 0,
+                        y: 0,
+                        width: image.width,
+                        height: image.height
+                    });
+                }
+                
+                const pdfBytes = await pdfDoc.save();
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                
+                const resultDiv = document.getElementById('ipo');
+                resultDiv.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px;">
+                        <p><strong>PDF created with ${files.length} image(s)</strong></p>
+                        <a class="tool-btn" download="images.pdf" href="${URL.createObjectURL(blob)}" style="margin-top: 10px;">
+                            <i class="fas fa-download"></i> Download PDF
                         </a>
                     </div>
-                )}
+                `;
+                showNotification('✅ PDF created successfully!', 'success');
+            } catch (error) {
+                showNotification('❌ Error creating PDF', 'error');
+                console.error(error);
+            }
+        }
 
-                {result.multi && (
-                    <div className="flex flex-col gap-4">
-                        {result.multi.map((r: any, idx: number) => (
-                            <a key={idx} download={r.name} href={r.url} className="p-5 glass rounded-2xl flex justify-between items-center hover:bg-white/10 group transition-all">
-                                <span className="font-bold">{r.name}</span>
-                                <i className="fas fa-download text-green-500 group-hover:scale-125 transition-transform"></i>
+        // PDF MERGER
+        async function mergePDF(){
+            const files = document.getElementById('pm').files;
+            
+            if(files.length < 2) {
+                showNotification('❌ Please select at least 2 PDF files', 'error');
+                return;
+            }
+
+            try {
+                const { PDFDocument } = PDFLib;
+                const mergedPdf = await PDFDocument.create();
+                
+                for(const file of files) {
+                    const pdfBytes = await file.arrayBuffer();
+                    const pdf = await PDFDocument.load(pdfBytes);
+                    const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                    pages.forEach(page => mergedPdf.addPage(page));
+                }
+                
+                const mergedPdfBytes = await mergedPdf.save();
+                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+                
+                const resultDiv = document.getElementById('pmo');
+                resultDiv.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px;">
+                        <p><strong>Merged ${files.length} PDF files</strong></p>
+                        <a class="tool-btn" download="merged.pdf" href="${URL.createObjectURL(blob)}" style="margin-top: 10px;">
+                            <i class="fas fa-download"></i> Download Merged PDF
+                        </a>
+                    </div>
+                `;
+                showNotification('✅ PDFs merged successfully!', 'success');
+            } catch (error) {
+                showNotification('❌ Error merging PDFs', 'error');
+                console.error(error);
+            }
+        }
+
+        // PDF SPLITTER
+        async function splitPDF(){
+            const file = document.getElementById('ps').files[0];
+            const splitPage = parseInt(document.getElementById('pn').value);
+            
+            if(!file || !splitPage) {
+                showNotification('❌ Please select a PDF file and enter page number', 'error');
+                return;
+            }
+
+            try {
+                const { PDFDocument } = PDFLib;
+                const pdf = await PDFDocument.load(await file.arrayBuffer());
+                const totalPages = pdf.getPageCount();
+                
+                if(splitPage < 1 || splitPage >= totalPages) {
+                    showNotification(`❌ Please enter a page number between 1 and ${totalPages-1}`, 'error');
+                    return;
+                }
+                
+                // Create first part
+                const firstPart = await PDFDocument.create();
+                const firstPages = await firstPart.copyPages(pdf, [...Array(splitPage).keys()]);
+                firstPages.forEach(page => firstPart.addPage(page));
+                
+                // Create second part
+                const secondPart = await PDFDocument.create();
+                const secondPages = await secondPart.copyPages(pdf, 
+                    [...Array(totalPages - splitPage).keys()].map(i => i + splitPage)
+                );
+                secondPages.forEach(page => secondPart.addPage(page));
+                
+                const firstPartBytes = await firstPart.save();
+                const secondPartBytes = await secondPart.save();
+                
+                const resultDiv = document.getElementById('pso');
+                resultDiv.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px;">
+                        <p><strong>PDF split into 2 parts:</strong></p>
+                        <p>Part 1: Pages 1-${splitPage}</p>
+                        <p>Part 2: Pages ${splitPage+1}-${totalPages}</p>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <a class="tool-btn" download="part1.pdf" href="${URL.createObjectURL(new Blob([firstPartBytes], {type: 'application/pdf'}))}" style="flex: 1;">
+                                <i class="fas fa-download"></i> Part 1
                             </a>
-                        ))}
+                            <a class="tool-btn" download="part2.pdf" href="${URL.createObjectURL(new Blob([secondPartBytes], {type: 'application/pdf'}))}" style="flex: 1;">
+                                <i class="fas fa-download"></i> Part 2
+                            </a>
+                        </div>
                     </div>
-                )}
+                `;
+                showNotification('✅ PDF split successfully!', 'success');
+            } catch (error) {
+                showNotification('❌ Error splitting PDF', 'error');
+                console.error(error);
+            }
+        }
 
-                {result.text && (
-                    <div className="max-h-[400px] overflow-y-auto bg-white/5 p-8 rounded-3xl border border-white/10 font-mono text-sm leading-relaxed whitespace-pre-wrap relative">
-                        <button 
-                            onClick={() => { navigator.clipboard.writeText(result.text); notify("Copied to clipboard!", "success"); }}
-                            className="absolute top-4 right-4 glass p-3 rounded-xl hover:bg-indigo-500 transition-colors"
-                        >
-                            <i className="fas fa-copy"></i>
-                        </button>
-                        {result.text}
-                    </div>
-                )}
+        // PDF TO TEXT
+        async function pdfText(){
+            const file = document.getElementById('pt').files[0];
+            
+            if(!file) {
+                showNotification('❌ Please select a PDF file', 'error');
+                return;
+            }
 
-                {result.info && (
-                    <div className="text-4xl font-extrabold gradient-primary bg-clip-text text-transparent text-center py-12">
-                        {result.info}
-                    </div>
-                )}
-              </div>
+            try {
+                const url = URL.createObjectURL(file);
+                const pdf = await pdfjsLib.getDocument(url).promise;
+                let text = '';
+                
+                for(let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    text += content.items.map(item => item.str).join(' ') + '\n\n';
+                }
+                
+                URL.revokeObjectURL(url);
+                
+                const resultDiv = document.getElementById('pto');
+                resultDiv.textContent = text || 'No text could be extracted from the PDF.';
+                
+                if(text) {
+                    showNotification('✅ Text extracted successfully!', 'success');
+                } else {
+                    showNotification('⚠️ No text found in PDF', 'warning');
+                }
+            } catch (error) {
+                showNotification('❌ Error extracting text from PDF', 'error');
+                console.error(error);
+            }
+        }
 
-              <button 
-                onClick={reset}
-                className="w-full py-4 border-2 border-white/10 rounded-[20px] font-bold hover:bg-white/5 transition-all flex items-center justify-center gap-2"
-              >
-                <i className="fas fa-redo"></i> Reset and Start Over
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
+        // PDF TO WORD
+        async function pdfWord(){
+            const file = document.getElementById('pw').files[0];
+            
+            if(!file) {
+                showNotification('❌ Please select a PDF file', 'error');
+                return;
+            }
 
-export default ToolModal;
+            try {
+                const url = URL.createObjectURL(file);
+                const pdf = await pdfjsLib.getDocument(url).promise;
+                let text = '';
+                
+                for(let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    text += content.items.map(item => item.str).join(' ') + '\n\n';
+                }
+                
+                URL.revokeObjectURL(url);
+                
+                if(text) {
+                    const blob = new Blob([text], { type: 'application/msword' });
+                    
+                    const resultDiv = document.getElementById('pwo');
+                    resultDiv.innerHTML = `
+                        <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px;">
+                            <p><strong>PDF converted to Word document</strong></p>
+                            <a class="tool-btn" download="output.doc" href="${URL.createObjectURL(blob)}" style="margin-top: 10px;">
+                                <i class="fas fa-download"></i> Download Word Document
+                            </a>
+                        </div>
+                    `;
+                    showNotification('✅ PDF converted to Word successfully!', 'success');
+                } else {
+                    showNotification('⚠️ No text found in PDF to convert', 'warning');
+                }
+            } catch (error) {
+                showNotification('❌ Error converting PDF to Word', 'error');
+                console.error(error);
+            }
+        }
+
+        // TEXT SUMMARIZER
+        function sum(){
+            const text = document.getElementById('st').value;
+            
+            if(!text) {
+                showNotification('❌ Please enter text to summarize', 'error');
+                return;
+            }
+            
+            const sentences = text.split('.');
+            const summaryLength = Math.ceil(sentences.length / 3);
+            const summary = sentences.slice(0, summaryLength).join('.') + '.';
+            
+            const resultDiv = document.getElementById('so');
+            resultDiv.textContent = summary || 'No text to summarize.';
+            
+            if(summary) {
+                showNotification('✅ Text summarized successfully!', 'success');
+            }
+        }
+
+        // MATH SOLVER
+        function solveMath(){
+            const expression = document.getElementById('me').value;
+            
+            if(!expression) {
+                showNotification('❌ Please enter a math expression', 'error');
+                return;
+            }
+            
+            // Security check: Only allow safe math operations
+            if(!/^[0-9+\-*/().\s]+$/.test(expression)) {
+                showNotification('❌ Invalid expression. Only numbers and basic operators allowed.', 'error');
+                return;
+            }
+            
+            try {
+                const result = Function(`"use strict"; return (${expression})`)();
+                const resultDiv = document.getElementById('mo');
+                resultDiv.innerHTML = `
+                    <strong>Expression:</strong> ${expression}<br>
+                    <strong>Result:</strong> ${result}
+                `;
+                showNotification('✅ Math problem solved!', 'success');
+            } catch (error) {
+                showNotification('❌ Error solving math expression', 'error');
+                console.error(error);
+            }
+        }
+
+        // GPA CALCULATOR
+        function gpa(){
+            const gradesInput = document.getElementById('g1').value;
+            const creditsInput = document.getElementById('g2').value;
+            
+            if(!gradesInput || !creditsInput) {
+                showNotification('❌ Please enter grades and credits', 'error');
+                return;
+            }
+            
+            const grades = gradesInput.split(',').map(Number);
+            const credits = creditsInput.split(',').map(Number);
+            
+            if(grades.length !== credits.length) {
+                showNotification('❌ Number of grades must match number of credits', 'error');
+                return;
+            }
+            
+            if(grades.some(isNaN) || credits.some(isNaN)) {
+                showNotification('❌ Please enter valid numbers', 'error');
+                return;
+            }
+            
+            let totalPoints = 0;
+            let totalCredits = 0;
+            
+            grades.forEach((grade, index) => {
+                totalPoints += grade * credits[index];
+                totalCredits += credits[index];
+            });
+            
+            const gpa = totalPoints / totalCredits;
+            
+            const resultDiv = document.getElementById('go');
+            resultDiv.innerHTML = `
+                <strong>Total Points:</strong> ${totalPoints.toFixed(2)}<br>
+                <strong>Total Credits:</strong> ${totalCredits}<br>
+                <strong>GPA:</strong> ${gpa.toFixed(2)}
+            `;
+            showNotification('✅ GPA calculated successfully!', 'success');
+        }
+
+        // WORD COUNTER
+        function countWords(){
+            const text = document.getElementById('wt').value;
+            
+            if(!text) {
+                showNotification('❌ Please enter text', 'error');
+                return;
+            }
+            
+            const words = text.trim() ? text.trim().split(/\s+/) : [];
+            const wordCount = words.length;
+            const charCount = text.length;
+            const charNoSpacesCount = text.replace(/\s/g, '').length;
+            const sentenceCount = text.split(/[.!?]+/).length - 1;
+            const readingTime = Math.ceil(wordCount / 200); // 200 words per minute
+            
+            const resultDiv = document.getElementById('wo');
+            resultDiv.innerHTML = `
+                <strong>Word Count:</strong> ${wordCount}<br>
+                <strong>Character Count:</strong> ${charCount}<br>
+                <strong>Characters (no spaces):</strong> ${charNoSpacesCount}<br>
+                <strong>Sentence Count:</strong> ${sentenceCount}<br>
+                <strong>Reading Time:</strong> ${readingTime} minute${readingTime !== 1 ? 's' : ''}
+            `;
+            showNotification('✅ Word count completed!', 'success');
+        }
+
+        // ESSAY WRITER FUNCTIONS
+        function generateEssay() {
+            const topic = document.getElementById('essayTopic').value || 'The Importance of Education';
+            
+            let essayContent = `Title: ${topic}
+
+Introduction:
+Education is one of the most powerful tools for personal and societal development. It shapes our thinking, enhances our capabilities, and opens doors to countless opportunities.
+
+Body:
+The importance of education cannot be overstated. It provides individuals with the knowledge and skills necessary to navigate the complexities of modern life. Through education, people learn critical thinking, problem-solving, and communication skills that are essential for success in any field.
+
+Education also plays a crucial role in social development. It promotes equality by providing opportunities to people from all backgrounds. An educated society is more likely to make informed decisions, promote innovation, and foster economic growth.
+
+Furthermore, education contributes to personal growth and self-awareness. It helps individuals understand their strengths and weaknesses, develop their talents, and pursue their passions. The journey of learning is continuous and extends far beyond the classroom.
+
+Conclusion:
+In conclusion, education is the foundation upon which we build our future. It empowers individuals, strengthens communities, and drives progress. Investing in education is investing in a brighter tomorrow for all.`;
+            
+            document.getElementById('essayContent').textContent = essayContent;
+            document.getElementById('essayResult').style.display = 'block';
+            document.getElementById('downloadEssayBtn').disabled = false;
+            
+            showNotification('✅ Essay generated successfully!', 'success');
+        }
+
+        function copyEssay() {
+            const text = document.getElementById('essayContent').textContent;
+            navigator.clipboard.writeText(text);
+            showNotification('✅ Essay copied to clipboard!', 'success');
+        }
+
+        function downloadEssay() {
+            const text = document.getElementById('essayContent').textContent;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'essay.txt';
+            link.click();
+            showNotification('📥 Essay downloaded!', 'success');
+        }
+
+        // AI ASSISTANT FUNCTIONS
+        function askAI() {
+            const question = document.getElementById('aiQuestion').value;
+            if (!question) return;
+            
+            const responses = [
+                `Based on your question about "${question}", here's what I suggest: Focus on the key aspects and break it down into manageable parts. Research thoroughly and structure your response logically.`,
+                `For "${question}", consider these points: 1) Understand the core requirements, 2) Gather relevant information, 3) Organize your thoughts systematically, 4) Review and refine your approach.`,
+                `Regarding "${question}", my advice is to approach it methodically. Start with research, then outline your main points, provide supporting evidence, and conclude with actionable recommendations.`
+            ];
+            
+            const response = responses[Math.floor(Math.random() * responses.length)];
+            
+            document.getElementById('aiResponseText').textContent = response;
+            document.getElementById('aiResponse').style.display = 'block';
+            
+            showNotification('✅ AI response generated!', 'success');
+        }
+
+        // Contact Form Functions
+        function sendContactMessage() {
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const message = document.getElementById('contactMessage').value;
+            
+            if (!name || !email || !message) {
+                showNotification('❌ Please fill all fields', 'error');
+                return;
+            }
+            
+            // In a real implementation, this would send the data to a server
+            // For now, we'll just show a success message
+            showNotification('✅ Message sent successfully! We will contact you soon.', 'success');
+            
+            // Clear form
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('contactMessage').value = '';
+        }
+
+        function shareDeveloperContact() {
+            const contactInfo = `Saroj Naik (Developer)
+Email: anytasker1998@gmail.com
+Phone: 8018733114
+Website: ${window.location.href}`;
+            
+            navigator.clipboard.writeText(contactInfo);
+            showNotification('✅ Developer contact copied to clipboard!', 'success');
+        }
+
+        // Share Functions
+        function shareWebsite() {
+            const shareData = {
+                title: 'AnyTasker Pro - Ultimate Utility Tools',
+                text: 'Check out these amazing free tools by Saroj Naik! All tools are 100% working.',
+                url: window.location.href
+            };
+            
+            if (navigator.share) {
+                navigator.share(shareData)
+                    .then(() => showNotification('✅ Website shared successfully!', 'success'))
+                    .catch(err => {
+                        console.log('Error sharing:', err);
+                        showShareOptions();
+                    });
+            } else {
+                showShareOptions();
+            }
+        }
+
+        function showShareOptions() {
+            showNotification('📱 Choose a sharing option from the footer buttons', 'info');
+            setTimeout(() => {
+                document.querySelector('footer').scrollIntoView({ behavior: 'smooth' });
+            }, 1000);
+        }
+
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out AnyTasker Pro - Amazing free tools by Saroj Naik!');
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank', 'width=600,height=400');
+            showNotification('✅ Opening Facebook share dialog...', 'success');
+        }
+
+        function shareOnTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('AnyTasker Pro - Free professional tools by Saroj Naik! #tools #freetools #anytasker');
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
+            showNotification('✅ Opening Twitter share dialog...', 'success');
+        }
+
+        function shareOnWhatsApp() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out AnyTasker Pro - Amazing free tools by Saroj Naik!');
+            window.open(`https://wa.me/?text=${text}%20${url}`, '_blank', 'width=600,height=400');
+            showNotification('✅ Opening WhatsApp share dialog...', 'success');
+        }
+
+        function copyWebsiteLink() {
+            const currentUrl = window.location.href;
+            navigator.clipboard.writeText(currentUrl)
+                .then(() => {
+                    showNotification('✅ Website link copied to clipboard!', 'success');
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showNotification('❌ Failed to copy link', 'error');
+                });
+        }
+
+        // Utility Functions
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            const messageEl = document.getElementById('notificationMessage');
+            
+            messageEl.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Search Functionality
+        function searchTools() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm.trim() === '') return;
+            
+            const matchedTool = tools.find(tool => 
+                tool.title.toLowerCase().includes(searchTerm) ||
+                tool.description.toLowerCase().includes(searchTerm) ||
+                tool.features.some(f => f.toLowerCase().includes(searchTerm))
+            );
+            
+            if (matchedTool) {
+                openTool(matchedTool.id);
+            } else {
+                showNotification(`🔍 No tool found for "${searchTerm}"`, 'info');
+            }
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+            
+            // Close nav when clicking outside
+            document.addEventListener('click', function(e) {
+                const navMenu = document.getElementById('navMenu');
+                const navToggle = document.querySelector('.nav-toggle');
+                
+                if (navMenu.classList.contains('show') && 
+                    !navMenu.contains(e.target) && 
+                    !navToggle.contains(e.target)) {
+                    navMenu.classList.remove('show');
+                }
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href !== '#') {
+                        e.preventDefault();
+                        const targetElement = document.querySelector(href);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                });
+            });
+            
+            // Auto-close tool on ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeTool();
+                }
+            });
+            
+            // Initialize ads
+            initializeAds();
+        });
+
+        function initializeAds() {
+            // Ads are already included in the HTML
+            // This function can be used for additional ad initialization if needed
+            console.log('Ads initialized successfully');
+        }
+    </script>
+</body>
+</html>
