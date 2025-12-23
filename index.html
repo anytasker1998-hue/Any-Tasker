@@ -12,6 +12,7 @@
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --primary: #6366f1;
@@ -168,6 +169,39 @@
             transform: translateY(-50%);
             width: 160px;
             height: 600px;
+        }
+
+        /* Middle Ads */
+        .ads-middle-left {
+            position: fixed;
+            top: 300px;
+            left: 10px;
+            width: 160px;
+            height: 600px;
+            z-index: 997;
+        }
+
+        .ads-middle-right {
+            position: fixed;
+            top: 300px;
+            right: 10px;
+            width: 160px;
+            height: 600px;
+            z-index: 997;
+        }
+
+        /* Social Bar Ads */
+        .social-ads-container {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 300px;
+            height: 250px;
+            z-index: 996;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            padding: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         /* Container */
@@ -736,9 +770,7 @@
         }
 
         .tool-container-wrapper.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: block;
             animation: fadeIn 0.3s ease;
         }
 
@@ -748,7 +780,11 @@
         }
 
         .tool-container {
-            width: 95%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
             height: 90%;
             background: var(--gradient-dark);
             border-radius: var(--radius-lg);
@@ -759,53 +795,12 @@
             flex-direction: column;
         }
 
-        /* Tool Ads */
-        .tool-ad {
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .tool-ad iframe {
-            border: none;
-            width: 100%;
-            height: 100%;
-        }
-
-        .tool-top-ad {
-            width: 100%;
-            height: 60px;
-        }
-
-        .tool-bottom-ad {
-            width: 100%;
-            height: 60px;
-        }
-
         .tool-main-content {
-            flex: 1;
-            display: flex;
-            overflow: hidden;
-        }
-
-        .tool-left-ad {
-            width: 160px;
-            height: 100%;
-        }
-
-        .tool-right-ad {
-            width: 160px;
-            height: 100%;
-        }
-
-        .tool-center {
-            flex: 1;
+            overflow-y: auto;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            flex: 1;
         }
 
         .tool-header {
@@ -1114,71 +1109,18 @@
             padding: 50px 20px 0;
         }
 
-        /* Floating Action Buttons */
-        .floating-action {
-            position: fixed;
-            bottom: 120px;
-            right: 30px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .fab-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: var(--shadow-glow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .fab-btn:hover {
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        .fab-btn .tooltip {
-            position: absolute;
-            right: 70px;
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            transform: translateX(20px);
-            transition: all 0.3s ease;
-            pointer-events: none;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .fab-btn:hover .tooltip {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
         /* Notification */
         .notification {
             position: fixed;
             bottom: 120px;
-            left: 30px;
+            right: 30px;
             background: var(--gradient);
             color: white;
             padding: 20px 30px;
             border-radius: var(--radius);
             box-shadow: var(--shadow-lg);
             z-index: 3000;
-            transform: translateX(-400px);
+            transform: translateX(400px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             max-width: 400px;
             backdrop-filter: blur(10px);
@@ -1216,19 +1158,64 @@
             background: var(--primary);
         }
 
+        /* Floating Action Buttons */
+        .floating-action {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+        }
+
+        .fab-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .fab-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .fab-btn .tooltip {
+            position: absolute;
+            right: 70px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 15px;
+            border-radius: var(--radius);
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: var(--transition);
+            pointer-events: none;
+        }
+
+        .fab-btn:hover .tooltip {
+            opacity: 1;
+        }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
-            .ads-left, .ads-right {
+            .ads-left, .ads-right, .ads-middle-left, .ads-middle-right {
                 display: none;
             }
             .ads-top, .ads-bottom {
                 width: 90%;
             }
-            .tool-left-ad, .tool-right-ad {
+            .social-ads-container {
                 display: none;
-            }
-            .tool-main-content {
-                flex-direction: column;
             }
         }
 
@@ -1282,21 +1269,6 @@
             .tools-grid {
                 grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             }
-            .floating-action {
-                bottom: 100px;
-                right: 20px;
-            }
-            .fab-btn {
-                width: 55px;
-                height: 55px;
-            }
-            .fab-btn .tooltip {
-                display: none;
-            }
-            .tool-container {
-                width: 98%;
-                height: 95%;
-            }
         }
 
         @media (max-width: 768px) {
@@ -1348,12 +1320,6 @@
                 width: 95%;
                 height: 70px;
             }
-            .tool-content {
-                padding: 20px;
-            }
-            .tool-top-ad, .tool-bottom-ad {
-                height: 50px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -1386,18 +1352,10 @@
                 font-size: 35px;
             }
             .tool-content {
-                padding: 15px;
+                padding: 20px;
             }
             .ads-top, .ads-bottom {
                 height: 60px;
-            }
-            .tool-container {
-                width: 100%;
-                height: 100%;
-                border-radius: 0;
-            }
-            .tool-top-ad, .tool-bottom-ad {
-                height: 40px;
             }
         }
     </style>
@@ -1424,45 +1382,81 @@
         </div>
     </div>
 
-    <!-- Main Page Ads -->
+    <!-- Ads - Top Banner -->
     <div class="ads-container ads-top">
-        <!-- Top Ad -->
-        <div class="ad-content" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;">
-            <div style="text-align:center;">
-                <h3 style="margin-bottom:5px;">AnyTasker Pro Tools</h3>
-                <p>Professional Utility Tools by Saroj Naik</p>
-            </div>
-        </div>
+        <iframe src="https://example.com/ads/top.html" title="Advertisement"></iframe>
     </div>
     
+    <!-- Ads - Left Side Banner (160x600) -->
     <div class="ads-container ads-left">
-        <!-- Left Side Ad -->
-        <div class="ad-content" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;">
-            <div style="text-align:center;transform:rotate(-90deg);">
-                <h3>Free Tools</h3>
-                <p>100% Working</p>
-            </div>
-        </div>
+        <script>
+          atOptions = {
+            'key' : 'f720a7f34040d119fe8c31e8d186661e',
+            'format' : 'iframe',
+            'height' : 600,
+            'width' : 160,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
     </div>
     
+    <!-- Ads - Right Side Banner (160x600) -->
     <div class="ads-container ads-right">
-        <!-- Right Side Ad -->
-        <div class="ad-content" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;">
-            <div style="text-align:center;transform:rotate(90deg);">
-                <h3>Image & PDF Tools</h3>
-                <p>Fast Processing</p>
-            </div>
-        </div>
+        <script>
+          atOptions = {
+            'key' : 'f720a7f34040d119fe8c31e8d186661e',
+            'format' : 'iframe',
+            'height' : 600,
+            'width' : 160,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
     </div>
     
+    <!-- Ads - Middle Left Banner -->
+    <div class="ads-container ads-middle-left">
+        <script>
+          atOptions = {
+            'key' : 'f720a7f34040d119fe8c31e8d186661e',
+            'format' : 'iframe',
+            'height' : 600,
+            'width' : 160,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
+    </div>
+    
+    <!-- Ads - Middle Right Banner -->
+    <div class="ads-container ads-middle-right">
+        <script>
+          atOptions = {
+            'key' : 'f720a7f34040d119fe8c31e8d186661e',
+            'format' : 'iframe',
+            'height' : 600,
+            'width' : 160,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
+    </div>
+    
+    <!-- Ads - Bottom Banner -->
     <div class="ads-container ads-bottom">
-        <!-- Bottom Ad -->
-        <div class="ad-content" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;">
-            <div style="text-align:center;">
-                <h3 style="margin-bottom:5px;">Contact: 8018733114</h3>
-                <p>Email: anytasker1998@gmail.com</p>
-            </div>
-        </div>
+        <iframe src="https://example.com/ads/bottom.html" title="Advertisement"></iframe>
+    </div>
+    
+    <!-- Native Banner -->
+    <div class="ads-container" style="position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); width: 728px; height: 90px;">
+        <script async="async" data-cfasync="false" src="https://pl28239794.effectivegatecpm.com/020dcc1e0bd23ed7dc8b597995087112/invoke.js"></script>
+        <div id="container-020dcc1e0bd23ed7dc8b597995087112"></div>
+    </div>
+    
+    <!-- Social Bar Ads -->
+    <div class="social-ads-container">
+        <script src="https://pl28258457.effectivegatecpm.com/77/86/60/778660b9c8b556582fb5127e53b7db86.js"></script>
     </div>
 
     <!-- Header -->
@@ -1491,6 +1485,8 @@
                 <ul id="navMenu">
                     <li><a href="#" onclick="showSection('home')" class="active"><i class="fas fa-home"></i> Home</a></li>
                     <li><a href="#" onclick="showSection('tools')"><i class="fas fa-th-large"></i> All Tools</a></li>
+                    <li><a href="#" onclick="showSection('about')"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="#" onclick="showSection('contact')"><i class="fas fa-envelope"></i> Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -1576,63 +1572,18 @@
         </section>
     </div>
 
-    <!-- Tool Container (Popup Window with Ads) -->
+    <!-- Tool Container -->
     <div class="tool-container-wrapper" id="toolContainer">
         <div class="tool-container">
-            <!-- Top Ad in Tool Window -->
-            <div class="tool-ad tool-top-ad">
-                <div class="ad-content" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;background:linear-gradient(135deg,#4f46e5,#8b5cf6);">
-                    <div style="text-align:center;">
-                        <h3 style="margin-bottom:5px;">Tool Advertisement</h3>
-                        <p>Free Professional Tools</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Main Tool Content Area -->
             <div class="tool-main-content">
-                <!-- Left Ad in Tool Window -->
-                <div class="tool-ad tool-left-ad">
-                    <div class="ad-content" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;background:linear-gradient(135deg,#8b5cf6,#ec4899);">
-                        <div style="text-align:center;transform:rotate(-90deg);">
-                            <h3>AnyTasker Pro</h3>
-                            <p>Premium Tools</p>
-                        </div>
-                    </div>
+                <div class="tool-header">
+                    <h2 id="toolTitle"><i class="fas fa-tools"></i> Tool Title</h2>
+                    <button class="close-tool" onclick="closeTool()">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-                
-                <!-- Center Content -->
-                <div class="tool-center">
-                    <div class="tool-header">
-                        <h2 id="toolTitle"><i class="fas fa-tools"></i> Tool Title</h2>
-                        <button class="close-tool" onclick="closeTool()">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="tool-content" id="toolContent">
-                        <!-- Tool content will be loaded here -->
-                    </div>
-                </div>
-                
-                <!-- Right Ad in Tool Window -->
-                <div class="tool-ad tool-right-ad">
-                    <div class="ad-content" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;background:linear-gradient(135deg,#ec4899,#f59e0b);">
-                        <div style="text-align:center;transform:rotate(90deg);">
-                            <h3>Developed By</h3>
-                            <p>Saroj Naik</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Bottom Ad in Tool Window -->
-            <div class="tool-ad tool-bottom-ad">
-                <div class="ad-content" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;background:linear-gradient(135deg,#f59e0b,#10b981);">
-                    <div style="text-align:center;">
-                        <h3 style="margin-bottom:5px;">Contact: 8018733114</h3>
-                        <p>Email: anytasker1998@gmail.com</p>
-                    </div>
+                <div class="tool-content" id="toolContent">
+                    <!-- Tool content will be loaded here -->
                 </div>
             </div>
         </div>
@@ -1657,6 +1608,8 @@
                 <ul class="footer-links">
                     <li><a href="#" onclick="showSection('home')"><i class="fas fa-chevron-right"></i> Home</a></li>
                     <li><a href="#" onclick="showSection('tools')"><i class="fas fa-chevron-right"></i> All Tools</a></li>
+                    <li><a href="#" onclick="showSection('about')"><i class="fas fa-chevron-right"></i> About</a></li>
+                    <li><a href="#" onclick="showSection('contact')"><i class="fas fa-chevron-right"></i> Contact</a></li>
                 </ul>
             </div>
             
@@ -2019,6 +1972,7 @@
             loadTools();
             showNotification('🚀 Welcome to AnyTasker Pro! All tools are 100% working.', 'success');
             setupEventListeners();
+            initializeAds();
         }
 
         // Load Tools
@@ -2767,6 +2721,27 @@
             } else {
                 showNotification('📱 Use share buttons in footer', 'info');
             }
+        }
+
+        // Ads Initialization
+        function initializeAds() {
+            // In a real implementation, you would load actual ad scripts here
+            // For now, we'll use placeholder iframes
+            
+            const adContainers = document.querySelectorAll('.ads-container iframe');
+            adContainers.forEach((iframe, index) => {
+                // Simulate ad loading
+                setTimeout(() => {
+                    iframe.src = `data:text/html;charset=utf-8,
+                        <div style="width:100%;height:100%;background:linear-gradient(135deg,#4f46e5,#8b5cf6);display:flex;align-items:center;justify-content:center;color:white;font-family:Arial;">
+                            <div style="text-align:center;">
+                                <h3>Advertisement</h3>
+                                <p>Ad Space ${index + 1}</p>
+                                <small>AnyTasker Pro</small>
+                            </div>
+                        </div>`;
+                }, 1000 * (index + 1));
+            });
         }
 
         // Event Listeners
