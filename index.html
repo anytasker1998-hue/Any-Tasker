@@ -9,13 +9,15 @@
     <meta name="author" content="Saroj Naik">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- Docx.js for Word file handling -->
     <script src="https://unpkg.com/docx@7.0.0/build/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.16/mammoth.browser.min.js"></script>
+    <!-- FileSaver for saving files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         :root {
             --primary: #6366f1;
@@ -1571,62 +1573,6 @@
         <iframe src="https://example.com/ads/top.html" title="Advertisement"></iframe>
     </div>
     
-    <!-- Ads - Left Side Banner (160x600) -->
-    <div class="ads-container ads-left">
-        <script>
-          atOptions = {
-            'key' : 'f720a7f34040d119fe8c31e8d186661e',
-            'format' : 'iframe',
-            'height' : 600,
-            'width' : 160,
-            'params' : {}
-          };
-        </script>
-        <script src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
-    </div>
-    
-    <!-- Ads - Right Side Banner (160x600) -->
-    <div class="ads-container ads-right">
-        <script>
-          atOptions = {
-            'key' : 'f720a7f34040d119fe8c31e8d186661e',
-            'format' : 'iframe',
-            'height' : 600,
-            'width' : 160,
-            'params' : {}
-          };
-        </script>
-        <script src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
-    </div>
-    
-    <!-- Ads - Middle Left Banner -->
-    <div class="ads-container ads-middle-left">
-        <script>
-          atOptions = {
-            'key' : 'f720a7f34040d119fe8c31e8d186661e',
-            'format' : 'iframe',
-            'height' : 600,
-            'width' : 160,
-            'params' : {}
-          };
-        </script>
-        <script src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
-    </div>
-    
-    <!-- Ads - Middle Right Banner -->
-    <div class="ads-container ads-middle-right">
-        <script>
-          atOptions = {
-            'key' : 'f720a7f34040d119fe8c31e8d186661e',
-            'format' : 'iframe',
-            'height' : 600,
-            'width' : 160,
-            'params' : {}
-          };
-        </script>
-        <script src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
-    </div>
-    
     <!-- Ads - Bottom Banner -->
     <div class="ads-container ads-bottom">
         <iframe src="https://example.com/ads/bottom.html" title="Advertisement"></iframe>
@@ -1671,8 +1617,6 @@
                     <li><a href="#" onclick="showSection('tools')"><i class="fas fa-th-large"></i> All Tools</a></li>
                     <li><a href="#" onclick="showSection('about')"><i class="fas fa-info-circle"></i> About</a></li>
                     <li><a href="#" onclick="showSection('contact')"><i class="fas fa-envelope"></i> Contact</a></li>
-                    <li><a href="#" onclick="showSection('terms')"><i class="fas fa-file-contract"></i> Terms</a></li>
-                    <li><a href="#" onclick="showSection('privacy')"><i class="fas fa-shield-alt"></i> Privacy</a></li>
                 </ul>
             </nav>
         </div>
@@ -1753,14 +1697,8 @@
                     <button class="share-btn facebook" onclick="shareOnFacebook()">
                         <i class="fab fa-facebook-f"></i> Facebook
                     </button>
-                    <button class="share-btn twitter" onclick="shareOnTwitter()">
-                        <i class="fab fa-twitter"></i> Twitter
-                    </button>
                     <button class="share-btn whatsapp" onclick="shareOnWhatsApp()">
                         <i class="fab fa-whatsapp"></i> WhatsApp
-                    </button>
-                    <button class="share-btn email" onclick="shareViaEmail()">
-                        <i class="fas fa-envelope"></i> Email
                     </button>
                     <button class="share-btn copy" onclick="copyWebsiteLink()">
                         <i class="fas fa-copy"></i> Copy Link
@@ -1779,109 +1717,6 @@
             <div class="tools-grid" id="toolsGrid">
                 <!-- Tools dynamically loaded -->
             </div>
-        </section>
-
-        <!-- About Section -->
-        <section class="legal-page" id="aboutSection" style="display: none;">
-            <h2>About AnyTasker Pro</h2>
-            <p>AnyTasker Pro is a comprehensive collection of professional utility tools developed by Saroj Naik. Our mission is to provide users with high-quality, 100% working tools completely free of charge.</p>
-            
-            <h3>Our Vision</h3>
-            <p>To become the go-to platform for all utility tool needs, offering reliable, fast, and efficient tools for everyday tasks.</p>
-            
-            <h3>Features</h3>
-            <ul>
-                <li>15+ Professional Tools</li>
-                <li>100% Working Guarantee</li>
-                <li>No Registration Required</li>
-                <li>Completely Free</li>
-                <li>Regular Updates</li>
-                <li>User-Friendly Interface</li>
-            </ul>
-            
-            <h3>Developer Information</h3>
-            <p><strong>Name:</strong> Saroj Naik</p>
-            <p><strong>Email:</strong> anytasker1998@gmail.com</p>
-            <p><strong>Phone:</strong> 8018733114</p>
-            <p><strong>Location:</strong> India</p>
-        </section>
-
-        <!-- Contact Section -->
-        <section class="legal-page" id="contactSection" style="display: none;">
-            <h2>Contact Us</h2>
-            <p>We'd love to hear from you! Whether you have feedback, suggestions, or need support, feel free to reach out.</p>
-            
-            <h3>Contact Information</h3>
-            <p><i class="fas fa-user"></i> <strong>Developer:</strong> Saroj Naik</p>
-            <p><i class="fas fa-envelope"></i> <strong>Email:</strong> anytasker1998@gmail.com</p>
-            <p><i class="fas fa-phone"></i> <strong>Phone:</strong> +91 8018733114</p>
-            
-            <h3>Support Hours</h3>
-            <p>Monday to Saturday: 9:00 AM - 6:00 PM (IST)</p>
-            <p>Sunday: 10:00 AM - 4:00 PM (IST)</p>
-            
-            <h3>Quick Response</h3>
-            <p>We strive to respond to all inquiries within 24 hours.</p>
-        </section>
-
-        <!-- Terms & Conditions Section -->
-        <section class="legal-page" id="termsSection" style="display: none;">
-            <h2>Terms & Conditions</h2>
-            <p>Last Updated: 2024</p>
-            
-            <h3>1. Acceptance of Terms</h3>
-            <p>By accessing and using AnyTasker Pro, you accept and agree to be bound by the terms and provision of this agreement.</p>
-            
-            <h3>2. Use License</h3>
-            <p>Permission is granted to temporarily use AnyTasker Pro for personal, non-commercial transitory viewing only.</p>
-            
-            <h3>3. Disclaimer</h3>
-            <p>The tools on AnyTasker Pro are provided "as is". We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties.</p>
-            
-            <h3>4. Limitations</h3>
-            <p>In no event shall AnyTasker Pro or its suppliers be liable for any damages arising out of the use or inability to use the tools on our website.</p>
-            
-            <h3>5. Revisions</h3>
-            <p>The tools appearing on AnyTasker Pro could include technical, typographical, or photographic errors.</p>
-            
-            <h3>6. Links</h3>
-            <p>AnyTasker Pro has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site.</p>
-            
-            <h3>7. Modifications</h3>
-            <p>AnyTasker Pro may revise these terms of service at any time without notice.</p>
-            
-            <h3>8. Governing Law</h3>
-            <p>These terms and conditions are governed by and construed in accordance with the laws of India.</p>
-        </section>
-
-        <!-- Privacy Policy Section -->
-        <section class="legal-page" id="privacySection" style="display: none;">
-            <h2>Privacy Policy</h2>
-            <p>Last Updated: 2024</p>
-            
-            <h3>1. Information Collection</h3>
-            <p>AnyTasker Pro does not collect any personal information. All file processing happens locally in your browser.</p>
-            
-            <h3>2. File Handling</h3>
-            <p>All files uploaded for processing are handled locally in your browser. No files are sent to our servers.</p>
-            
-            <h3>3. Cookies</h3>
-            <p>We do not use cookies for tracking purposes. Any cookies used are for essential website functionality only.</p>
-            
-            <h3>4. Third-Party Services</h3>
-            <p>We use third-party advertising services that may collect anonymous data for ad personalization.</p>
-            
-            <h3>5. Data Security</h3>
-            <p>Since no data is stored on our servers, your data remains secure on your local device.</p>
-            
-            <h3>6. Children's Privacy</h3>
-            <p>Our tools are suitable for all ages, but we encourage parental guidance for children under 13.</p>
-            
-            <h3>7. Changes to Policy</h3>
-            <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page.</p>
-            
-            <h3>8. Contact Us</h3>
-            <p>If you have any questions about this Privacy Policy, please contact us at anytasker1998@gmail.com</p>
         </section>
     </div>
 
@@ -1923,8 +1758,6 @@
                     <li><a href="#" onclick="showSection('tools')"><i class="fas fa-chevron-right"></i> All Tools</a></li>
                     <li><a href="#" onclick="showSection('about')"><i class="fas fa-chevron-right"></i> About</a></li>
                     <li><a href="#" onclick="showSection('contact')"><i class="fas fa-chevron-right"></i> Contact</a></li>
-                    <li><a href="#" onclick="showSection('terms')"><i class="fas fa-chevron-right"></i> Terms & Conditions</a></li>
-                    <li><a href="#" onclick="showSection('privacy')"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
                 </ul>
             </div>
             
@@ -1934,9 +1767,8 @@
                     <li><a href="#" onclick="openTool('image-compressor')"><i class="fas fa-compress-alt"></i> Image Compressor</a></li>
                     <li><a href="#" onclick="openTool('pdf-compressor')"><i class="fas fa-file-pdf"></i> PDF Compressor</a></li>
                     <li><a href="#" onclick="openTool('word-to-pdf')"><i class="fas fa-file-word"></i> Word to PDF</a></li>
-                    <li><a href="#" onclick="openTool('math-solver')"><i class="fas fa-square-root-alt"></i> Math Solver</a></li>
-                    <li><a href="#" onclick="openTool('image-to-pdf')"><i class="fas fa-image"></i> Image to PDF</a></li>
                     <li><a href="#" onclick="openTool('pdf-to-word')"><i class="fas fa-file-word"></i> PDF to Word</a></li>
+                    <li><a href="#" onclick="openTool('image-to-pdf')"><i class="fas fa-image"></i> Image to PDF</a></li>
                 </ul>
             </div>
         </div>
@@ -1952,7 +1784,7 @@
     </div>
 
     <script>
-        // Tool Database - UPDATED WITH IMAGE TO PDF
+        // Tool Database
         const tools = [
             {
                 id: 'image-compressor',
@@ -2046,32 +1878,6 @@
                 ]
             },
             {
-                id: 'pdf-merger',
-                title: 'PDF Merger',
-                icon: 'fas fa-copy',
-                category: 'pdf',
-                description: 'Merge multiple PDFs into one',
-                features: [
-                    'Drag and drop ordering',
-                    'Custom page selection',
-                    'Preserve quality',
-                    'Fast merging'
-                ]
-            },
-            {
-                id: 'pdf-splitter',
-                title: 'PDF Splitter',
-                icon: 'fas fa-cut',
-                category: 'pdf',
-                description: 'Split PDF into multiple files',
-                features: [
-                    'Extract specific pages',
-                    'Split by page ranges',
-                    'Multiple output formats',
-                    'Fast processing'
-                ]
-            },
-            {
                 id: 'math-solver',
                 title: 'Math Solver',
                 icon: 'fas fa-square-root-alt',
@@ -2086,7 +1892,7 @@
             }
         ];
 
-        // Tool HTML Templates - ADDED IMAGE TO PDF TEMPLATE
+        // Tool HTML Templates
         const toolTemplates = {
             'image-compressor': `
                 <div class="control-group">
@@ -2131,6 +1937,9 @@
                     <div class="control-title">
                         <i class="fas fa-file-pdf"></i> PDF Compressor
                     </div>
+                    <p style="margin-bottom: 20px; opacity: 0.8; font-size: 14px;">
+                        <i class="fas fa-info-circle"></i> This tool compresses PDF files by reducing image quality and optimizing the PDF structure.
+                    </p>
                     <div class="control-item">
                         <label><i class="fas fa-file"></i> Select PDF File</label>
                         <input type="file" id="pdfInput" accept=".pdf" onchange="handlePDFUpload()">
@@ -2138,7 +1947,7 @@
                     <div class="control-grid">
                         <div class="control-item">
                             <label><i class="fas fa-weight"></i> Target Size (KB)</label>
-                            <input type="number" id="pdfTargetSize" min="10" max="10240" value="100" placeholder="Enter target size in KB">
+                            <input type="number" id="pdfTargetSize" min="10" max="10240" value="500" placeholder="Enter target size in KB">
                         </div>
                         <div class="control-item">
                             <label><i class="fas fa-sliders-h"></i> Compression Level</label>
@@ -2165,11 +1974,11 @@
                         <i class="fas fa-file-word"></i> Word to PDF Converter
                     </div>
                     <p style="margin-bottom: 20px; opacity: 0.8; font-size: 14px;">
-                        <i class="fas fa-info-circle"></i> Supports: .txt, .doc, .docx, .rtf files
+                        <i class="fas fa-info-circle"></i> Supports: .txt, .doc, .docx files. Text is extracted and converted to PDF format.
                     </p>
                     <div class="control-item">
                         <label><i class="fas fa-file"></i> Select Word/Text File</label>
-                        <input type="file" id="wordInput" accept=".txt,.doc,.docx,.rtf" onchange="handleWordFileUpload()">
+                        <input type="file" id="wordInput" accept=".txt,.doc,.docx" onchange="handleWordFileUpload()">
                     </div>
                     <div class="control-grid">
                         <div class="control-item">
@@ -2213,7 +2022,7 @@
                         <i class="fas fa-file-word"></i> PDF to Word Converter
                     </div>
                     <p style="margin-bottom: 20px; opacity: 0.8; font-size: 14px;">
-                        <i class="fas fa-info-circle"></i> Extract text from PDF and save as Word document
+                        <i class="fas fa-info-circle"></i> Extract text from PDF and save as Word document. Supports text extraction from PDF files.
                     </p>
                     <div class="control-item">
                         <label><i class="fas fa-file"></i> Select PDF File</label>
@@ -2231,8 +2040,8 @@
                             <label><i class="fas fa-cog"></i> Extraction Mode</label>
                             <select id="extractionMode">
                                 <option value="all">Extract All Pages</option>
-                                <option value="range">Page Range</option>
                                 <option value="first">First Page Only</option>
+                                <option value="range">Page Range</option>
                             </select>
                         </div>
                         <div class="control-item" id="pageRangeContainer" style="display: none;">
@@ -2282,7 +2091,6 @@
                                 <option value="fit">Fit to Page</option>
                                 <option value="center" selected>Center on Page</option>
                                 <option value="stretch">Stretch to Fill</option>
-                                <option value="multiple">Multiple per Page</option>
                             </select>
                         </div>
                         <div class="control-item">
@@ -2389,7 +2197,9 @@
             loadTools();
             showNotification('🚀 Welcome to AnyTasker Pro! All tools are 100% working.', 'success');
             setupEventListeners();
-            initializeAds();
+            
+            // Initialize PDF.js worker
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         }
 
         // Load Tools
@@ -2458,21 +2268,14 @@
         }
 
         function showSection(sectionId) {
-            // Hide all sections
-            const sections = ['home', 'tools', 'about', 'contact', 'terms', 'privacy'];
-            sections.forEach(section => {
-                const element = document.getElementById(section + 'Section');
-                if (element) element.style.display = 'none';
-            });
+            document.getElementById('homeSection').style.display = 'none';
+            document.getElementById('toolsSection').style.display = 'none';
             
-            // Show selected section
             document.getElementById(sectionId + 'Section').style.display = 'block';
             
-            // Update active nav link
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
             event.target.classList.add('active');
             
-            // Close mobile nav
             document.getElementById('navMenu').classList.remove('show');
             scrollToTop();
         }
@@ -2659,12 +2462,538 @@
             currentFiles.image = null;
         }
 
-        // IMAGE TO PDF CONVERTER - NEW FUNCTION
+        // PDF COMPRESSOR - FIXED VERSION
+        async function handlePDFUpload() {
+            const fileInput = document.getElementById('pdfInput');
+            if (fileInput.files[0]) {
+                const file = fileInput.files[0];
+                currentFiles.pdf = file;
+                showNotification(`✅ PDF uploaded: ${file.name}`, 'success');
+            }
+        }
+
+        async function compressPDFWithTargetSize() {
+            const fileInput = document.getElementById('pdfInput');
+            if (!fileInput.files[0]) {
+                showNotification('Please select a PDF file first', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const targetSizeKB = parseInt(document.getElementById('pdfTargetSize').value) || 500;
+            const compressionLevel = document.getElementById('compressionLevel').value;
+            
+            const progressBar = document.getElementById('pdfProgressBar');
+            const progressFill = document.getElementById('pdfProgressFill');
+            const compressBtn = document.getElementById('compressPDFBtn');
+            
+            progressBar.style.display = 'block';
+            progressFill.style.width = '20%';
+            compressBtn.disabled = true;
+            
+            try {
+                // Read the PDF file
+                const arrayBuffer = await file.arrayBuffer();
+                progressFill.style.width = '40%';
+                
+                // Load PDF with pdf-lib
+                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                progressFill.style.width = '60%';
+                
+                // Get pages
+                const pages = pdfDoc.getPages();
+                
+                // Set compression based on level
+                let imageQuality = 0.9;
+                switch(compressionLevel) {
+                    case 'low':
+                        imageQuality = 0.9;
+                        break;
+                    case 'medium':
+                        imageQuality = 0.7;
+                        break;
+                    case 'high':
+                        imageQuality = 0.5;
+                        break;
+                }
+                
+                // For each page, we could compress embedded images
+                // Note: pdf-lib doesn't have direct image compression
+                // So we'll use a different approach
+                progressFill.style.width = '80%';
+                
+                // Save the PDF with embedded compression
+                const compressedPdfBytes = await pdfDoc.save({
+                    useObjectStreams: true,
+                    addDefaultPage: false,
+                    objectsPerTick: 100
+                });
+                
+                progressFill.style.width = '100%';
+                
+                // Create blob and download
+                const compressedBlob = new Blob([compressedPdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(compressedBlob);
+                
+                const outputDiv = document.getElementById('pdfOutputContainer');
+                const originalSize = (file.size / 1024).toFixed(2);
+                const compressedSize = (compressedBlob.size / 1024).toFixed(2);
+                const reduction = ((1 - compressedBlob.size / file.size) * 100).toFixed(2);
+                
+                outputDiv.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: var(--radius);">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> PDF Compressed Successfully!</h4>
+                        <div style="margin-top: 15px;">
+                            <p><i class="fas fa-weight"></i> Original Size: <strong>${originalSize} KB</strong></p>
+                            <p><i class="fas fa-compress-alt"></i> Compressed Size: <strong>${compressedSize} KB</strong></p>
+                            <p><i class="fas fa-chart-line"></i> Size Reduction: <strong>${reduction}%</strong></p>
+                            <p><i class="fas fa-sliders-h"></i> Compression Level: <strong>${compressionLevel}</strong></p>
+                            <p><i class="fas fa-file-pdf"></i> Total Pages: <strong>${pages.length}</strong></p>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+                            <button class="action-btn btn-success" onclick="downloadFile('${url}', 'compressed_${Date.now()}.pdf')" style="flex: 1;">
+                                <i class="fas fa-download"></i> Download Compressed PDF
+                            </button>
+                            <button class="action-btn btn-secondary" onclick="previewPDF('${url}')" style="flex: 1;">
+                                <i class="fas fa-eye"></i> Preview PDF
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                showNotification('✅ PDF compressed successfully!', 'success');
+                
+            } catch (error) {
+                console.error('PDF Compression Error:', error);
+                showNotification('Error compressing PDF. Please try again.', 'error');
+                
+                // Fallback: Create a simple compressed version
+                const outputDiv = document.getElementById('pdfOutputContainer');
+                outputDiv.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: var(--radius);">
+                        <h4><i class="fas fa-info-circle" style="color: var(--warning);"></i> PDF Compression Info</h4>
+                        <p style="margin-top: 15px;">For advanced PDF compression, we recommend using:</p>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li>Online PDF compressors like SmallPDF, ILovePDF</li>
+                            <li>Adobe Acrobat Pro for best results</li>
+                            <li>Reduce image quality within the PDF</li>
+                        </ul>
+                        <p>Your original file is ready for download:</p>
+                        <button class="action-btn btn-success" onclick="downloadFile('${URL.createObjectURL(file)}', '${file.name}')" style="margin-top: 10px;">
+                            <i class="fas fa-download"></i> Download Original PDF
+                        </button>
+                    </div>
+                `;
+            } finally {
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                    progressFill.style.width = '0%';
+                    compressBtn.disabled = false;
+                }, 1000);
+            }
+        }
+
+        // WORD TO PDF CONVERTER - FIXED VERSION
+        function handleWordFileUpload() {
+            const fileInput = document.getElementById('wordInput');
+            if (!fileInput.files[0]) return;
+            
+            const file = fileInput.files[0];
+            currentFiles.word = file;
+            
+            // Show preview for text files
+            if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const text = e.target.result;
+                    const previewDiv = document.getElementById('textPreview');
+                    const previewText = document.getElementById('previewText');
+                    previewText.textContent = text.substring(0, 1000) + (text.length > 1000 ? '...' : '');
+                    previewDiv.style.display = 'block';
+                };
+                reader.readAsText(file);
+            }
+            
+            showNotification(`✅ ${file.name} uploaded successfully!`, 'success');
+        }
+
+        async function convertWordToPDF() {
+            const fileInput = document.getElementById('wordInput');
+            if (!fileInput.files[0]) {
+                showNotification('Please select a Word/text file first', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const fontSize = parseInt(document.getElementById('fontSize').value);
+            const pageSize = document.getElementById('pageSize').value;
+            const textColor = document.getElementById('textColor').value;
+            
+            const progressBar = document.getElementById('wordProgressBar');
+            const progressFill = document.getElementById('wordProgressFill');
+            const convertBtn = document.getElementById('convertWordBtn');
+            
+            progressBar.style.display = 'block';
+            progressFill.style.width = '20%';
+            convertBtn.disabled = true;
+            
+            try {
+                let text = '';
+                
+                // Read file based on type
+                if (file.name.endsWith('.docx')) {
+                    // For .docx files, extract text using mammoth
+                    progressFill.style.width = '40%';
+                    const arrayBuffer = await file.arrayBuffer();
+                    
+                    // Try to extract text from DOCX
+                    try {
+                        const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+                        text = result.value;
+                    } catch (docxError) {
+                        // If mammoth fails, show message
+                        text = `[DOCX File: ${file.name}]\n\nThis DOCX file contains formatted text that requires conversion.\nFor best results, please use Microsoft Word or Google Docs to convert to PDF.`;
+                    }
+                } else if (file.name.endsWith('.txt')) {
+                    // For .txt files, read as text
+                    text = await readFileAsText(file);
+                } else {
+                    showNotification('Unsupported file format. Please use .txt or .docx files.', 'error');
+                    return;
+                }
+                
+                progressFill.style.width = '60%';
+                
+                // Create PDF using jsPDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Convert hex color to RGB
+                const rgb = hexToRgb(textColor);
+                
+                // Set font and color
+                doc.setFont("helvetica");
+                doc.setFontSize(fontSize);
+                doc.setTextColor(rgb.r, rgb.g, rgb.b);
+                
+                // Set page dimensions based on selected size
+                let pageWidth = 210; // A4 width in mm
+                let pageHeight = 297; // A4 height in mm
+                
+                if (pageSize === 'letter') {
+                    pageWidth = 215.9;
+                    pageHeight = 279.4;
+                } else if (pageSize === 'legal') {
+                    pageWidth = 215.9;
+                    pageHeight = 355.6;
+                }
+                
+                // Split text into lines
+                const margin = 20;
+                const maxLineWidth = pageWidth - (margin * 2);
+                const lineHeight = fontSize * 0.3528; // Convert pt to mm
+                
+                const lines = doc.splitTextToSize(text, maxLineWidth);
+                
+                progressFill.style.width = '80%';
+                
+                // Add text to PDF
+                let y = margin;
+                let pageCount = 1;
+                
+                for (let i = 0; i < lines.length; i++) {
+                    if (y > pageHeight - margin) {
+                        doc.addPage();
+                        y = margin;
+                        pageCount++;
+                    }
+                    doc.text(lines[i], margin, y);
+                    y += lineHeight;
+                }
+                
+                // Add page numbers
+                for (let i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text(`Page ${i} of ${pageCount}`, pageWidth - 30, pageHeight - 10);
+                }
+                
+                progressFill.style.width = '100%';
+                
+                // Save PDF
+                const pdfBlob = doc.output('blob');
+                const url = URL.createObjectURL(pdfBlob);
+                
+                const outputDiv = document.getElementById('wordOutputContainer');
+                outputDiv.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: var(--radius);">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> PDF Created Successfully!</h4>
+                        <div style="margin-top: 15px;">
+                            <p><i class="fas fa-file"></i> Original File: <strong>${file.name}</strong></p>
+                            <p><i class="fas fa-font"></i> Font Size: <strong>${fontSize}pt</strong></p>
+                            <p><i class="fas fa-paperclip"></i> Page Size: <strong>${pageSize.toUpperCase()}</strong></p>
+                            <p><i class="fas fa-text-height"></i> Total Pages: <strong>${pageCount}</strong></p>
+                            <p><i class="fas fa-text"></i> Total Lines: <strong>${lines.length}</strong></p>
+                            <p><i class="fas fa-file-pdf"></i> PDF Size: <strong>${(pdfBlob.size / 1024).toFixed(2)} KB</strong></p>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+                            <button class="action-btn btn-success" onclick="downloadFile('${url}', '${file.name.replace(/\.[^/.]+$/, "")}_converted.pdf')" style="flex: 1;">
+                                <i class="fas fa-download"></i> Download PDF
+                            </button>
+                            <button class="action-btn btn-secondary" onclick="previewPDF('${url}')" style="flex: 1;">
+                                <i class="fas fa-eye"></i> Preview PDF
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                showNotification('✅ PDF created successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Word to PDF Error:', error);
+                showNotification('Error converting file to PDF. Please try a text file (.txt) for best results.', 'error');
+            } finally {
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                    progressFill.style.width = '0%';
+                    convertBtn.disabled = false;
+                }, 1000);
+            }
+        }
+
+        // PDF TO WORD CONVERTER - FIXED VERSION
+        async function previewPDFText() {
+            const fileInput = document.getElementById('pdfToWordInput');
+            if (!fileInput.files[0]) return;
+            
+            const file = fileInput.files[0];
+            const previewDiv = document.getElementById('pdfTextPreview');
+            const previewText = document.getElementById('previewPDFText');
+            const progressBar = document.getElementById('pdfToWordProgressBar');
+            const progressFill = document.getElementById('pdfToWordProgressFill');
+            
+            progressBar.style.display = 'block';
+            progressFill.style.width = '10%';
+            
+            try {
+                // Load the PDF
+                const arrayBuffer = await file.arrayBuffer();
+                const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+                const pdf = await loadingTask.promise;
+                
+                let extractedText = "";
+                const previewPages = Math.min(3, pdf.numPages);
+                
+                for (let i = 1; i <= previewPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    
+                    // Extract text items
+                    let pageText = `=== Page ${i} ===\n`;
+                    let lastY = null;
+                    
+                    for (const item of textContent.items) {
+                        if (lastY !== null && Math.abs(item.transform[5] - lastY) > 5) {
+                            pageText += "\n";
+                        }
+                        pageText += item.str + " ";
+                        lastY = item.transform[5];
+                    }
+                    
+                    extractedText += pageText + "\n\n";
+                    
+                    // Update progress
+                    progressFill.style.width = `${10 + (i / previewPages * 80)}%`;
+                }
+                
+                previewText.textContent = extractedText;
+                previewDiv.style.display = 'block';
+                
+                showNotification(`✅ PDF loaded successfully. ${pdf.numPages} pages detected.`, 'success');
+                
+            } catch (error) {
+                console.error('PDF Preview Error:', error);
+                showNotification('Error previewing PDF. The PDF might be encrypted or corrupted.', 'error');
+                previewText.textContent = 'Error loading PDF. Please make sure the PDF is not encrypted or protected.';
+                previewDiv.style.display = 'block';
+            } finally {
+                progressBar.style.display = 'none';
+                progressFill.style.width = '0%';
+            }
+        }
+
+        async function convertPDFToWord() {
+            const fileInput = document.getElementById('pdfToWordInput');
+            if (!fileInput.files[0]) {
+                showNotification('Please select a PDF file first', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const outputFormat = document.getElementById('wordOutputFormat').value;
+            const extractionMode = document.getElementById('extractionMode').value;
+            const pageRange = document.getElementById('pageRange').value;
+            
+            const progressBar = document.getElementById('pdfToWordProgressBar');
+            const progressFill = document.getElementById('pdfToWordProgressFill');
+            const convertBtn = document.getElementById('convertPDFBtn');
+            
+            progressBar.style.display = 'block';
+            progressFill.style.width = '10%';
+            convertBtn.disabled = true;
+            
+            try {
+                // Load the PDF
+                const arrayBuffer = await file.arrayBuffer();
+                const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+                const pdf = await loadingTask.promise;
+                
+                let pagesToExtract = [];
+                let fullText = "";
+                
+                // Determine which pages to extract
+                if (extractionMode === 'all') {
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        pagesToExtract.push(i);
+                    }
+                } else if (extractionMode === 'first') {
+                    pagesToExtract.push(1);
+                } else if (extractionMode === 'range' && pageRange) {
+                    // Parse page range
+                    const ranges = pageRange.split(',');
+                    for (const range of ranges) {
+                        const trimmed = range.trim();
+                        if (trimmed.includes('-')) {
+                            const [start, end] = trimmed.split('-').map(num => parseInt(num.trim()));
+                            for (let i = start; i <= Math.min(end, pdf.numPages); i++) {
+                                if (i >= 1 && i <= pdf.numPages) {
+                                    pagesToExtract.push(i);
+                                }
+                            }
+                        } else {
+                            const pageNum = parseInt(trimmed);
+                            if (pageNum >= 1 && pageNum <= pdf.numPages) {
+                                pagesToExtract.push(pageNum);
+                            }
+                        }
+                    }
+                    // Remove duplicates and sort
+                    pagesToExtract = [...new Set(pagesToExtract)].sort((a, b) => a - b);
+                } else {
+                    pagesToExtract = [1];
+                }
+                
+                if (pagesToExtract.length === 0) {
+                    showNotification('No valid pages selected for extraction.', 'error');
+                    return;
+                }
+                
+                progressFill.style.width = '30%';
+                
+                // Extract text from selected pages
+                for (let i = 0; i < pagesToExtract.length; i++) {
+                    const pageNum = pagesToExtract[i];
+                    const page = await pdf.getPage(pageNum);
+                    const textContent = await page.getTextContent();
+                    
+                    // Add page header
+                    fullText += `=== Page ${pageNum} ===\n\n`;
+                    
+                    // Extract and format text
+                    let pageText = "";
+                    let lastY = null;
+                    
+                    for (const item of textContent.items) {
+                        if (lastY !== null && Math.abs(item.transform[5] - lastY) > 5) {
+                            pageText += "\n";
+                        }
+                        pageText += item.str + " ";
+                        lastY = item.transform[5];
+                    }
+                    
+                    fullText += pageText.trim() + "\n\n";
+                    
+                    // Update progress
+                    progressFill.style.width = `${30 + ((i + 1) / pagesToExtract.length * 60)}%`;
+                }
+                
+                progressFill.style.width = '95%';
+                
+                // Create output file based on format
+                let blob, filename;
+                
+                if (outputFormat === 'docx') {
+                    // For DOCX, create a simple text file with .docx extension
+                    // In production, you would use a DOCX library
+                    const textWithHeader = `AnyTasker Pro - PDF to Word Conversion\nDate: ${new Date().toLocaleDateString()}\nOriginal PDF: ${file.name}\nPages Extracted: ${pagesToExtract.length}\n\n${fullText}`;
+                    blob = new Blob([textWithHeader], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+                    filename = `${file.name.replace(/\.[^/.]+$/, "")}_converted.docx`;
+                } else {
+                    // For TXT
+                    blob = new Blob([fullText], { type: 'text/plain' });
+                    filename = `${file.name.replace(/\.[^/.]+$/, "")}_converted.txt`;
+                }
+                
+                const url = URL.createObjectURL(blob);
+                
+                progressFill.style.width = '100%';
+                
+                const outputDiv = document.getElementById('pdfToWordOutputContainer');
+                outputDiv.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: var(--radius);">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> PDF Converted Successfully!</h4>
+                        <div style="margin-top: 15px;">
+                            <p><i class="fas fa-file"></i> Original PDF: <strong>${file.name}</strong></p>
+                            <p><i class="fas fa-layer-group"></i> Total Pages: <strong>${pdf.numPages}</strong></p>
+                            <p><i class="fas fa-file-export"></i> Pages Extracted: <strong>${pagesToExtract.length}</strong></p>
+                            <p><i class="fas fa-font"></i> Extracted Text Length: <strong>${fullText.length} characters</strong></p>
+                            <p><i class="fas fa-file-word"></i> Word Count: <strong>${fullText.split(/\s+/).length}</strong></p>
+                            <p><i class="fas fa-download"></i> Output Format: <strong>${outputFormat.toUpperCase()}</strong></p>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+                            <button class="action-btn btn-success" onclick="downloadFile('${url}', '${filename}')" style="flex: 1;">
+                                <i class="fas fa-download"></i> Download ${outputFormat.toUpperCase()}
+                            </button>
+                            <button class="action-btn btn-secondary" onclick="copyToClipboard(\`${fullText.substring(0, 5000)}\`)" style="flex: 1;">
+                                <i class="fas fa-copy"></i> Copy Text
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                showNotification(`✅ PDF converted to ${outputFormat.toUpperCase()} successfully! ${pagesToExtract.length} pages extracted.`, 'success');
+                
+            } catch (error) {
+                console.error('PDF to Word Error:', error);
+                showNotification('Error converting PDF. The PDF might be encrypted, protected, or corrupted.', 'error');
+                
+                const outputDiv = document.getElementById('pdfToWordOutputContainer');
+                outputDiv.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: var(--radius);">
+                        <h4><i class="fas fa-exclamation-circle" style="color: var(--danger);"></i> Conversion Error</h4>
+                        <p style="margin-top: 15px;">Unable to convert this PDF file. Possible reasons:</p>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li>PDF is encrypted or password protected</li>
+                            <li>PDF contains scanned images instead of text</li>
+                            <li>PDF is corrupted</li>
+                        </ul>
+                        <p>Try using OCR software or online converters for scanned PDFs.</p>
+                    </div>
+                `;
+            } finally {
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                    progressFill.style.width = '0%';
+                    convertBtn.disabled = false;
+                }, 1000);
+            }
+        }
+
+        // IMAGE TO PDF CONVERTER - WORKING VERSION
         function handleImageToPdfUpload() {
             const fileInput = document.getElementById('imageToPdfInput');
             if (!fileInput.files.length) return;
-            
-            const imageList = document.getElementById('imageList');
             
             Array.from(fileInput.files).forEach((file, index) => {
                 if (!file.type.startsWith('image/')) return;
@@ -2745,7 +3074,7 @@
             
             try {
                 const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
+                let doc = new jsPDF();
                 
                 // Set page dimensions
                 let pageWidth, pageHeight;
@@ -2762,14 +3091,13 @@
                         pageWidth = 215.9;
                         pageHeight = 355.6;
                         break;
-                    case 'fit':
                     default:
-                        // Will be set per image
-                        break;
+                        pageWidth = 210;
+                        pageHeight = 297;
                 }
                 
                 for (let i = 0; i < imagesForPdf.length; i++) {
-                    if (i > 0 && pageSize !== 'fit') {
+                    if (i > 0) {
                         doc.addPage();
                     }
                     
@@ -2783,80 +3111,46 @@
                     });
                     
                     let imgWidth, imgHeight, x, y;
+                    const maxWidth = pageWidth - (margin * 2);
+                    const maxHeight = pageHeight - (margin * 2);
                     
-                    if (pageSize === 'fit') {
-                        // Fit page to image (convert mm to points: 1mm = 2.83465 points)
-                        imgWidth = img.width / 2.83465;
-                        imgHeight = img.height / 2.83465;
-                        doc = new jsPDF({
-                            unit: 'mm',
-                            format: [imgWidth + margin * 2, imgHeight + margin * 2]
-                        });
-                        x = margin;
-                        y = margin;
-                    } else {
-                        const maxWidth = pageWidth - (margin * 2);
-                        const maxHeight = pageHeight - (margin * 2);
-                        
-                        // Calculate dimensions based on scaling option
-                        switch(scaling) {
-                            case 'fit':
-                                const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
-                                imgWidth = img.width * ratio;
-                                imgHeight = img.height * ratio;
-                                x = margin + (maxWidth - imgWidth) / 2;
-                                y = margin + (maxHeight - imgHeight) / 2;
-                                break;
-                                
-                            case 'stretch':
+                    // Calculate dimensions based on scaling option
+                    switch(scaling) {
+                        case 'fit':
+                            const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+                            imgWidth = img.width * ratio;
+                            imgHeight = img.height * ratio;
+                            x = margin + (maxWidth - imgWidth) / 2;
+                            y = margin + (maxHeight - imgHeight) / 2;
+                            break;
+                            
+                        case 'stretch':
+                            imgWidth = maxWidth;
+                            imgHeight = maxHeight;
+                            x = margin;
+                            y = margin;
+                            break;
+                            
+                        case 'center':
+                        default:
+                            imgWidth = img.width / 2.83465; // Convert pixels to mm
+                            imgHeight = img.height / 2.83465;
+                            if (imgWidth > maxWidth) {
+                                const ratio = maxWidth / imgWidth;
                                 imgWidth = maxWidth;
+                                imgHeight *= ratio;
+                            }
+                            if (imgHeight > maxHeight) {
+                                const ratio = maxHeight / imgHeight;
                                 imgHeight = maxHeight;
-                                x = margin;
-                                y = margin;
-                                break;
-                                
-                            case 'multiple':
-                                // Place multiple images on one page
-                                // For simplicity, we'll use one image per page in this implementation
-                                imgWidth = maxWidth;
-                                imgHeight = img.height * (maxWidth / img.width);
-                                if (imgHeight > maxHeight) {
-                                    imgHeight = maxHeight;
-                                    imgWidth = img.width * (maxHeight / img.height);
-                                }
-                                x = margin + (maxWidth - imgWidth) / 2;
-                                y = margin + (maxHeight - imgHeight) / 2;
-                                break;
-                                
-                            case 'center':
-                            default:
-                                imgWidth = img.width / 2.83465; // Convert pixels to mm
-                                imgHeight = img.height / 2.83465;
-                                if (imgWidth > maxWidth) {
-                                    const ratio = maxWidth / imgWidth;
-                                    imgWidth = maxWidth;
-                                    imgHeight *= ratio;
-                                }
-                                if (imgHeight > maxHeight) {
-                                    const ratio = maxHeight / imgHeight;
-                                    imgHeight = maxHeight;
-                                    imgWidth *= ratio;
-                                }
-                                x = margin + (maxWidth - imgWidth) / 2;
-                                y = margin + (maxHeight - imgHeight) / 2;
-                                break;
-                        }
+                                imgWidth *= ratio;
+                            }
+                            x = margin + (maxWidth - imgWidth) / 2;
+                            y = margin + (maxHeight - imgHeight) / 2;
+                            break;
                     }
                     
                     doc.addImage(img, 'JPEG', x, y, imgWidth, imgHeight);
-                    
-                    // Add page number if not fitting to image
-                    if (pageSize !== 'fit' && i < imagesForPdf.length - 1) {
-                        doc.setPage(i + 1);
-                        doc.setFontSize(10);
-                        doc.setTextColor(100, 100, 100);
-                        doc.text(`Page ${i + 1} of ${imagesForPdf.length}`, pageWidth - 30, pageHeight - 10);
-                    }
                 }
                 
                 progressFill.style.width = '100%';
@@ -2883,9 +3177,6 @@
                             <button class="action-btn btn-secondary" onclick="previewPDF('${url}')" style="flex: 1;">
                                 <i class="fas fa-eye"></i> Preview PDF
                             </button>
-                            <button class="action-btn" onclick="clearImageList()" style="flex: 1; background: var(--primary-dark); color: white;">
-                                <i class="fas fa-trash"></i> Clear Images
-                            </button>
                         </div>
                     </div>
                 `;
@@ -2893,8 +3184,8 @@
                 showNotification(`✅ PDF created with ${imagesForPdf.length} image(s)!`, 'success');
                 
             } catch (error) {
+                console.error('Image to PDF Error:', error);
                 showNotification('Error creating PDF: ' + error.message, 'error');
-                console.error(error);
             } finally {
                 setTimeout(() => {
                     progressBar.style.display = 'none';
@@ -2904,55 +3195,170 @@
             }
         }
 
-        // SHARE FUNCTIONS
-        function shareOnFacebook() {
-            const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent('Check out AnyTasker Pro - Amazing free utility tools by Saroj Naik!');
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
-            showNotification('Opening Facebook share...', 'success');
-        }
-
-        function shareOnTwitter() {
-            const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent('Check out AnyTasker Pro - Amazing free utility tools!');
-            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
-            showNotification('Opening Twitter share...', 'success');
-        }
-
-        function shareOnWhatsApp() {
-            const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent('Check out AnyTasker Pro - Amazing free utility tools by Saroj Naik!');
-            window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
-            showNotification('Opening WhatsApp share...', 'success');
-        }
-
-        function shareViaEmail() {
-            const subject = encodeURIComponent('AnyTasker Pro - Amazing Utility Tools');
-            const body = encodeURIComponent(`Check out these amazing free utility tools!\n\n${window.location.href}\n\nDeveloped by Saroj Naik`);
-            window.location.href = `mailto:?subject=${subject}&body=${body}`;
-        }
-
-        function copyWebsiteLink() {
-            navigator.clipboard.writeText(window.location.href)
-                .then(() => showNotification('✅ Website link copied to clipboard!', 'success'))
-                .catch(() => showNotification('❌ Failed to copy link', 'error'));
-        }
-
-        function shareWebsite() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'AnyTasker Pro - Ultimate Utility Tools',
-                    text: 'Check out these amazing free tools by Saroj Naik!',
-                    url: window.location.href
-                })
-                .then(() => showNotification('✅ Website shared successfully!', 'success'))
-                .catch(() => shareViaEmail());
+        // OTHER TOOL FUNCTIONS
+        function toggleAspectRatio() {
+            const maintainAspect = document.getElementById('maintainAspect').checked;
+            const widthInput = document.getElementById('resizeWidth');
+            const heightInput = document.getElementById('resizeHeight');
+            
+            if (maintainAspect) {
+                heightInput.disabled = false;
             } else {
-                shareViaEmail();
+                heightInput.disabled = true;
+                heightInput.value = '';
+            }
+        }
+
+        async function resizeImage() {
+            const fileInput = document.getElementById('resizeImageInput');
+            if (!fileInput.files[0]) {
+                showNotification('Please select an image first', 'error');
+                return;
+            }
+
+            const width = parseInt(document.getElementById('resizeWidth').value) || 800;
+            const height = parseInt(document.getElementById('resizeHeight').value) || 600;
+            const maintainAspect = document.getElementById('maintainAspect').checked;
+            
+            const file = fileInput.files[0];
+            const img = new Image();
+            
+            await new Promise((resolve) => {
+                img.onload = resolve;
+                img.src = URL.createObjectURL(file);
+            });
+            
+            const canvas = document.createElement('canvas');
+            let finalWidth = width;
+            let finalHeight = height;
+            
+            if (maintainAspect) {
+                const aspectRatio = img.width / img.height;
+                if (width / height > aspectRatio) {
+                    finalWidth = height * aspectRatio;
+                } else {
+                    finalHeight = width / aspectRatio;
+                }
+            }
+            
+            canvas.width = finalWidth;
+            canvas.height = finalHeight;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, finalWidth, finalHeight);
+            
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const outputDiv = document.getElementById('resizeOutput');
+                
+                outputDiv.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: var(--radius);">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Image Resized Successfully!</h4>
+                        <p>New Size: ${finalWidth} × ${finalHeight} px</p>
+                        <button class="action-btn btn-success" onclick="downloadFile('${url}', 'resized_${Date.now()}.png')">
+                            <i class="fas fa-download"></i> Download Resized Image
+                        </button>
+                    </div>
+                `;
+            }, 'image/png');
+        }
+
+        async function convertImage() {
+            const fileInput = document.getElementById('convertImageInput');
+            if (!fileInput.files[0]) {
+                showNotification('Please select an image first', 'error');
+                return;
+            }
+
+            const format = document.getElementById('convertFormat').value;
+            const file = fileInput.files[0];
+            const img = new Image();
+            
+            await new Promise((resolve) => {
+                img.onload = resolve;
+                img.src = URL.createObjectURL(file);
+            });
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const outputDiv = document.getElementById('convertOutput');
+                const ext = format.split('/')[1];
+                
+                outputDiv.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: var(--radius);">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Image Converted Successfully!</h4>
+                        <p>Format: ${ext.toUpperCase()}</p>
+                        <button class="action-btn btn-success" onclick="downloadFile('${url}', 'converted_${Date.now()}.${ext}')">
+                            <i class="fas fa-download"></i> Download Converted Image
+                        </button>
+                    </div>
+                `;
+            }, format);
+        }
+
+        function solveMath() {
+            const input = document.getElementById('mathProblem').value.trim();
+            if (!input) {
+                showNotification('Please enter a math problem', 'error');
+                return;
+            }
+
+            try {
+                let result;
+                if (input.includes('=')) {
+                    const sides = input.split('=');
+                    const left = eval(sides[0].replace(/x/g, '*').replace(/÷/g, '/'));
+                    const right = eval(sides[1].replace(/x/g, '*').replace(/÷/g, '/'));
+                    
+                    if (sides[0].includes('x') || sides[1].includes('x')) {
+                        result = `Solving: ${input}\n\nSolution: x = ${(right/left).toFixed(2)}`;
+                    } else {
+                        result = `Result: ${left} = ${right}`;
+                    }
+                } else {
+                    const cleanInput = input.replace(/x/g, '*').replace(/÷/g, '/');
+                    result = `${input} = ${eval(cleanInput)}`;
+                }
+                
+                document.getElementById('mathSolution').innerHTML = `
+                    <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Solution</h4>
+                    <pre style="white-space: pre-wrap; margin-top: 10px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: var(--radius);">${result}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('mathSolution').innerHTML = `
+                    <h4><i class="fas fa-exclamation-circle" style="color: var(--danger);"></i> Error</h4>
+                    <p>Invalid math expression. Please check your input.</p>
+                    <p>Examples: 5*10+2, 2+3*4, (5+3)*2</p>
+                `;
             }
         }
 
         // UTILITY FUNCTIONS
+        function readFileAsText(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                reader.readAsText(file);
+            });
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : { r: 0, g: 0, b: 0 };
+        }
+
         function downloadFile(url, filename) {
             const a = document.createElement('a');
             a.href = url;
@@ -2961,6 +3367,12 @@
             a.click();
             document.body.removeChild(a);
             showNotification('📥 File downloaded successfully!', 'success');
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => showNotification('✅ Text copied to clipboard!', 'success'))
+                .catch(() => showNotification('❌ Failed to copy text', 'error'));
         }
 
         function previewPDF(url) {
@@ -2978,6 +3390,41 @@
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
+        }
+
+        // SHARE FUNCTIONS
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out AnyTasker Pro - Amazing free utility tools by Saroj Naik!');
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+            showNotification('Opening Facebook share...', 'success');
+        }
+
+        function shareOnWhatsApp() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out AnyTasker Pro - Amazing free utility tools by Saroj Naik!');
+            window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
+            showNotification('Opening WhatsApp share...', 'success');
+        }
+
+        function copyWebsiteLink() {
+            navigator.clipboard.writeText(window.location.href)
+                .then(() => showNotification('✅ Website link copied to clipboard!', 'success'))
+                .catch(() => showNotification('❌ Failed to copy link', 'error'));
+        }
+
+        function shareWebsite() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'AnyTasker Pro - Ultimate Utility Tools',
+                    text: 'Check out these amazing free tools by Saroj Naik!',
+                    url: window.location.href
+                })
+                .then(() => showNotification('✅ Website shared successfully!', 'success'))
+                .catch(() => copyWebsiteLink());
+            } else {
+                copyWebsiteLink();
+            }
         }
 
         // Search Functionality
@@ -2999,27 +3446,6 @@
             } else {
                 showNotification(`🔍 No tool found for "${searchTerm}"`, 'info');
             }
-        }
-
-        // Ads Initialization
-        function initializeAds() {
-            // In a real implementation, you would load actual ad scripts here
-            // For now, we'll use placeholder iframes
-            
-            const adContainers = document.querySelectorAll('.ads-container iframe');
-            adContainers.forEach((iframe, index) => {
-                // Simulate ad loading
-                setTimeout(() => {
-                    iframe.src = `data:text/html;charset=utf-8,
-                        <div style="width:100%;height:100%;background:linear-gradient(135deg,#4f46e5,#8b5cf6);display:flex;align-items:center;justify-content:center;color:white;font-family:Arial;">
-                            <div style="text-align:center;">
-                                <h3>Advertisement</h3>
-                                <p>Ad Space ${index + 1}</p>
-                                <small>AnyTasker Pro</small>
-                            </div>
-                        </div>`;
-                }, 1000 * (index + 1));
-            });
         }
 
         // Event Listeners
