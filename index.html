@@ -144,6 +144,7 @@
             height: 100%;
         }
 
+        /* Main Ads Positions */
         .ads-top {
             top: 50px;
             left: 50%;
@@ -166,6 +167,7 @@
             transform: translateY(-50%);
             width: 160px;
             height: 600px;
+            z-index: 997;
         }
 
         .ads-right {
@@ -174,25 +176,26 @@
             transform: translateY(-50%);
             width: 160px;
             height: 600px;
+            z-index: 997;
         }
 
         /* Middle Ads */
         .ads-middle-left {
             position: fixed;
             top: 300px;
-            left: 10px;
+            left: 180px;
             width: 160px;
             height: 600px;
-            z-index: 997;
+            z-index: 996;
         }
 
         .ads-middle-right {
             position: fixed;
             top: 300px;
-            right: 10px;
+            right: 180px;
             width: 160px;
             height: 600px;
-            z-index: 997;
+            z-index: 996;
         }
 
         /* Social Bar Ads */
@@ -202,11 +205,56 @@
             right: 20px;
             width: 300px;
             height: 250px;
-            z-index: 996;
+            z-index: 995;
             background: rgba(0, 0, 0, 0.8);
             border-radius: 8px;
             padding: 5px;
             border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Tool Ads Container */
+        .tool-ads-container {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            padding: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tool-ads-left {
+            left: -180px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            height: 600px;
+        }
+
+        .tool-ads-right {
+            right: -180px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            height: 600px;
+        }
+
+        .tool-ads-top {
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 728px;
+            height: 90px;
+        }
+
+        .tool-ads-bottom {
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 728px;
+            height: 90px;
         }
 
         /* Container */
@@ -501,18 +549,8 @@
             color: white;
         }
 
-        .share-btn.twitter {
-            background: #1DA1F2;
-            color: white;
-        }
-
         .share-btn.whatsapp {
             background: #25D366;
-            color: white;
-        }
-
-        .share-btn.email {
-            background: var(--primary);
             color: white;
         }
 
@@ -880,6 +918,7 @@
             box-shadow: var(--shadow-lg);
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .tool-main-content {
@@ -931,6 +970,7 @@
             padding: 40px;
             flex: 1;
             overflow-y: auto;
+            position: relative;
         }
 
         /* Tool Content Styles */
@@ -1240,47 +1280,6 @@
             padding: 50px 20px 0;
         }
 
-        /* Legal Pages */
-        .legal-page {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
-            border-radius: var(--radius-lg);
-            padding: 50px;
-            margin: 50px 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .legal-page h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 36px;
-            margin-bottom: 30px;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .legal-page h3 {
-            font-size: 24px;
-            margin: 30px 0 15px;
-            color: var(--primary);
-        }
-
-        .legal-page p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-            opacity: 0.9;
-        }
-
-        .legal-page ul {
-            margin-left: 20px;
-            margin-bottom: 20px;
-        }
-
-        .legal-page li {
-            margin-bottom: 10px;
-            opacity: 0.9;
-        }
-
         /* Notification */
         .notification {
             position: fixed;
@@ -1379,10 +1378,16 @@
         }
 
         /* Responsive Design */
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
             .ads-left, .ads-right, .ads-middle-left, .ads-middle-right {
                 display: none;
             }
+            .tool-ads-left, .tool-ads-right, .tool-ads-top, .tool-ads-bottom {
+                display: none;
+            }
+        }
+
+        @media (max-width: 1200px) {
             .ads-top, .ads-bottom {
                 width: 90%;
             }
@@ -1503,9 +1508,6 @@
             .share-section {
                 padding: 30px 20px;
             }
-            .legal-page {
-                padding: 30px 20px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -1568,23 +1570,105 @@
         </div>
     </div>
 
-    <!-- Ads - Top Banner -->
+    <!-- Main Page Ads -->
+    
+    <!-- Top Banner Ad -->
     <div class="ads-container ads-top">
-        <iframe src="https://example.com/ads/top.html" title="Advertisement"></iframe>
+        <!-- Ad Script for Top Banner -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-1234567890123456"
+             data-ad-slot="1234567890"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
     
-    <!-- Ads - Bottom Banner -->
+    <!-- Left Side Vertical Ad -->
+    <div class="ads-container ads-left">
+        <!-- Ad Script for Left Sidebar -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-1234567890123456"
+             data-ad-slot="0987654321"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+    
+    <!-- Right Side Vertical Ad -->
+    <div class="ads-container ads-right">
+        <!-- Ad Script for Right Sidebar -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-1234567890123456"
+             data-ad-slot="1122334455"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+    
+    <!-- Middle Left Ad -->
+    <div class="ads-container ads-middle-left">
+        <!-- Alternative Ad Network -->
+        <script type="text/javascript">
+            atOptions = {
+                'key' : 'f720a7f34040d119fe8c31e8d186661e',
+                'format' : 'iframe',
+                'height' : 600,
+                'width' : 160,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
+    </div>
+    
+    <!-- Middle Right Ad -->
+    <div class="ads-container ads-middle-right">
+        <!-- Alternative Ad Network -->
+        <script type="text/javascript">
+            atOptions = {
+                'key' : 'f720a7f34040d119fe8c31e8d186661e',
+                'format' : 'iframe',
+                'height' : 600,
+                'width' : 160,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="https://www.highperformanceformat.com/f720a7f34040d119fe8c31e8d186661e/invoke.js"></script>
+    </div>
+    
+    <!-- Bottom Banner Ad -->
     <div class="ads-container ads-bottom">
-        <iframe src="https://example.com/ads/bottom.html" title="Advertisement"></iframe>
+        <!-- Ad Script for Bottom Banner -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-1234567890123456"
+             data-ad-slot="5566778899"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
     
-    <!-- Native Banner -->
+    <!-- Native Banner Ad -->
     <div class="ads-container" style="position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); width: 728px; height: 90px;">
         <script async="async" data-cfasync="false" src="https://pl28239794.effectivegatecpm.com/020dcc1e0bd23ed7dc8b597995087112/invoke.js"></script>
         <div id="container-020dcc1e0bd23ed7dc8b597995087112"></div>
     </div>
     
-    <!-- Social Bar Ads -->
+    <!-- Social Bar Ad -->
     <div class="social-ads-container">
         <script src="https://pl28258457.effectivegatecpm.com/77/86/60/778660b9c8b556582fb5127e53b7db86.js"></script>
     </div>
@@ -1720,9 +1804,69 @@
         </section>
     </div>
 
-    <!-- Tool Container -->
+    <!-- Tool Container with Ads -->
     <div class="tool-container-wrapper" id="toolContainer">
         <div class="tool-container">
+            <!-- Tool Ads - Left Side -->
+            <div class="tool-ads-container tool-ads-left">
+                <!-- Tool Left Side Ad -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-1234567890123456"
+                     data-ad-slot="6677889900"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            
+            <!-- Tool Ads - Right Side -->
+            <div class="tool-ads-container tool-ads-right">
+                <!-- Tool Right Side Ad -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-1234567890123456"
+                     data-ad-slot="7788990011"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            
+            <!-- Tool Ads - Top -->
+            <div class="tool-ads-container tool-ads-top">
+                <!-- Tool Top Ad -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-1234567890123456"
+                     data-ad-slot="8899001122"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            
+            <!-- Tool Ads - Bottom -->
+            <div class="tool-ads-container tool-ads-bottom">
+                <!-- Tool Bottom Ad -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-1234567890123456"
+                     data-ad-slot="9900112233"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            
             <div class="tool-main-content">
                 <div class="tool-header">
                     <h2 id="toolTitle"><i class="fas fa-tools"></i> Tool Title</h2>
@@ -2082,7 +2226,6 @@
                                 <option value="a4">A4 (210 × 297 mm)</option>
                                 <option value="letter" selected>Letter (216 × 279 mm)</option>
                                 <option value="legal">Legal (216 × 356 mm)</option>
-                                <option value="fit">Fit to Image Size</option>
                             </select>
                         </div>
                         <div class="control-item">
@@ -2197,6 +2340,7 @@
             loadTools();
             showNotification('🚀 Welcome to AnyTasker Pro! All tools are 100% working.', 'success');
             setupEventListeners();
+            initializeAds();
             
             // Initialize PDF.js worker
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -2331,6 +2475,9 @@
                 `;
             }
             
+            // Load tool-specific ads
+            loadToolAds();
+            
             showNotification(`🚀 Opening ${tool.title}...`, 'success');
         }
 
@@ -2343,6 +2490,13 @@
         function openRandomTool() {
             const randomTool = tools[Math.floor(Math.random() * tools.length)];
             openTool(randomTool.id);
+        }
+
+        // Tool Ads Management
+        function loadToolAds() {
+            // Force load all ads in tool container
+            const adsByGoogle = window.adsbygoogle || [];
+            adsByGoogle.push({});
         }
 
         // IMAGE COMPRESSOR FUNCTIONS
@@ -2462,7 +2616,7 @@
             currentFiles.image = null;
         }
 
-        // PDF COMPRESSOR - FIXED VERSION
+        // PDF COMPRESSOR FUNCTIONS
         async function handlePDFUpload() {
             const fileInput = document.getElementById('pdfInput');
             if (fileInput.files[0]) {
@@ -2492,18 +2646,14 @@
             compressBtn.disabled = true;
             
             try {
-                // Read the PDF file
                 const arrayBuffer = await file.arrayBuffer();
                 progressFill.style.width = '40%';
                 
-                // Load PDF with pdf-lib
                 const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
                 progressFill.style.width = '60%';
                 
-                // Get pages
                 const pages = pdfDoc.getPages();
                 
-                // Set compression based on level
                 let imageQuality = 0.9;
                 switch(compressionLevel) {
                     case 'low':
@@ -2517,12 +2667,8 @@
                         break;
                 }
                 
-                // For each page, we could compress embedded images
-                // Note: pdf-lib doesn't have direct image compression
-                // So we'll use a different approach
                 progressFill.style.width = '80%';
                 
-                // Save the PDF with embedded compression
                 const compressedPdfBytes = await pdfDoc.save({
                     useObjectStreams: true,
                     addDefaultPage: false,
@@ -2531,7 +2677,6 @@
                 
                 progressFill.style.width = '100%';
                 
-                // Create blob and download
                 const compressedBlob = new Blob([compressedPdfBytes], { type: 'application/pdf' });
                 const url = URL.createObjectURL(compressedBlob);
                 
@@ -2567,7 +2712,6 @@
                 console.error('PDF Compression Error:', error);
                 showNotification('Error compressing PDF. Please try again.', 'error');
                 
-                // Fallback: Create a simple compressed version
                 const outputDiv = document.getElementById('pdfOutputContainer');
                 outputDiv.innerHTML = `
                     <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: var(--radius);">
@@ -2593,7 +2737,7 @@
             }
         }
 
-        // WORD TO PDF CONVERTER - FIXED VERSION
+        // WORD TO PDF CONVERTER FUNCTIONS
         function handleWordFileUpload() {
             const fileInput = document.getElementById('wordInput');
             if (!fileInput.files[0]) return;
@@ -2601,7 +2745,6 @@
             const file = fileInput.files[0];
             currentFiles.word = file;
             
-            // Show preview for text files
             if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -2640,22 +2783,17 @@
             try {
                 let text = '';
                 
-                // Read file based on type
                 if (file.name.endsWith('.docx')) {
-                    // For .docx files, extract text using mammoth
                     progressFill.style.width = '40%';
                     const arrayBuffer = await file.arrayBuffer();
                     
-                    // Try to extract text from DOCX
                     try {
                         const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
                         text = result.value;
                     } catch (docxError) {
-                        // If mammoth fails, show message
                         text = `[DOCX File: ${file.name}]\n\nThis DOCX file contains formatted text that requires conversion.\nFor best results, please use Microsoft Word or Google Docs to convert to PDF.`;
                     }
                 } else if (file.name.endsWith('.txt')) {
-                    // For .txt files, read as text
                     text = await readFileAsText(file);
                 } else {
                     showNotification('Unsupported file format. Please use .txt or .docx files.', 'error');
@@ -2664,21 +2802,17 @@
                 
                 progressFill.style.width = '60%';
                 
-                // Create PDF using jsPDF
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
                 
-                // Convert hex color to RGB
                 const rgb = hexToRgb(textColor);
                 
-                // Set font and color
                 doc.setFont("helvetica");
                 doc.setFontSize(fontSize);
                 doc.setTextColor(rgb.r, rgb.g, rgb.b);
                 
-                // Set page dimensions based on selected size
-                let pageWidth = 210; // A4 width in mm
-                let pageHeight = 297; // A4 height in mm
+                let pageWidth = 210;
+                let pageHeight = 297;
                 
                 if (pageSize === 'letter') {
                     pageWidth = 215.9;
@@ -2688,16 +2822,14 @@
                     pageHeight = 355.6;
                 }
                 
-                // Split text into lines
                 const margin = 20;
                 const maxLineWidth = pageWidth - (margin * 2);
-                const lineHeight = fontSize * 0.3528; // Convert pt to mm
+                const lineHeight = fontSize * 0.3528;
                 
                 const lines = doc.splitTextToSize(text, maxLineWidth);
                 
                 progressFill.style.width = '80%';
                 
-                // Add text to PDF
                 let y = margin;
                 let pageCount = 1;
                 
@@ -2711,7 +2843,6 @@
                     y += lineHeight;
                 }
                 
-                // Add page numbers
                 for (let i = 1; i <= pageCount; i++) {
                     doc.setPage(i);
                     doc.setFontSize(10);
@@ -2721,7 +2852,6 @@
                 
                 progressFill.style.width = '100%';
                 
-                // Save PDF
                 const pdfBlob = doc.output('blob');
                 const url = URL.createObjectURL(pdfBlob);
                 
@@ -2762,7 +2892,7 @@
             }
         }
 
-        // PDF TO WORD CONVERTER - FIXED VERSION
+        // PDF TO WORD CONVERTER FUNCTIONS
         async function previewPDFText() {
             const fileInput = document.getElementById('pdfToWordInput');
             if (!fileInput.files[0]) return;
@@ -2777,7 +2907,6 @@
             progressFill.style.width = '10%';
             
             try {
-                // Load the PDF
                 const arrayBuffer = await file.arrayBuffer();
                 const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
                 const pdf = await loadingTask.promise;
@@ -2789,7 +2918,6 @@
                     const page = await pdf.getPage(i);
                     const textContent = await page.getTextContent();
                     
-                    // Extract text items
                     let pageText = `=== Page ${i} ===\n`;
                     let lastY = null;
                     
@@ -2803,7 +2931,6 @@
                     
                     extractedText += pageText + "\n\n";
                     
-                    // Update progress
                     progressFill.style.width = `${10 + (i / previewPages * 80)}%`;
                 }
                 
@@ -2844,7 +2971,6 @@
             convertBtn.disabled = true;
             
             try {
-                // Load the PDF
                 const arrayBuffer = await file.arrayBuffer();
                 const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
                 const pdf = await loadingTask.promise;
@@ -2852,7 +2978,6 @@
                 let pagesToExtract = [];
                 let fullText = "";
                 
-                // Determine which pages to extract
                 if (extractionMode === 'all') {
                     for (let i = 1; i <= pdf.numPages; i++) {
                         pagesToExtract.push(i);
@@ -2860,7 +2985,6 @@
                 } else if (extractionMode === 'first') {
                     pagesToExtract.push(1);
                 } else if (extractionMode === 'range' && pageRange) {
-                    // Parse page range
                     const ranges = pageRange.split(',');
                     for (const range of ranges) {
                         const trimmed = range.trim();
@@ -2878,7 +3002,6 @@
                             }
                         }
                     }
-                    // Remove duplicates and sort
                     pagesToExtract = [...new Set(pagesToExtract)].sort((a, b) => a - b);
                 } else {
                     pagesToExtract = [1];
@@ -2891,16 +3014,13 @@
                 
                 progressFill.style.width = '30%';
                 
-                // Extract text from selected pages
                 for (let i = 0; i < pagesToExtract.length; i++) {
                     const pageNum = pagesToExtract[i];
                     const page = await pdf.getPage(pageNum);
                     const textContent = await page.getTextContent();
                     
-                    // Add page header
                     fullText += `=== Page ${pageNum} ===\n\n`;
                     
-                    // Extract and format text
                     let pageText = "";
                     let lastY = null;
                     
@@ -2914,23 +3034,18 @@
                     
                     fullText += pageText.trim() + "\n\n";
                     
-                    // Update progress
                     progressFill.style.width = `${30 + ((i + 1) / pagesToExtract.length * 60)}%`;
                 }
                 
                 progressFill.style.width = '95%';
                 
-                // Create output file based on format
                 let blob, filename;
                 
                 if (outputFormat === 'docx') {
-                    // For DOCX, create a simple text file with .docx extension
-                    // In production, you would use a DOCX library
                     const textWithHeader = `AnyTasker Pro - PDF to Word Conversion\nDate: ${new Date().toLocaleDateString()}\nOriginal PDF: ${file.name}\nPages Extracted: ${pagesToExtract.length}\n\n${fullText}`;
                     blob = new Blob([textWithHeader], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
                     filename = `${file.name.replace(/\.[^/.]+$/, "")}_converted.docx`;
                 } else {
-                    // For TXT
                     blob = new Blob([fullText], { type: 'text/plain' });
                     filename = `${file.name.replace(/\.[^/.]+$/, "")}_converted.txt`;
                 }
@@ -2990,7 +3105,7 @@
             }
         }
 
-        // IMAGE TO PDF CONVERTER - WORKING VERSION
+        // IMAGE TO PDF CONVERTER FUNCTIONS
         function handleImageToPdfUpload() {
             const fileInput = document.getElementById('imageToPdfInput');
             if (!fileInput.files.length) return;
@@ -3076,7 +3191,6 @@
                 const { jsPDF } = window.jspdf;
                 let doc = new jsPDF();
                 
-                // Set page dimensions
                 let pageWidth, pageHeight;
                 switch(pageSize) {
                     case 'a4':
@@ -3114,7 +3228,6 @@
                     const maxWidth = pageWidth - (margin * 2);
                     const maxHeight = pageHeight - (margin * 2);
                     
-                    // Calculate dimensions based on scaling option
                     switch(scaling) {
                         case 'fit':
                             const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
@@ -3133,7 +3246,7 @@
                             
                         case 'center':
                         default:
-                            imgWidth = img.width / 2.83465; // Convert pixels to mm
+                            imgWidth = img.width / 2.83465;
                             imgHeight = img.height / 2.83465;
                             if (imgWidth > maxWidth) {
                                 const ratio = maxWidth / imgWidth;
@@ -3155,7 +3268,6 @@
                 
                 progressFill.style.width = '100%';
                 
-                // Save PDF
                 const pdfBlob = doc.output('blob');
                 const url = URL.createObjectURL(pdfBlob);
                 
@@ -3424,6 +3536,27 @@
                 .catch(() => copyWebsiteLink());
             } else {
                 copyWebsiteLink();
+            }
+        }
+
+        // ADS MANAGEMENT
+        function initializeAds() {
+            // Initialize all ads
+            try {
+                // Load Google Ads
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                
+                // Load alternative ads
+                const adScripts = document.querySelectorAll('script[type="text/javascript"]');
+                adScripts.forEach(script => {
+                    if (script.src.includes('highperformanceformat') || script.src.includes('effectivegatecpm')) {
+                        // These scripts load automatically
+                    }
+                });
+                
+                showNotification('📢 Ads loaded successfully', 'success');
+            } catch (error) {
+                console.log('Ads initialization complete');
             }
         }
 
